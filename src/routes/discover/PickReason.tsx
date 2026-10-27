@@ -28,7 +28,7 @@ export function PickReason({ reason, title }: { reason: string; title: string })
       <Popover
         placement="bottom start"
         offset={4}
-        className="max-w-64 border-2 border-popover-border bg-popover-bg p-3 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
+        className="max-w-64 rounded-popover border-2 border-popover-border bg-popover-bg p-3 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
       >
         <Dialog aria-label={`Why ${title} was picked`} className="text-sm text-fg outline-none">
           {reason}

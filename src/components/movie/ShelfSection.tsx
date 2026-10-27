@@ -51,7 +51,7 @@ export function ShelfSection({
           <Eyebrow className="mb-1">Feature Nº {feature}</Eyebrow>
           <h2
             id={headingId}
-            className="flex items-center gap-3 font-display text-5xl leading-none tracking-wide uppercase"
+            className="flex items-center gap-3 font-display text-5xl leading-none tracking-wide case-display"
           >
             {icon}
             {to ? (

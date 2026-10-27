@@ -44,7 +44,7 @@ export function AccountUnreachable({ onRetry }: { onRetry: () => Promise<boolean
       <Logo className="h-9 w-auto" />
       <div>
         <Eyebrow>Your account</Eyebrow>
-        <h1 className="font-display text-4xl leading-none tracking-wide uppercase">
+        <h1 className="font-display text-4xl leading-none tracking-wide case-display">
           Can’t reach your account
         </h1>
       </div>
@@ -55,7 +55,7 @@ export function AccountUnreachable({ onRetry }: { onRetry: () => Promise<boolean
       <Button
         onPress={retry}
         isPending={pending}
-        className="flex min-h-12 w-full items-center justify-center bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg uppercase hover:bg-button-primary-bg-hover data-pending:opacity-70"
+        className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover data-pending:opacity-70"
       >
         Try again
       </Button>

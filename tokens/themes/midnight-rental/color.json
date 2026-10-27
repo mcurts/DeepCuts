@@ -1,0 +1,208 @@
+{
+  "$description": "Tier 2 color roles for Midnight Rental (ADR-0056): the same names as every theme, this brand's values.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "default": {
+        "$value": "{palette.night}"
+      },
+      "raised": {
+        "$value": "{palette.night-raised}"
+      },
+      "overlay": {
+        "$value": "{palette.night-overlay}"
+      }
+    },
+    "fg": {
+      "default": {
+        "$value": "{palette.haze}"
+      },
+      "soft": {
+        "$value": "{palette.haze-soft}"
+      },
+      "muted": {
+        "$value": "{palette.lilac}"
+      },
+      "placeholder": {
+        "$value": "{palette.lilac}"
+      },
+      "on-accent": {
+        "$value": "{palette.night}"
+      },
+      "on-highlight": {
+        "$value": "{palette.night}"
+      },
+      "danger": {
+        "$value": "{palette.red-soft}"
+      }
+    },
+    "accent": {
+      "default": {
+        "$value": "{palette.pink}"
+      },
+      "hover": {
+        "$value": "{palette.pink-bright}"
+      }
+    },
+    "highlight": {
+      "$value": "{palette.cyan}"
+    },
+    "danger": {
+      "$value": "{palette.red}"
+    },
+    "contextual": {
+      "$value": "{color.accent.default}"
+    },
+    "border": {
+      "default": {
+        "$value": "{palette.grid}"
+      },
+      "strong": {
+        "$value": "{palette.grid-strong}"
+      },
+      "control": {
+        "$value": "{palette.wire}"
+      },
+      "emphasis": {
+        "$value": "{palette.haze}"
+      }
+    },
+    "focus": {
+      "$value": "{palette.yellow}"
+    },
+    "favourite": {
+      "$value": "{palette.yellow}"
+    },
+    "match": {
+      "$description": "The match sticker's fill and text, in five steps from red to neon green by the pick's match (owner, 2026-10-13). Each step's text passes 4.5:1 on its fill (scripts/contrast-pairs.json); the match is always written on the sticker too.",
+      "0": {
+        "default": {
+          "$value": "{palette.coral}"
+        },
+        "fg": {
+          "$value": "{color.fg.on-highlight}"
+        }
+      },
+      "20": {
+        "default": {
+          "$value": "{palette.orange}"
+        },
+        "fg": {
+          "$value": "{color.fg.on-accent}"
+        }
+      },
+      "40": {
+        "default": {
+          "$value": "{palette.amber}"
+        },
+        "fg": {
+          "$value": "{color.fg.on-accent}"
+        }
+      },
+      "60": {
+        "default": {
+          "$value": "{palette.lime}"
+        },
+        "fg": {
+          "$value": "{color.fg.on-accent}"
+        }
+      },
+      "80": {
+        "default": {
+          "$value": "{palette.mint}"
+        },
+        "fg": {
+          "$value": "{color.fg.on-accent}"
+        }
+      }
+    },
+    "shadow": {
+      "$value": "{palette.black}"
+    },
+    "tag": {
+      "watchlist": {
+        "$value": "{palette.sky}"
+      },
+      "liked": {
+        "$value": "{palette.haze}"
+      },
+      "disliked": {
+        "$value": "{palette.red-soft}"
+      }
+    },
+    "genre": {
+      "$description": "Card tones per TMDB genre (design v2). Decorative; always paired with the genre name as text.",
+      "default": {
+        "$value": "{palette.lilac}"
+      },
+      "action": {
+        "$value": "{color.orange.400}"
+      },
+      "adventure": {
+        "$value": "{color.lime.400}"
+      },
+      "animation": {
+        "$value": "{color.gold.400}"
+      },
+      "comedy": {
+        "$value": "{color.gold.400}"
+      },
+      "crime": {
+        "$value": "{color.indigo.400}"
+      },
+      "documentary": {
+        "$value": "{color.green.400}"
+      },
+      "drama": {
+        "$value": "{color.sky.400}"
+      },
+      "family": {
+        "$value": "{color.lime.400}"
+      },
+      "fantasy": {
+        "$value": "{color.violet.400}"
+      },
+      "history": {
+        "$value": "{color.green.400}"
+      },
+      "horror": {
+        "$value": "{color.violet.400}"
+      },
+      "music": {
+        "$value": "{color.magenta.400}"
+      },
+      "mystery": {
+        "$value": "{color.indigo.400}"
+      },
+      "romance": {
+        "$value": "{color.magenta.400}"
+      },
+      "science-fiction": {
+        "$value": "{color.cyan.400}"
+      },
+      "thriller": {
+        "$value": "{color.orange.400}"
+      },
+      "tv-movie": {
+        "$value": "{color.sky.400}"
+      },
+      "war": {
+        "$value": "{color.orange.400}"
+      },
+      "western": {
+        "$value": "{color.gold.400}"
+      }
+    },
+    "print": {
+      "paper": {
+        "$value": "{palette.haze}"
+      },
+      "ink": {
+        "$value": "{palette.night}"
+      },
+      "spot": {
+        "$value": "{palette.yellow}"
+      }
+    }
+  }
+}

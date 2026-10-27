@@ -1,0 +1,99 @@
+{
+  "$description": "Shape and elevation roles for Vintage, the Triple Feature identity (ADR-0040): square corners and hard black offset shadows. Round things (stickers, stamps) use rounded-full in every theme.",
+  "radius": {
+    "$type": "dimension",
+    "control": {
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      },
+      "$description": "Buttons, fields, tag toggles"
+    },
+    "container": {
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      },
+      "$description": "Cards, panels, popovers, toasts"
+    }
+  },
+  "elevation": {
+    "$type": "shadow",
+    "stamp": {
+      "$value": {
+        "color": "{color.shadow}",
+        "offsetX": {
+          "value": 3,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 3,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Stamps and stickers"
+    },
+    "cta": {
+      "$value": {
+        "color": "{color.shadow}",
+        "offsetX": {
+          "value": 5,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 5,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "Call-to-action buttons"
+    },
+    "box": {
+      "$value": {
+        "color": "{color.shadow}",
+        "offsetX": {
+          "value": 7,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 7,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      },
+      "$description": "VHS boxes and popovers (a lifted VHS box goes to 9px; VhsBox.css)"
+    }
+  },
+  "text-shadow": {
+    "$type": "dimension",
+    "offset": {
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$description": "Offset of the hard text shadow under highlighted headline words (text-shadow-hard); 0 turns it off"
+    }
+  }
+}

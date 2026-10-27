@@ -14,12 +14,13 @@ import { useSession } from '@/session/SessionContext'
 
 // Same field styles as the registration form.
 const fieldBox =
-  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
+  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg rounded-field focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
 const inputClass =
   'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-fg outline-none placeholder:text-fg-placeholder'
-const cardClass = 'grid content-start gap-2.5 border-2 border-card-border bg-card-bg p-4'
+const cardClass =
+  'grid content-start gap-2.5 border-2 border-card-border bg-card-bg rounded-card p-4'
 const secondaryButton =
-  'flex h-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 font-display text-base tracking-widest uppercase text-button-secondary-fg data-pending:opacity-70'
+  'flex h-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg rounded-button px-3.5 font-display text-base tracking-widest case-display text-button-secondary-fg data-pending:opacity-70'
 
 /** "Change name" and "Delete account" cards for a passkey account. */
 export function AccountSettings({ name }: { name: string }) {
@@ -57,7 +58,7 @@ function ChangeName({ name, rename }: { name: string; rename: (name: string) => 
 
   return (
     <section aria-labelledby="name-heading" className={cardClass}>
-      <h2 id="name-heading" className="font-display text-2xl tracking-wide uppercase">
+      <h2 id="name-heading" className="font-display text-2xl tracking-wide case-display">
         Change name
       </h2>
       <Form
@@ -111,7 +112,7 @@ function DeleteAccount({ deleteAccount }: { deleteAccount: () => Promise<void> }
 
   return (
     <section aria-labelledby="delete-heading" className={cardClass}>
-      <h2 id="delete-heading" className="font-display text-2xl tracking-wide uppercase">
+      <h2 id="delete-heading" className="font-display text-2xl tracking-wide case-display">
         Delete account
       </h2>
       <p className="text-sm text-fg-muted">

@@ -155,7 +155,7 @@ function MoveButton({
       // The shelf finds the button again after the move, to keep focus on it.
       data-move={direction}
       onClick={onPress}
-      className="flex size-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg text-button-secondary-fg hover:border-accent"
+      className="flex size-11 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg text-button-secondary-fg hover:border-accent"
     >
       <Icon name={direction === 'earlier' ? 'back' : 'forward'} />
     </button>

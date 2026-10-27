@@ -46,7 +46,7 @@ describe('landing page (signed out)', () => {
   it('shows only the logo and Sign in: no search, no films', async () => {
     renderRoute('/', { initialSession: SIGNED_OUT })
     await screen.findByRole('heading', { level: 1, name: 'Your movies, close at hand' })
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: /Find a movie/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('navigation', { name: 'Main' })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /View details/ })).not.toBeInTheDocument()
   })

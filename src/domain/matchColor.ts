@@ -2,7 +2,7 @@
 // green at a high one, through orange, amber and lime, so a pick's color says roughly how good a
 // match it is before you read the number. The number is always written on the sticker too.
 //
-// The steps are design tokens (color.match.0-80 in tokens/themes/dark/color.json), each with a
+// The steps are design tokens (color.match.0-80 in tokens/themes/<theme>/color.json), each with a
 // text color that passes 4.5:1 on its fill, checked by the contrast gate.
 
 /** Where each step starts, from 0% up, matching the token names (color.match.20 is 20–39%). */

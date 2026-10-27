@@ -36,13 +36,13 @@ export function PageHeading({
       {/* Each page has exactly one <h1>; useRouteFocus moves focus to it after navigation. The
           highlight is part of the same heading, so it reads as one sentence. */}
       <h1
-        className={`font-display leading-none tracking-wide text-balance wrap-anywhere uppercase ${SIZES[size]}`}
+        className={`font-display leading-none tracking-wide text-balance wrap-anywhere case-display ${SIZES[size]}`}
       >
         {title}
         {highlight && (
           <>
             {' '}
-            <span className={`text-danger text-shadow-hard ${size === 'poster' ? 'block' : ''}`}>
+            <span className={`text-highlight text-shadow-hard ${size === 'poster' ? 'block' : ''}`}>
               {highlight}
             </span>
           </>

@@ -122,14 +122,14 @@ export function DetailTags({
               // element that fails axe, and disabling the button would drop keyboard focus. A second
               // press while saving is ignored in `save` instead.
               aria-disabled={saving}
-              className="flex min-h-11 animate-pop-in items-center justify-center gap-2 bg-button-primary-bg px-5 font-display text-base tracking-widest text-button-primary-fg uppercase hover:bg-button-primary-bg-hover aria-disabled:opacity-70"
+              className="flex min-h-11 animate-pop-in items-center justify-center gap-2 rounded-button bg-button-primary-bg px-5 font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover aria-disabled:opacity-70"
             >
               {saving ? 'Saving…' : 'Save'}
             </Button>
             <Button
               onPress={cancel}
               isDisabled={saving}
-              className="flex min-h-11 animate-pop-in items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg px-5 font-display text-base tracking-widest text-button-secondary-fg uppercase hover:border-accent"
+              className="flex min-h-11 animate-pop-in items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-5 font-display text-base tracking-widest text-button-secondary-fg case-display hover:border-accent"
             >
               Cancel
             </Button>

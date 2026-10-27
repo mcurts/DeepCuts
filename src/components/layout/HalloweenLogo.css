@@ -80,14 +80,16 @@
 
   /* ---- At rest ------------------------------------------------------------------------------ */
   .halloween-logo__deep {
-    fill: var(--dc-brand-logo-red);
+    fill: var(--dc-brand-logo-primary);
   }
-  .halloween-logo__cuts,
+  .halloween-logo__cuts {
+    fill: var(--dc-brand-logo-secondary);
+  }
   .halloween-logo__deep-letters {
-    fill: var(--dc-brand-logo-bone);
+    fill: var(--dc-brand-logo-on-primary);
   }
   .halloween-logo__cuts-letters {
-    fill: var(--dc-brand-logo-ink);
+    fill: var(--dc-brand-logo-on-secondary);
   }
   .halloween-logo__moon {
     fill: var(--dc-brand-halloween-moon);

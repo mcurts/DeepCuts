@@ -80,7 +80,7 @@ export function PickActions({
               // border's width, so the strip still reads as one row with single 2px dividers. The
               // hovered or focused button is lifted above its neighbours, so its whole outline shows
               // in the tag's colour (with shared dividers, its left edge was the previous button's).
-              className="relative flex min-h-11 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 border-2 border-tag-toggle-border bg-tag-toggle-bg px-0.5 text-xs font-bold text-tag-toggle-fg not-first:-ml-0.5 hover:z-10 hover:border-(--tag) focus-visible:z-10 aria-disabled:cursor-wait aria-disabled:opacity-60"
+              className="relative flex min-h-11 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-bg px-0.5 text-xs font-bold text-tag-toggle-fg not-first:-ml-0.5 hover:z-10 hover:border-(--tag) focus-visible:z-10 aria-disabled:cursor-wait aria-disabled:opacity-60"
             >
               <Icon name={action.icon} className="size-5 shrink-0 text-(--tag)" />
               <span aria-hidden="true">{action.short}</span>

@@ -1,0 +1,15 @@
+{
+  "$description": "Surface textures for Midnight Rental (ADR-0056). 0 turns one off.",
+  "texture": {
+    "$type": "number",
+    "grain": {
+      "$value": 0.1
+    },
+    "scratch": {
+      "$value": 0
+    },
+    "halftone": {
+      "$value": 20
+    }
+  }
+}

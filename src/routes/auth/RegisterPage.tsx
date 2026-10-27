@@ -32,7 +32,7 @@ const INVITE_REFUSED = 'This invite can’t be used. It may have expired or been
 // Shared field styles. The whole field box shows the focus ring (focus-ring-within), and turns
 // the danger color while it has an error.
 const fieldBox =
-  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
+  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg rounded-field focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
 const inputClass =
   'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-fg outline-none placeholder:text-fg-placeholder'
 
@@ -96,7 +96,7 @@ export function RegisterPage() {
     <AuthLayout title="Create an account">
       <div>
         <Eyebrow>Your account</Eyebrow>
-        <h1 className="font-display text-4xl leading-none tracking-wide uppercase">
+        <h1 className="font-display text-4xl leading-none tracking-wide case-display">
           Create an account
         </h1>
         <p className="mt-2 text-sm text-fg-muted">
@@ -153,7 +153,7 @@ export function RegisterPage() {
         <Button
           type="submit"
           isPending={pending}
-          className="flex min-h-12 w-full items-center justify-center bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg uppercase hover:bg-button-primary-bg-hover data-pending:opacity-70"
+          className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover data-pending:opacity-70"
         >
           Create passkey
         </Button>

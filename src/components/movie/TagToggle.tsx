@@ -30,7 +30,7 @@ export function TagToggle({
       // the tag's color and its text and icon turn ink (ADR-0040), so on and off differ by far
       // more than a border.
       style={tagColor(tag.tag) as CSSProperties}
-      className={`group flex min-w-0 items-center justify-center gap-2 border-2 border-tag-toggle-border bg-tag-toggle-bg px-2 py-1.5 text-sm text-tag-toggle-fg hover:border-(--tag) data-selected:border-(--tag) data-selected:bg-(--tag) data-selected:text-fg-on-accent data-selected:shadow-stamp ${className}`}
+      className={`group flex min-w-0 items-center justify-center gap-2 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-bg px-2 py-1.5 text-sm text-tag-toggle-fg hover:border-(--tag) data-selected:border-(--tag) data-selected:bg-(--tag) data-selected:text-fg-on-accent data-selected:shadow-stamp ${className}`}
     >
       <Icon
         name={tag.icon}

@@ -1,0 +1,93 @@
+{
+  "$description": "Shape and elevation roles for Midnight Rental (ADR-0056).",
+  "radius": {
+    "$type": "dimension",
+    "control": {
+      "$value": {
+        "value": 10,
+        "unit": "px"
+      }
+    },
+    "container": {
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    }
+  },
+  "elevation": {
+    "$type": "shadow",
+    "stamp": {
+      "$value": {
+        "color": "{palette.glow-cyan}",
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 8,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    },
+    "cta": {
+      "$value": {
+        "color": "{palette.glow}",
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 16,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    },
+    "box": {
+      "$value": {
+        "color": "{palette.glow}",
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 0,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 24,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        }
+      }
+    }
+  },
+  "text-shadow": {
+    "$type": "dimension",
+    "offset": {
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      }
+    }
+  }
+}

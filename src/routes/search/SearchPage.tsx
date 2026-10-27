@@ -68,7 +68,7 @@ function ResultRow({ movie }: { movie: MovieSummary }) {
   return (
     <li
       style={genreTone(movie.genre_ids)}
-      className="grid min-w-0 gap-2.5 border-2 border-card-border bg-card-bg p-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-4 md:p-4"
+      className="grid min-w-0 gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-4 md:p-4"
     >
       <MovieLink movie={movie} meta={meta} disliked={tags?.has('disliked') ?? false} />
       <ToggleButton
@@ -83,7 +83,7 @@ function ResultRow({ movie }: { movie: MovieSummary }) {
           )
         }
         aria-label={`Want to see ${movie.title}`}
-        className="inline-flex h-11 w-36 shrink-0 items-center justify-center gap-2 justify-self-end border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 font-display text-base tracking-widest whitespace-nowrap text-button-secondary-fg uppercase hover:border-accent data-selected:border-accent data-selected:bg-accent data-selected:text-fg-on-accent"
+        className="inline-flex h-11 w-36 shrink-0 items-center justify-center gap-2 justify-self-end rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 font-display text-base tracking-widest whitespace-nowrap text-button-secondary-fg case-display hover:border-accent data-selected:border-accent data-selected:bg-accent data-selected:text-fg-on-accent"
       >
         <Icon name={wanted ? 'check' : 'bookmark'} />
         {wanted ? 'Added' : 'Add to list'}

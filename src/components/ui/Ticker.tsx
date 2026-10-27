@@ -52,7 +52,7 @@ export function Ticker({ items, loading = false }: { items: string[]; loading?: 
   }
 
   const band =
-    'mx-[calc(50%-50vw)] -mt-5 mb-8 overflow-hidden border-y-3 border-surface bg-accent py-2 font-display text-lg tracking-widest whitespace-nowrap text-fg-on-accent uppercase md:-mt-6'
+    'mx-[calc(50%-50vw)] -mt-5 mb-8 overflow-hidden border-y-3 border-surface bg-accent py-2 font-display text-lg tracking-widest whitespace-nowrap text-fg-on-accent case-display md:-mt-6'
   if (items.length === 0) {
     // The empty band: one line's height (a no-break space), nothing to read.
     return loading ? (

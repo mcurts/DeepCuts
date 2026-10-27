@@ -78,7 +78,7 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
       >
         {/* The Group is the popover's trigger, so the suggestion list matches the whole field's
             width (--trigger-width), not just the text input's. */}
-        <Group className="focus-ring-within flex min-h-12 items-stretch border-2 border-field-border bg-field-bg pl-3 focus-within:border-field-border-focus">
+        <Group className="focus-ring-within flex min-h-12 items-stretch rounded-field border-2 border-field-border bg-field-bg pl-3 focus-within:border-field-border-focus">
           <Icon name="search" className="size-5 shrink-0 self-center text-accent" />
           <Input
             // Enter with a highlighted suggestion selects it (React Aria); otherwise it acts as Find.
@@ -93,14 +93,14 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
           <button
             type="submit"
             disabled={suggestions.length === 0}
-            className="w-18 bg-field-action-bg font-display text-base tracking-widest text-field-action-fg uppercase hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-surface-overlay disabled:text-fg-muted"
+            className="w-18 bg-field-action-bg font-display text-base tracking-widest text-field-action-fg case-display hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-surface-overlay disabled:text-fg-muted"
           >
             Find
           </button>
         </Group>
         <Popover
           offset={6}
-          className="max-h-96 w-(--trigger-width) overflow-y-auto border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
+          className="max-h-96 w-(--trigger-width) overflow-y-auto rounded-popover border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
         >
           <ListBox
             aria-label="Movie suggestions"

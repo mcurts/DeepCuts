@@ -1,21 +1,8 @@
 {
   "font": {
-    "family": {
-      "$type": "fontFamily",
-      "$description": "Self-hosted faces (ADR-0008, ADR-0040) with system fallbacks.",
-      "anton": {
-        "$value": ["Anton", "Impact", "Arial Narrow", "sans-serif"]
-      },
-      "special-elite": {
-        "$value": ["Special Elite", "Courier New", "monospace"]
-      },
-      "courier-prime": {
-        "$value": ["Courier Prime", "Courier New", "monospace"]
-      }
-    },
     "size": {
       "$type": "dimension",
-      "$description": "Tailwind\u2019s default type scale.",
+      "$description": "Tailwind’s default type scale.",
       "xs": {
         "$value": {
           "value": 0.75,

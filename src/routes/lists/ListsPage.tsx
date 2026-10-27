@@ -72,7 +72,7 @@ export function ListsPage() {
               className={`flex min-h-27 flex-col items-start border p-3 md:min-h-34 ${
                 active
                   ? 'border-(--tag) bg-(--tag)/10'
-                  : 'border-card-border bg-card-bg hover:border-border-control'
+                  : 'rounded-card border-card-border bg-card-bg hover:border-border-control'
               }`}
             >
               <Icon name={t.icon} className="mb-auto size-5 text-(--tag)" />

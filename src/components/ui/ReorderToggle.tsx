@@ -21,7 +21,7 @@ export function ReorderToggle({
       ref={ref}
       type="button"
       onClick={onPress}
-      className="flex min-h-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg px-5 font-display text-base tracking-widest text-button-secondary-fg uppercase hover:border-accent"
+      className="flex min-h-11 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-5 font-display text-base tracking-widest text-button-secondary-fg case-display hover:border-accent"
     >
       {active ? 'Done' : 'Reorder'}
     </button>

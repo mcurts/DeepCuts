@@ -18,9 +18,11 @@ import { readFileSync, writeFileSync } from 'node:fs'
 
 const tokens = JSON.parse(readFileSync('build/tokens/tokens.json', 'utf8'))
 const color = {
-  red: tokens['brand-logo-red'],
-  bone: tokens['brand-logo-bone'],
-  ink: tokens['brand-logo-ink'],
+  // The default theme's logo roles (ADR-0056): first block, its letters, second block, its letters.
+  red: tokens['brand-logo-primary'],
+  bone: tokens['brand-logo-on-primary'],
+  boneBlock: tokens['brand-logo-secondary'],
+  ink: tokens['brand-logo-on-secondary'],
   // The Halloween icon (October; src/components/layout/seasonalLogos.ts) wears the lit Halloween
   // wordmark's colors: purple and orange blocks, an orange D.
   litDeep: tokens['brand-halloween-lit-deep'],
@@ -50,7 +52,7 @@ const monogram = (
   <path fill="${c}" fill-rule="evenodd" transform="${place(47.5)}" d="${C}"/>
 </svg>
 `
-const svg = monogram(color.red, color.bone, color.bone, color.ink)
+const svg = monogram(color.red, color.boneBlock, color.bone, color.ink)
 writeFileSync('public/favicon.svg', svg)
 // Seasonal tab icons: SVG only (see applySeasonalFavicon).
 writeFileSync(

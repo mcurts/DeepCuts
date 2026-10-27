@@ -1,59 +1,63 @@
 {
-  "$description": "Tier 2, dark theme (the only theme). Semantic color roles on the Triple Feature palette (ADR-0040); a light theme would be tokens/themes/light/ with the same names (ADR-0027).",
+  "$description": "Tier 2 color roles for Vintage, the Triple Feature identity (ADR-0040). Every theme in tokens/themes/ defines these same names (ADR-0056); only the values differ.",
   "color": {
     "$type": "color",
     "surface": {
       "default": {
-        "$value": "{color.ink.default}"
+        "$value": "{palette.ink.default}"
       },
       "raised": {
-        "$value": "{color.ink.raised}"
+        "$value": "{palette.ink.raised}"
       },
       "overlay": {
-        "$value": "{color.ink.overlay}",
+        "$value": "{palette.ink.overlay}",
         "$description": "Hovered and focused rows inside raised surfaces (menus, suggestions), skeleton bars"
       }
     },
     "fg": {
       "default": {
-        "$value": "{color.bone.default}"
+        "$value": "{palette.bone.default}"
       },
       "soft": {
-        "$value": "{color.bone.soft}",
+        "$value": "{palette.bone.soft}",
         "$description": "Body and lede text"
       },
       "muted": {
-        "$value": "{color.dust}",
+        "$value": "{palette.dust}",
         "$description": "Secondary text and metadata"
       },
       "placeholder": {
-        "$value": "{color.dust}"
+        "$value": "{palette.dust}"
       },
       "on-accent": {
-        "$value": "{color.ink.default}",
+        "$value": "{palette.ink.default}",
         "$description": "Text on mustard fills"
       },
-      "on-danger": {
-        "$value": "{color.bone.default}",
-        "$description": "Text on blood fills (CTAs, the match stamp, the logo)"
+      "on-highlight": {
+        "$value": "{palette.bone.default}",
+        "$description": "Text on highlight fills (CTAs, the match stamp)"
       },
       "danger": {
-        "$value": "{color.red.300}",
+        "$value": "{palette.red.300}",
         "$description": "Error text (field errors). Blood is too dark for small text"
       }
     },
     "accent": {
       "default": {
-        "$value": "{color.mustard.default}",
+        "$value": "{palette.mustard.default}",
         "$description": "Labels, links, focus, utility buttons"
       },
       "hover": {
-        "$value": "{color.mustard.hover}"
+        "$value": "{palette.mustard.hover}"
       }
     },
+    "highlight": {
+      "$value": "{palette.blood}",
+      "$description": "The brand's second accent: CTA fills, the match stamp and large headline words. In Vintage it's blood red, about 3:1 on ink, so never small text (ADR-0040)"
+    },
     "danger": {
-      "$value": "{color.blood}",
-      "$description": "Blood red: CTA fills, the match stamp, large headline text and error borders. About 3:1 on ink, so never small text (ADR-0040)"
+      "$value": "{palette.blood}",
+      "$description": "Error borders and error marks (3:1 on the page). Error text uses fg.danger"
     },
     "contextual": {
       "$value": "{color.accent.default}",
@@ -61,44 +65,44 @@
     },
     "border": {
       "default": {
-        "$value": "{color.line.default}",
+        "$value": "{palette.line.default}",
         "$description": "Structure lines and dividers (decorative)"
       },
       "strong": {
-        "$value": "{color.line.strong}",
+        "$value": "{palette.line.strong}",
         "$description": "Dashed outlines of empty slots (decorative)"
       },
       "control": {
-        "$value": "{color.dust}",
+        "$value": "{palette.dust}",
         "$description": "Outlines that identify a control (3:1)"
       },
       "emphasis": {
-        "$value": "{color.bone.default}",
+        "$value": "{palette.bone.default}",
         "$description": "2-3px bone outlines on fields, buttons and the stamp ring"
       }
     },
     "focus": {
-      "$value": "{color.mustard.default}"
+      "$value": "{palette.mustard.default}"
     },
     "favourite": {
-      "$value": "{color.mustard.default}",
+      "$value": "{palette.mustard.default}",
       "$description": "Favourite films: the Top Ten (ADR-0035). Decorative; always next to its label"
     },
     "match": {
       "$description": "The match sticker's fill and text, in five steps from red to neon green by the pick's match (owner, 2026-10-13). Each step's text passes 4.5:1 on its fill (scripts/contrast-pairs.json); the match is always written on the sticker too.",
       "0": {
         "default": {
-          "$value": "{color.blood}",
-          "$description": "0\u201319%"
+          "$value": "{palette.blood}",
+          "$description": "0–19%"
         },
         "fg": {
-          "$value": "{color.fg.on-danger}"
+          "$value": "{color.fg.on-highlight}"
         }
       },
       "20": {
         "default": {
-          "$value": "{color.heat.20}",
-          "$description": "20\u201339%"
+          "$value": "{palette.heat.20}",
+          "$description": "20–39%"
         },
         "fg": {
           "$value": "{color.fg.on-accent}"
@@ -106,8 +110,8 @@
       },
       "40": {
         "default": {
-          "$value": "{color.heat.40}",
-          "$description": "40\u201359%"
+          "$value": "{palette.heat.40}",
+          "$description": "40–59%"
         },
         "fg": {
           "$value": "{color.fg.on-accent}"
@@ -115,8 +119,8 @@
       },
       "60": {
         "default": {
-          "$value": "{color.heat.60}",
-          "$description": "60\u201379%"
+          "$value": "{palette.heat.60}",
+          "$description": "60–79%"
         },
         "fg": {
           "$value": "{color.fg.on-accent}"
@@ -124,8 +128,8 @@
       },
       "80": {
         "default": {
-          "$value": "{color.heat.80}",
-          "$description": "80\u2013100%"
+          "$value": "{palette.heat.80}",
+          "$description": "80–100%"
         },
         "fg": {
           "$value": "{color.fg.on-accent}"
@@ -133,7 +137,7 @@
       }
     },
     "shadow": {
-      "$value": "{color.black}",
+      "$value": "{palette.black}",
       "$description": "Hard offset shadows (ADR-0040)"
     },
     "tag": {
@@ -142,18 +146,18 @@
         "$description": "Want to see"
       },
       "liked": {
-        "$value": "{color.bone.default}",
+        "$value": "{palette.bone.default}",
         "$description": "Like"
       },
       "disliked": {
-        "$value": "{color.red.300}",
+        "$value": "{palette.red.300}",
         "$description": "Dislike. The only red in the UI (ADR-0020)"
       }
     },
     "genre": {
       "$description": "Card tones per TMDB genre (design v2). Decorative; always paired with the genre name as text.",
       "default": {
-        "$value": "{color.dust}"
+        "$value": "{palette.dust}"
       },
       "action": {
         "$value": "{color.orange.500}"
@@ -215,12 +219,16 @@
     },
     "print": {
       "paper": {
-        "$value": "{color.bone.default}",
+        "$value": "{palette.bone.default}",
         "$description": "Printed-matter paper: stickers and labels drawn as physical objects"
       },
       "ink": {
-        "$value": "{color.ink.default}",
+        "$value": "{palette.ink.default}",
         "$description": "Ink printed on that paper"
+      },
+      "spot": {
+        "$value": "{palette.mustard.default}",
+        "$description": "A printed card in the brand's spot ink, with print.ink on it: the Top Ten sticker before the film is added"
       }
     }
   }

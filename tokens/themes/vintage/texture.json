@@ -1,0 +1,15 @@
+{
+  "$description": "Surface textures for Vintage, the Triple Feature identity (ADR-0040): film grain over the window, faint scratches on the page, halftone dots in image wells. 0 turns one off.",
+  "texture": {
+    "$type": "number",
+    "grain": { "$value": 0.22, "$description": "Opacity of the film-grain layer" },
+    "scratch": {
+      "$value": 3.5,
+      "$description": "Strength of the vertical scratches, as a percent of the text color"
+    },
+    "halftone": {
+      "$value": 35,
+      "$description": "Strength of the halftone dots, as a percent of the shadow color"
+    }
+  }
+}

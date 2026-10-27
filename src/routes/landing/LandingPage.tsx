@@ -29,7 +29,8 @@ const COPY: Record<PanelId, string> = {
 }
 
 // The two calls to action share a size: at least 48px tall, in the display face.
-const cta = 'inline-flex min-h-12 items-center px-6 font-display text-xl tracking-widest uppercase'
+const cta =
+  'inline-flex min-h-12 items-center px-6 font-display text-xl tracking-widest case-display'
 
 /** The landing page: ticker, hero, and the three-feature program. */
 export function LandingPage() {
@@ -49,7 +50,7 @@ export function LandingPage() {
         <Link
           to="/sign-in"
           state={{ from: '/' }}
-          className={`${cta} bg-button-cta-bg text-button-cta-fg shadow-button-cta hover:bg-button-cta-bg/90`}
+          className={`${cta} rounded-button bg-button-cta-bg text-button-cta-fg shadow-button-cta hover:bg-button-cta-bg/90`}
         >
           Get your ticket
         </Link>
@@ -65,7 +66,7 @@ export function LandingPage() {
         <div className="mb-6 flex items-end gap-6">
           <h2
             id="program-heading"
-            className="font-display text-5xl leading-none tracking-wide uppercase"
+            className="font-display text-5xl leading-none tracking-wide case-display"
           >
             Tonight’s program
           </h2>

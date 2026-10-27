@@ -12,13 +12,13 @@ import { HEADER_HEIGHT_VAR } from '@/hooks/useHeaderHeight'
 // Sonner applies this as a CSS variable through React's style prop, which the CSP allows.
 const BELOW_HEADER = { top: `calc(var(${HEADER_HEIGHT_VAR}, 0px) + 12px)` }
 
-// The Triple Feature look (ADR-0040), from the tokens: square, a bone outline, a hard shadow and
-// the typewriter label face. Sonner's own sizing, stacking and animation are kept; these classes
+// The theme's look (ADR-0040, ADR-0056), from the tokens: its container corners, an emphasis
+// outline, the popover shadow and the label face. Sonner's own sizing, stacking and animation are kept; these classes
 // only replace its colors, corners and type.
 const TOAST_CLASSES = {
   toast:
-    'rounded-none! border-2! border-border-emphasis! bg-surface-raised! font-label! text-base! text-fg! shadow-popover!',
-  closeButton: 'rounded-none! border-border-emphasis! bg-surface-raised! text-fg!',
+    'rounded-container! border-2! border-border-emphasis! bg-surface-raised! font-label! text-base! text-fg! shadow-popover!',
+  closeButton: 'rounded-control! border-border-emphasis! bg-surface-raised! text-fg!',
 }
 // Sonner pins the close button to the toast's top-left corner, half outside it. Move it to the
 // top-right corner, where a close button is expected, through the variables Sonner reads.

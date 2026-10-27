@@ -1,0 +1,23 @@
+{
+  "$description": "Midnight Rental's wordmark colors (ADR-0056): the same Deep Cuts wordmark in this brand's colors.",
+  "brand": {
+    "$type": "color",
+    "logo": {
+      "primary": {
+        "$value": "#ff5fae"
+      },
+      "on-primary": {
+        "$value": "#0e0b1f"
+      },
+      "secondary": {
+        "$value": "#3fe0ff"
+      },
+      "on-secondary": {
+        "$value": "#0e0b1f"
+      },
+      "tagline": {
+        "$value": "#d9d3f5"
+      }
+    }
+  }
+}

@@ -1,7 +1,8 @@
-// Fails if any semantic fg/bg token pair is below its WCAG contrast minimum. ADR-0006, ADR-0009.
-import { readFileSync } from 'node:fs'
+// Fails if any fg/bg token pair is below its WCAG contrast minimum, in any theme. ADR-0006,
+// ADR-0009, ADR-0056: every theme (tokens/themes/<id>/, built to build/tokens/<id>/) must pass every
+// pair, so a new brand can't merge until it is accessible.
+import { readdirSync, readFileSync } from 'node:fs'
 
-const tokens = JSON.parse(readFileSync('build/tokens/tokens.json', 'utf8'))
 const pairs = JSON.parse(readFileSync('scripts/contrast-pairs.json', 'utf8'))
 
 const channel = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
@@ -31,7 +32,7 @@ const mix = (a, weight, b) =>
  * A pair side is a token name, or `{ "mix": [token, weight, token] }` for a color the page mixes
  * at runtime (e.g. the genre sticker's face, index.css `sticker-face`). Returns [label, hex].
  */
-const resolve = (side) => {
+const resolve = (tokens, side) => {
   if (typeof side === 'string') return [side, tokens[side]]
   const [a, weight, b] = side.mix
   const label = `mix(${a} ${weight * 100}%, ${b})`
@@ -39,17 +40,26 @@ const resolve = (side) => {
 }
 
 let failed = 0
-for (const [fgSide, bgSide, min] of pairs) {
-  const [fg, fgHex] = resolve(fgSide)
-  const [bg, bgHex] = resolve(bgSide)
-  if (!fgHex || !bgHex) {
-    console.error(`✗ unknown token in pair: ${fg} / ${bg}`)
-    failed++
-    continue
+for (const theme of readdirSync('tokens/themes')) {
+  const tokens = JSON.parse(readFileSync(`build/tokens/${theme}/tokens.json`, 'utf8'))
+  let themeFailed = 0
+  for (const [fgSide, bgSide, min] of pairs) {
+    const [fg, fgHex] = resolve(tokens, fgSide)
+    const [bg, bgHex] = resolve(tokens, bgSide)
+    if (!fgHex || !bgHex) {
+      console.error(`✗ [${theme}] unknown token in pair: ${fg} / ${bg}`)
+      themeFailed++
+      continue
+    }
+    const r = ratio(fgHex, bgHex)
+    if (r < min) {
+      themeFailed++
+      console.log(`✗ [${theme}] ${fg} on ${bg}: ${r.toFixed(2)} (min ${min})`)
+    }
   }
-  const r = ratio(fgHex, bgHex)
-  const ok = r >= min
-  if (!ok) failed++
-  console.log(`${ok ? '✓' : '✗'} ${fg} on ${bg}: ${r.toFixed(2)} (min ${min})`)
+  console.log(
+    `${themeFailed ? '✗' : '✓'} ${theme}: ${pairs.length - themeFailed}/${pairs.length} pairs pass`,
+  )
+  failed += themeFailed
 }
 process.exit(failed ? 1 : 0)

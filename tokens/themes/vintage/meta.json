@@ -1,0 +1,12 @@
+{
+  "$comment": "Not tokens: how the app lists and loads this theme (ADR-0056). `fonts` are @fontsource stylesheets; the default theme's load with the app, others' only when chosen.",
+  "label": "Vintage",
+  "colorScheme": "dark",
+  "default": true,
+  "fonts": [
+    "@fontsource/anton/400.css",
+    "@fontsource/special-elite/400.css",
+    "@fontsource/courier-prime/400.css",
+    "@fontsource/courier-prime/700.css"
+  ]
+}

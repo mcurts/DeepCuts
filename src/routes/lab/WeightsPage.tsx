@@ -329,7 +329,7 @@ function Summary({
   }
 
   return (
-    <div className="grid gap-2.5 border-2 border-card-border bg-card-bg p-4">
+    <div className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4">
       <h3 className="text-sm font-bold">These settings</h3>
       <pre className="overflow-x-auto text-sm text-fg-muted tabular-nums">
         <code>{text}</code>
@@ -337,7 +337,7 @@ function Summary({
       <div className="flex flex-wrap gap-2.5">
         <Button
           onPress={copy}
-          className="min-h-11 border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest uppercase hover:border-accent"
+          className="min-h-11 border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-accent"
         >
           Copy settings
         </Button>
@@ -548,7 +548,7 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
   return (
     <section
       aria-labelledby="learned"
-      className="grid gap-2.5 border-2 border-card-border bg-card-bg p-4"
+      className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4"
     >
       <h3 id="learned" className="text-sm font-bold">
         Learn from your presses
@@ -591,7 +591,7 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
             to={`/lab/weights?${apply.toString()}`}
             replace
             preventScrollReset
-            className="inline-flex min-h-11 w-fit items-center border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest uppercase hover:border-accent"
+            className="inline-flex min-h-11 w-fit items-center border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-accent"
           >
             Use these weights
           </Link>

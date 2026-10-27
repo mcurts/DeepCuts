@@ -62,7 +62,7 @@ test.describe('signed out (ADR-0034)', () => {
       'Discover Some Deep Cuts',
     ])
     // No search: it only leads to signed-in pages.
-    await expect(page.getByRole('combobox')).toHaveCount(0)
+    await expect(page.getByRole('combobox', { name: /Find a movie/ })).toHaveCount(0)
     await expect(page.getByRole('navigation', { name: 'Main' })).toHaveCount(0)
     // Two calls to action, both easy to hit, plus the header's Sign in.
     for (const name of ['Get your ticket', 'See the program']) {
