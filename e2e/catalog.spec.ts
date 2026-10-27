@@ -515,7 +515,7 @@ test('liking a film tunes Home’s recommendations, with a match and the reason 
   // Detail stages tag changes until Save.
   await page.getByRole('button', { name: 'Save' }).click()
   await expect(toasts(page).getByText(/^Saved\./)).toBeVisible()
-  await page.getByRole('link', { name: 'Deep Cuts, go to Home' }).click()
+  await page.getByRole('link', { name: 'Deep Cuts, The B-sides of cinema, go to Home' }).click()
   // The top pick is the first row in Discovery (no featured card).
   const tile = page
     .getByRole('region', { name: 'Discover Some Deep Cuts' })

@@ -6,6 +6,7 @@
 import { useRef } from 'react'
 import { Link, Outlet } from 'react-router'
 import { FEATURES } from '@/config/features'
+import { TAGLINE } from '@/config/brand'
 import { AccountChip } from '@/components/layout/AccountChip'
 import { Icon } from '@/components/ui/Icon'
 import { Logo } from '@/components/layout/Logo'
@@ -42,10 +43,11 @@ export function AppLayout() {
         <div className="mx-auto flex max-w-300 flex-wrap items-center justify-between gap-x-3 gap-y-4 px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 md:px-8 lg:flex-nowrap lg:gap-x-8 lg:py-5">
           {/* From `md`, nudged down 8px, so the wordmark itself lines up with the search field
               beside it (from `lg`) and the tagline hangs below (owner, 2026-10-15). A transform,
-              so the header height doesn't change. */}
+              so the header height doesn't change. The name includes the tagline the link shows
+              (WCAG 2.5.3, Label in Name), so a voice control user can say what they see. */}
           <Link
             to="/"
-            aria-label="Deep Cuts, go to Home"
+            aria-label={`Deep Cuts, ${TAGLINE}, go to Home`}
             className="inline-flex min-h-11 shrink-0 flex-col items-start justify-center gap-1 md:translate-y-2"
           >
             {/* The tagline shows from `md` only: phones keep their header height (owner,
