@@ -68,6 +68,17 @@ export function RegisterPage() {
   // page returns to where sign-in started, and `pending` stays set until it does).
   if (session.kind === 'account' && !pending) return <Navigate to="/account" replace />
 
+  // Removes one field's message as soon as it's edited. React Aria would only drop it on blur,
+  // and then the message vanishes as the mouse goes down on Create passkey: the button jumps up
+  // and the click misses (issue #60).
+  function clearError(field: string) {
+    setErrors((current) =>
+      field in current
+        ? Object.fromEntries(Object.entries(current).filter(([f]) => f !== field))
+        : current,
+    )
+  }
+
   // Validates every field at once, then registers and returns to where sign-in started.
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -113,7 +124,7 @@ export function RegisterPage() {
       )}
 
       {/* validationBehavior="aria": the browser's own popups stay off; Zod's messages show under
-          each field instead, and editing a field clears its message. */}
+          each field instead, and editing a field clears its message (clearError). */}
       <Form
         ref={formRef}
         onSubmit={submit}
@@ -121,7 +132,13 @@ export function RegisterPage() {
         validationBehavior="aria"
         className="grid gap-4"
       >
-        <TextField name="name" isRequired autoComplete="name" className="group grid gap-1.5">
+        <TextField
+          name="name"
+          isRequired
+          autoComplete="name"
+          onChange={() => clearError('name')}
+          className="group grid gap-1.5"
+        >
           <Label className="text-sm font-bold">Name</Label>
           <div className={fieldBox}>
             <Input className={inputClass} />
@@ -137,6 +154,7 @@ export function RegisterPage() {
           isRequired
           defaultValue={linkInvite}
           autoComplete="off"
+          onChange={() => clearError('invite')}
           className="group grid gap-1.5"
         >
           <Label className="text-sm font-bold">Invite code</Label>
