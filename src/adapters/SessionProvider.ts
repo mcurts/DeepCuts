@@ -53,7 +53,11 @@ export const SIGNED_OUT: Session = { kind: 'signedOut' }
 
 /** Everything the app can do with sessions, independent of how sign-in actually works. */
 export interface SessionProvider {
-  /** The account signed in last time, or signed out. */
+  /**
+   * The account signed in last time, or signed out. Rejects when it can't tell (e.g. the accounts
+   * server doesn't answer in time, or answers with an error), so the app can say so instead of
+   * showing a signed-in person as signed out (issue #19).
+   */
   getSession(): Promise<Session>
   /** The sign-in options to offer, in display order. */
   signInMethods(): readonly SignInMethod[]
