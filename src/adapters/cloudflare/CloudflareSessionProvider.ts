@@ -11,6 +11,7 @@ import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { z } from 'zod'
 import { createMockSessionProvider } from '../local/MockSessionProvider'
 import { AccountsApiError } from './AccountsApiError'
+import { reportStatus } from './sessionEnded'
 import {
   registrationSchema,
   SIGNED_OUT,
@@ -71,8 +72,11 @@ async function api<T>(
     clearTimeout(timer)
   }
   if (controller.signal.aborted) throw controller.signal.reason
-  if (!res.ok)
+  if (!res.ok) {
+    // A 401 means the session ended on the server (issue #18): the app signs out.
+    reportStatus(res.status)
     throw new AccountsApiError(res.status, errorSchema.safeParse(data).data?.error ?? 'error')
+  }
   const parsed = schema.safeParse(data)
   // A 200 that isn't the expected JSON (e.g. the app's HTML when Functions are skipped) is an error.
   if (!parsed.success) throw new AccountsApiError(502, 'bad_response')

@@ -1,7 +1,8 @@
 // Screen tests for real passkey accounts (ADR-0031, Stage 6 A2b/A4): with the Cloudflare session
 // provider, registration drops the "practice" notice and explains a refused invite on its field;
-// sign-in offers the passkey first; the Account page renames and deletes a passkey account. The
-// accounts API is the MSW fake, and the device's passkey prompt is stubbed.
+// sign-in offers the passkey first; the Account page renames and deletes a passkey account; a
+// session the server ends mid-use goes to Sign in and back (issue #18). The accounts API is the
+// MSW fake, and the device's passkey prompt is stubbed.
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
@@ -10,6 +11,7 @@ import { createCloudflareSessionProvider } from '@/adapters/cloudflare/Cloudflar
 import { SIGNED_OUT, type Session } from '@/adapters/SessionProvider'
 import { createFakeAccountsApi } from '@/test/msw/fakeAccountsApi'
 import { server } from '@/test/msw/server'
+import { SESSION_ENDED } from '@/notify'
 import { findToast, renderRoute } from '@/test/renderRoute'
 
 vi.mock('@simplewebauthn/browser', () => ({
@@ -153,11 +155,11 @@ describe('account settings (A2b)', () => {
 })
 
 describe('a tag that fails to save', () => {
-  // The server refuses the change, as it did in Safari before the local cookie fix (401).
+  // The server fails the change. (A 401 means the session ended, which goes to Sign in instead:
+  // see "a session the server ends" below.)
+  beforeEach(() => void (api.state.signedIn = { id: 'passkey-user', name: 'Pat Key' }))
   const refuseTagChanges = () =>
-    server.use(
-      http.put('/api/tags', () => HttpResponse.json({ error: 'signed_out' }, { status: 401 })),
-    )
+    server.use(http.put('/api/tags', () => HttpResponse.json({ error: 'x' }, { status: 500 })))
   const asPat = { sessionProvider: createCloudflareSessionProvider(), initialSession: PAT }
 
   it('says so on the Detail page, and keeps the picks selected to retry', async () => {
@@ -183,5 +185,74 @@ describe('a tag that fails to save', () => {
     renderRoute('/search?q=thing', { ...asPat, features: { searchPage: true } })
     await user.click(await screen.findByRole('button', { name: 'Want to see The Thing' }))
     expect(await findToast(/^Your change wasn’t saved./)).toBeInTheDocument()
+  })
+})
+
+describe('a session the server ends mid-use (issue #18)', () => {
+  // Signed in as Pat on the server, until a test ends the session there.
+  beforeEach(() => void (api.state.signedIn = { id: 'passkey-user', name: 'Pat Key' }))
+  const asPat = () => ({ sessionProvider: createCloudflareSessionProvider(), initialSession: PAT })
+  // What the server does after 30 idle days, or a sign-out on another device.
+  const endSessionOnServer = () => void (api.state.signedIn = null)
+
+  it('lands on Sign in with one message, and signing back in returns to the same page', async () => {
+    const user = userEvent.setup()
+    const { router } = renderRoute('/movie/1091', asPat())
+    const group = await screen.findByRole('group', { name: 'Your tags' })
+
+    endSessionOnServer()
+    await user.click(within(group).getByRole('button', { name: 'More like this' }))
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+
+    await waitFor(() => expect(router.state.location.pathname).toBe('/sign-in'))
+    expect(await findToast(SESSION_ENDED)).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 1, name: /Sign in/ })).toBeInTheDocument()
+
+    // Pat signs in again with the passkey, and is back on the film.
+    await user.click(screen.getByRole('button', { name: /Sign in with a passkey/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/movie/1091'))
+    expect(api.state.signedIn).toMatchObject({ name: 'Pat Key' })
+  })
+
+  it('from Home, goes to Sign in and back to Home, not to the landing page', async () => {
+    endSessionOnServer()
+    const user = userEvent.setup()
+    // Home loads the lists and the Top Ten at once; both fail, and only one message shows.
+    const { router } = renderRoute('/', asPat())
+    await waitFor(() => expect(router.state.location.pathname).toBe('/sign-in'))
+    expect(await findToast(SESSION_ENDED)).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: /Sign in with a passkey/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(screen.getAllByText(SESSION_ENDED)).toHaveLength(1)
+  })
+
+  it('a visitor who never signed in sees no message and stays put on a 401', async () => {
+    // The startup session check answers 401 for a signed-out first visit (issue #19), and the
+    // accounts APIs answer 401 to anyone without a session.
+    endSessionOnServer()
+    server.use(
+      http.get('/api/auth/session', () =>
+        HttpResponse.json({ error: 'signed_out' }, { status: 401 }),
+      ),
+    )
+    const provider = createCloudflareSessionProvider()
+    const { router } = renderRoute('/', { sessionProvider: provider, initialSession: SIGNED_OUT })
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Your movies, close at hand' }),
+    ).toBeInTheDocument()
+    await expect(provider.getSession()).resolves.toEqual(SIGNED_OUT)
+    await expect(provider.rename?.('X')).rejects.toMatchObject({ status: 401 })
+    expect(router.state.location.pathname).toBe('/')
+    expect(screen.queryByText(SESSION_ENDED)).not.toBeInTheDocument()
+  })
+
+  it('signing out on purpose still goes to the landing page', async () => {
+    const user = userEvent.setup()
+    const { router } = renderRoute('/account', asPat())
+    await user.click(await screen.findByRole('button', { name: 'Sign out' }))
+    await user.click(screen.getByRole('button', { name: 'Yes, sign out' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
+    expect(api.state.signedIn).toBeNull()
+    expect(screen.queryByText(SESSION_ENDED)).not.toBeInTheDocument()
   })
 })

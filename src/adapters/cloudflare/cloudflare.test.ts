@@ -1,8 +1,9 @@
 // Tests for the Cloudflare adapters (ADR-0031, Stage 6 A4): both pass the shared contract suites
 // against a fake accounts API (MSW), and handle what's specific to them: the passkey prompt being
-// cancelled, server errors, the demo staying on the device, rename/delete, and the 30-second reuse
-// of fetched tags. The browser's passkey prompt is stubbed here; the real one is covered by the
-// Playwright test with a virtual authenticator.
+// cancelled, server errors, the demo staying on the device, rename/delete, the 30-second reuse
+// of fetched tags, and the "session ended" signal on a 401 (issue #18). The browser's passkey
+// prompt is stubbed here; the real one is covered by the Playwright test with a virtual
+// authenticator.
 import { http, HttpResponse } from 'msw'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createFakeAccountsApi } from '../../test/msw/fakeAccountsApi'
@@ -15,6 +16,7 @@ import { TopTenFullError } from '../../domain/topTen'
 import { createCloudflareSessionProvider } from './CloudflareSessionProvider'
 import { createCloudflareTagRepository, TagApiError } from './CloudflareTagRepository'
 import { createCloudflareTopTenRepository, TopTenApiError } from './CloudflareTopTenRepository'
+import { onSessionEnded } from './sessionEnded'
 
 // The device's answer to the passkey prompt. Tests make it reject to imitate "Cancel".
 const prompt = vi.hoisted(() => ({
@@ -251,5 +253,40 @@ describe('CloudflareTopTenRepository', () => {
     const repo = createCloudflareTopTenRepository()
     await expect(repo.list()).rejects.toMatchObject({ status: 502 })
     await expect(repo.add(1)).rejects.toMatchObject({ status: 502 })
+  })
+})
+
+describe('the session-ended signal (issue #18)', () => {
+  // Listens for the signal for the length of one test.
+  function listen() {
+    const ended = vi.fn()
+    const stop = onSessionEnded(ended)
+    return { ended, stop }
+  }
+
+  it('fires on a 401 from the tags, Top Ten and account APIs, before the call rejects', async () => {
+    // The fake API answers 401 to everything that needs a session: nobody is signed in.
+    const { ended, stop } = listen()
+    await expect(createCloudflareTagRepository().setTag(1, 'liked', true)).rejects.toMatchObject({
+      status: 401,
+    })
+    expect(ended).toHaveBeenCalledTimes(1)
+    await expect(createCloudflareTopTenRepository().list()).rejects.toMatchObject({ status: 401 })
+    expect(ended).toHaveBeenCalledTimes(2)
+    await expect(createCloudflareSessionProvider().rename?.('X')).rejects.toMatchObject({
+      status: 401,
+    })
+    expect(ended).toHaveBeenCalledTimes(3)
+    stop()
+  })
+
+  it('stays quiet for other failures, and after the listener stops', async () => {
+    const { ended, stop } = listen()
+    server.use(http.get('/api/tags', () => HttpResponse.json({ error: 'x' }, { status: 500 })))
+    await expect(createCloudflareTagRepository().list('liked')).rejects.toBeInstanceOf(TagApiError)
+    expect(ended).not.toHaveBeenCalled()
+    stop()
+    await expect(createCloudflareTopTenRepository().list()).rejects.toBeInstanceOf(TopTenApiError)
+    expect(ended).not.toHaveBeenCalled()
   })
 })

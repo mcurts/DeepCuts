@@ -9,6 +9,7 @@
 import { z } from 'zod'
 import { TopTenChangedError, TopTenFullError, type TopTenList } from '../../domain/topTen'
 import { topTenSchema, type TopTenRepository } from '../TopTenRepository'
+import { reportStatus } from './sessionEnded'
 
 /**
  * A failed Top Ten API call, other than the two expected refusals: "the list is full"
@@ -42,6 +43,8 @@ async function call(
   })
   const body: unknown = await res.json().catch(() => undefined)
   if (!res.ok) {
+    // A 401 means the session ended on the server (issue #18): the app signs out.
+    reportStatus(res.status)
     // Two 409s are expected outcomes, not failures: `top_ten_full` (the screen shows "full") and
     // `top_ten_changed` (a reorder for a list that changed elsewhere, ADR-0041).
     const code = res.status === 409 ? errorSchema.safeParse(body).data?.error : undefined

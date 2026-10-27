@@ -3,8 +3,9 @@
 // authenticator (Chrome DevTools Protocol, `WebAuthn.addVirtualAuthenticator`) stands in for a
 // phone or laptop: it creates and uses real passkeys, with user verification.
 //
-// One flow, start to finish: invite → register → reload (still signed in) → sign out → sign in
-// with the passkey → the lists are still there. Then axe on the account pages at all three widths.
+// One flow, start to finish: invite → register → reload (still signed in) → the session ends on
+// the server mid-use → Sign in with the passkey → back on the same page, the lists still there →
+// sign out. Then axe on the account pages at all three widths.
 import { execFileSync } from 'node:child_process'
 import type { Page } from '@playwright/test'
 import { expect, expectNoA11yViolations, test } from './fixtures'
@@ -38,7 +39,9 @@ async function addAuthenticator(page: Page) {
   })
 }
 
-test('invite → register → reload → sign out → sign in with the passkey', async ({ page }) => {
+test('invite → register → reload → session ends → sign in with the passkey → sign out', async ({
+  page,
+}) => {
   await addAuthenticator(page)
 
   // Register from an invite link. The code is filled in, then removed from the address bar.
@@ -69,23 +72,26 @@ test('invite → register → reload → sign out → sign in with the passkey',
   // The cookie is invisible to the page's JavaScript (HttpOnly).
   expect(await page.evaluate(() => document.cookie)).not.toContain('dc_session')
 
-  // Sign out from the header's account menu (desktop width, one press), then the session is gone.
-  await page.getByRole('banner').getByRole('button', { name: 'Account menu for Ada' }).click()
-  await expect(page.getByRole('menuitem', { name: 'Account settings' })).toBeVisible()
-  await page.getByRole('menuitem', { name: 'Sign out' }).click()
-  await expect(page).toHaveURL(/\/$/)
-  expect(await (await page.request.get('/api/auth/session')).json()).toBeNull()
+  // The session ends on the server mid-use (issue #18): as after 30 idle days, or a sign-out on
+  // another device, the browser's cookie no longer opens it. Saving a tag then lands on Sign in.
+  await page.goto('/movie/1091')
+  const tags = page.getByRole('group', { name: 'Your tags' })
+  await expect(tags).toBeVisible()
+  await page.context().clearCookies()
+  await tags.getByRole('button', { name: 'More like this' }).click()
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(page).toHaveURL(/\/sign-in$/)
+  await expect(page.getByText('You were signed out. Sign in again')).toBeVisible()
 
-  // Sign in with the passkey: one button, no username.
-  await page.goto('/sign-in')
+  // Sign in with the passkey (one button, no username): back on the same film.
   await page.getByRole('button', { name: /Sign in with a passkey/ }).click()
-  await expect(page).not.toHaveURL(/\/sign-in/)
+  await expect(page).toHaveURL(/\/movie\/1091$/)
   const session = await page.request.get('/api/auth/session')
   expect(await session.json()).toMatchObject({ name: 'Ada Lovelace' })
 
-  // The lists are still there.
-  const tags = await (await page.request.get('/api/tags')).json()
-  expect(tags.records).toEqual([expect.objectContaining({ tmdbId: 1091, tag: 'liked' })])
+  // The lists are still there (the save that hit the ended session changed nothing).
+  const saved = await (await page.request.get('/api/tags')).json()
+  expect(saved.records).toEqual([expect.objectContaining({ tmdbId: 1091, tag: 'liked' })])
 
   // Reorders persist in D1 (ADR-0041): the watchlist's saved order and the Top Ten's ranks.
   const api = (method: string, path: string, body: unknown) =>
@@ -109,6 +115,15 @@ test('invite → register → reload → sign out → sign in with the passkey',
   await page.reload()
   expect((await (await page.request.get('/api/tags')).json()).watchlistOrder).toEqual([348, 790])
   expect((await (await page.request.get('/api/top-ten')).json()).films).toEqual([790, 348])
+
+  // Sign out from the header's account menu (desktop width, one press), then the session is gone.
+  // Chosen, not ended by the server: it lands on the landing page, not on Sign in.
+  await page.goto('/account')
+  await page.getByRole('banner').getByRole('button', { name: 'Account menu for Ada' }).click()
+  await expect(page.getByRole('menuitem', { name: 'Account settings' })).toBeVisible()
+  await page.getByRole('menuitem', { name: 'Sign out' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  expect(await (await page.request.get('/api/auth/session')).json()).toBeNull()
 })
 
 test('a used invite is refused on the invite field', async ({ page }) => {

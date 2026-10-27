@@ -17,6 +17,11 @@ import type { TopTenRepository } from '@/adapters/TopTenRepository'
 /** What `useSession()` gives a component. */
 export interface SessionValue {
   session: Session
+  /**
+   * True when the server ended the passkey session (idle too long, or signed out elsewhere) and
+   * the app signed out because of it, until the next sign-in or sign-out (issue #18).
+   */
+  sessionEnded: boolean
   /** Demo or practice: localStorage. Passkey account: the server. Signed out: empty, read-only. */
   tags: TagRepository
   /** The Top Ten (ADR-0036), stored in the same place as `tags`. Signed out: empty, read-only. */
