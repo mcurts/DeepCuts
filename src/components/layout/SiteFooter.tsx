@@ -2,11 +2,13 @@
 // the attribution TMDB's terms of use require. Shown at the foot of the main shell, the account
 // pages and Detail; the full-screen Tune onboarding leaves it out so nothing competes with it.
 // It also shows the release version (ADR-0048, ADR-0049), so anyone reporting a problem can say
-// which one. Builds outside a deploy say "dev build" instead.
+// which one. Builds outside a deploy say "dev build" instead. The theme chooser sits here too
+// (ADR-0056): every visitor can reach it, signed in or not, without it competing with the page.
+import { ThemePicker } from './ThemePicker'
 
 /**
- * The legal footer: "© 2026 Mike Curts · mikecurts.com. All rights reserved. · v1.2.0" and the
- * TMDB credit. Side by side from `sm`, stacked on phones.
+ * The legal footer: "© 2026 Mike Curts · mikecurts.com. All rights reserved. · v1.2.0", the
+ * TMDB credit and the theme chooser. Side by side from `sm`, stacked on phones.
  * @param className - Placement from the layout (width, gutters, top margin).
  * @param version - The release shown (`1.2.0`, or `dev`); the build's own unless a story sets one.
  */
@@ -31,6 +33,7 @@ export function SiteFooter({
         </p>
         <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
       </div>
+      <ThemePicker className="mt-4 font-label text-sm text-fg-muted" />
     </footer>
   )
 }

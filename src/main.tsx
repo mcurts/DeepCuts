@@ -15,6 +15,7 @@ import { reloadOnStaleChunk } from './reloadOnStaleChunk'
 import { AppSessionProvider } from './session/AppSessionProvider'
 import { routes } from './router'
 import { startApp } from './startup'
+import { initTheme } from './theme'
 import './index.css'
 
 // A tab left open across a deploy reloads once to get the new pages, instead of erroring.
@@ -22,6 +23,9 @@ reloadOnStaleChunk()
 
 // A holiday's tab icon, when one is in season (e.g. Halloween all October).
 applySeasonalFavicon()
+
+// The chosen theme's fonts, and remembering a theme picked by a `?theme=` link (ADR-0056).
+initTheme()
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Root element #root not found')
@@ -51,8 +55,8 @@ await startApp(createRoot(root), sessionProvider, (initialSession) => (
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppSessionProvider provider={sessionProvider} initialSession={initialSession}>
-        {/* Triple Feature texture (ADR-0040, index.css): faint scratches behind every page and
-            film grain over it. Both are decoration only, pinned to the window, and let every
+        {/* Textures (ADR-0040, index.css): faint scratches behind every page and film grain over
+            it, as strong as the theme sets (ADR-0056). Both are decoration only, pinned to the window, and let every
             click through. Rendered once here so every layout gets them. */}
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 film-scratch" />
         <RouterProvider router={router} />
