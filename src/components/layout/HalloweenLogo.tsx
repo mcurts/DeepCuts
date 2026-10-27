@@ -30,7 +30,11 @@ type Pumpkin = {
    * and the outline width. */
   size: { rx: number; rxMid: number; ry: number; spread: number; outline: number }
   stem: string
-  flicker: { duration: string; delay: string }
+  /**
+   * The flicker's duration and delay, as utility classes, so pumpkins flicker out of step. Classes,
+   * not a `style` attribute: the CSP blocks inline styles in the pre-rendered HTML (ADR-0057).
+   */
+  flicker: string
   /** Eyes, (sometimes) a nose, and the mouth, as polygon points. */
   face: string[]
 }
@@ -43,7 +47,7 @@ const BEHIND: Pumpkin[] = [
     tilt: -8,
     size: { rx: 15.1, rxMid: 11.4, ry: 22, spread: 10.9, outline: 1.2 },
     stem: 'M-20.5 45Q-22 37 -18 33Q-15 30 -11 33Q-16 36 -15 45Z',
-    flicker: { duration: '1.9s', delay: '-0.70s' },
+    flicker: '[animation-duration:1.9s] [animation-delay:-0.70s]',
     face: [
       '-34.6,57.4 -21.6,61.4 -23.2,63.1 -33.1,60.0',
       '-1.4,57.4 -14.4,61.4 -12.8,63.1 -2.9,60.0',
@@ -56,7 +60,7 @@ const BEHIND: Pumpkin[] = [
     tilt: -4,
     size: { rx: 15.1, rxMid: 11.4, ry: 20, spread: 10.9, outline: 1.2 },
     stem: 'M61.5 -25Q60 -33 64 -37Q67 -40 71 -37Q66 -34 67 -25Z',
-    flicker: { duration: '2.3s', delay: '-0.85s' },
+    flicker: '[animation-duration:2.3s] [animation-delay:-0.85s]',
     face: [
       '47.9,-16.8 61.4,-12.0 54.6,-7.6',
       '80.1,-16.8 66.6,-12.0 73.4,-7.6',
@@ -70,7 +74,7 @@ const BEHIND: Pumpkin[] = [
     tilt: 5,
     size: { rx: 13.3, rxMid: 10.1, ry: 18, spread: 9.7, outline: 1 },
     stem: 'M369.5 -19Q368 -27 372 -31Q375 -34 379 -31Q374 -28 375 -19Z',
-    flicker: { duration: '1.6s', delay: '-0.59s' },
+    flicker: '[animation-duration:1.6s] [animation-delay:-0.59s]',
     face: [
       '357.3,-9.4 368.8,-6.2 367.4,-4.7 358.7,-7.2',
       '386.7,-9.4 375.2,-6.2 376.6,-4.7 385.3,-7.2',
@@ -83,7 +87,7 @@ const BEHIND: Pumpkin[] = [
     tilt: 7,
     size: { rx: 15.7, rxMid: 11.9, ry: 22, spread: 11.3, outline: 1.2 },
     stem: 'M525.5 31Q524 23 528 19Q531 16 535 19Q530 22 531 31Z',
-    flicker: { duration: '2.0s', delay: '-0.74s' },
+    flicker: '[animation-duration:2.0s] [animation-delay:-0.74s]',
     face: [
       '511.3,40.3 525.3,45.6 518.3,50.4',
       '544.7,40.3 530.7,45.6 537.7,50.4',
@@ -101,7 +105,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: -10,
     size: { rx: 13.3, rxMid: 10.1, ry: 18, spread: 9.7, outline: 1 },
     stem: 'M-32.5 85Q-34 77 -30 73Q-27 70 -23 73Q-28 76 -27 85Z',
-    flicker: { duration: '1.7s', delay: '-0.63s' },
+    flicker: '[animation-duration:1.7s] [animation-delay:-0.63s]',
     face: [
       '-44.3,92.1 -32.3,96.4 -38.3,100.4',
       '-15.7,92.1 -27.7,96.4 -21.7,100.4',
@@ -115,7 +119,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: 9,
     size: { rx: 12.2, rxMid: 9.2, ry: 16, spread: 8.8, outline: 1 },
     stem: 'M533.5 85Q532 77 536 73Q539 70 543 73Q538 76 539 85Z',
-    flicker: { duration: '2.2s', delay: '-0.81s' },
+    flicker: '[animation-duration:2.2s] [animation-delay:-0.81s]',
     face: [
       '522.6,93.2 533.1,96.1 531.8,97.4 523.8,95.1',
       '549.4,93.2 538.9,96.1 540.2,97.4 548.2,95.1',
@@ -128,7 +132,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: -3,
     size: { rx: 24.4, rxMid: 18.5, ry: 31, spread: 17.6, outline: 1.9 },
     stem: 'M1.5 100Q0 92 4 88Q7 85 11 88Q6 91 7 100Z',
-    flicker: { duration: '1.8s', delay: '-0.67s' },
+    flicker: '[animation-duration:1.8s] [animation-delay:-0.67s]',
     face: [
       '-23.7,116.8 -1.0,124.9 -15.3,127.4',
       '31.7,116.8 9.0,124.9 23.3,127.4',
@@ -141,7 +145,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: 4,
     size: { rx: 21.5, rxMid: 16.3, ry: 28, spread: 15.5, outline: 1.7 },
     stem: 'M497.5 101Q496 93 500 89Q503 86 507 89Q502 92 503 101Z',
-    flicker: { duration: '2.1s', delay: '-0.78s' },
+    flicker: '[animation-duration:2.1s] [animation-delay:-0.78s]',
     face: [
       '475.6,115.9 495.6,123.2 483.0,125.4',
       '524.4,115.9 504.4,123.2 517.0,125.4',
@@ -154,7 +158,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: -6,
     size: { rx: 11, rxMid: 8.4, ry: 14, spread: 8, outline: 1 },
     stem: 'M-52.5 135Q-54 127 -50 123Q-47 120 -43 123Q-48 126 -47 135Z',
-    flicker: { duration: '1.4s', delay: '-0.52s' },
+    flicker: '[animation-duration:1.4s] [animation-delay:-0.52s]',
     face: [
       '-62.2,141.8 -52.7,144.3 -53.8,145.4 -61.0,143.5',
       '-37.8,141.8 -47.3,144.3 -46.2,145.4 -39.0,143.5',
@@ -167,7 +171,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: 5,
     size: { rx: 12.8, rxMid: 9.7, ry: 16, spread: 9.2, outline: 1 },
     stem: 'M61.5 135Q60 127 64 123Q67 120 71 123Q66 126 67 135Z',
-    flicker: { duration: '1.5s', delay: '-0.55s' },
+    flicker: '[animation-duration:1.5s] [animation-delay:-0.55s]',
     face: [
       '50.4,141.0 61.8,144.8 56.1,148.3',
       '77.6,141.0 66.2,144.8 71.9,148.3',
@@ -181,7 +185,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: -5,
     size: { rx: 13.3, rxMid: 10.1, ry: 17, spread: 9.7, outline: 1 },
     stem: 'M553.5 132Q552 124 556 120Q559 117 563 120Q558 123 559 132Z',
-    flicker: { duration: '1.3s', delay: '-0.48s' },
+    flicker: '[animation-duration:1.3s] [animation-delay:-0.48s]',
     face: [
       '541.7,138.5 553.7,142.6 547.7,146.3',
       '570.3,138.5 558.3,142.6 564.3,146.3',
@@ -195,7 +199,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: 6,
     size: { rx: 9.9, rxMid: 7.5, ry: 12, spread: 7.1, outline: 1 },
     stem: 'M449.5 143Q448 135 452 131Q455 128 459 131Q454 134 455 143Z',
-    flicker: { duration: '1.7s', delay: '-0.63s' },
+    flicker: '[animation-duration:1.7s] [animation-delay:-0.63s]',
     face: [
       '441.1,148.4 449.6,150.6 448.6,151.5 442.1,149.8',
       '462.9,148.4 454.4,150.6 455.4,151.5 461.9,149.8',
@@ -208,7 +212,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: 3,
     size: { rx: 14.5, rxMid: 11, ry: 19, spread: 10.5, outline: 1.1 },
     stem: 'M467.5 -32Q466 -40 470 -44Q473 -47 477 -44Q472 -41 473 -32Z',
-    flicker: { duration: '2.4s', delay: '-0.89s' },
+    flicker: '[animation-duration:2.4s] [animation-delay:-0.89s]',
     face: [
       '453.5,-22.8 467.0,-17.9 458.5,-16.4',
       '486.5,-22.8 473.0,-17.9 481.5,-16.4',
@@ -221,7 +225,7 @@ const IN_FRONT: Pumpkin[] = [
     tilt: -7,
     size: { rx: 8.1, rxMid: 6.2, ry: 10, spread: 5.9, outline: 1 },
     stem: 'M433.5 -11Q432 -19 436 -23Q439 -26 443 -23Q438 -20 439 -11Z',
-    flicker: { duration: '1.2s', delay: '-0.44s' },
+    flicker: '[animation-duration:1.2s] [animation-delay:-0.44s]',
     face: [
       '427.3,-8.4 434.6,-6.0 431.0,-3.8',
       '444.7,-8.4 437.4,-6.0 441.0,-3.8',
@@ -301,7 +305,6 @@ function JackOLantern({ pumpkin, glow }: { pumpkin: Pumpkin; glow: string }) {
   const { palette, at, tilt, size, stem, flicker, face } = pumpkin
   const [cx, cy] = at
   const lobe = { cy, ry: size.ry, strokeWidth: size.outline }
-  const timing = { animationDuration: flicker.duration, animationDelay: flicker.delay }
   const carving = face.map((points) => <polygon key={points} points={points} />)
   return (
     <g
@@ -312,12 +315,10 @@ function JackOLantern({ pumpkin, glow }: { pumpkin: Pumpkin; glow: string }) {
       <ellipse className="halloween-logo__skin" cx={cx - size.spread} rx={size.rx} {...lobe} />
       <ellipse className="halloween-logo__skin" cx={cx + size.spread} rx={size.rx} {...lobe} />
       <ellipse className="halloween-logo__rib" cx={cx} rx={size.rxMid} {...lobe} />
-      <g className="halloween-logo__glow" filter={`url(#${glow})`} style={timing}>
+      <g className={`halloween-logo__glow ${flicker}`} filter={`url(#${glow})`}>
         {carving}
       </g>
-      <g className="halloween-logo__face" style={timing}>
-        {carving}
-      </g>
+      <g className={`halloween-logo__face ${flicker}`}>{carving}</g>
     </g>
   )
 }
