@@ -1,0 +1,18 @@
+<!doctype html>
+<!--
+  Answer for a missing file under /assets/ on Cloudflare Pages (GitHub issue #17, ADR-0029).
+  With no top-level 404.html, Pages treats the site as a single-page app and answers every unknown
+  path with index.html and a 200. That is right for page URLs (/movie/603) but wrong for a deleted
+  chunk: a tab opened before a deploy would get HTML back for its old JavaScript. Pages looks for
+  the nearest 404.html, so this file makes only /assets/* misses a real 404 and keeps the SPA
+  fallback everywhere else. Vite copies public/ into dist/, so it ships as dist/assets/404.html.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Not found · Deep Cuts</title>
+  </head>
+  <body>
+    <p>Not found.</p>
+  </body>
+</html>

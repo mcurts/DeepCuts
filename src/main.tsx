@@ -11,9 +11,13 @@ import { applySeasonalFavicon } from './components/layout/seasonalLogos'
 import { createCloudflareSessionProvider } from './adapters/cloudflare/CloudflareSessionProvider'
 import { createMockSessionProvider } from './adapters/local/MockSessionProvider'
 import { shouldRetry } from './api/retry'
+import { reloadOnStaleChunk } from './reloadOnStaleChunk'
 import { AppSessionProvider } from './session/AppSessionProvider'
 import { routes } from './router'
 import './index.css'
+
+// A tab left open across a deploy reloads once to get the new pages, instead of erroring.
+reloadOnStaleChunk()
 
 // A holiday's tab icon, when one is in season (e.g. Halloween all October).
 applySeasonalFavicon()
