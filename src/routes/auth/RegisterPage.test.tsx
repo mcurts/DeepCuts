@@ -46,6 +46,26 @@ describe('registration (ADR-0031)', () => {
     expect(router.state.location.pathname).toBe('/register')
   })
 
+  // Issue #60: if the message waited for blur, it would vanish as the mouse went down on the
+  // button, the button would jump up and the click would miss.
+  it('clears a field’s message as soon as it is edited, before it loses focus', async () => {
+    const user = userEvent.setup()
+    renderRoute('/register', { initialSession: SIGNED_OUT })
+    await fill(user, { name: '', invite: 'not-a-code' })
+    await user.click(screen.getByRole('button', { name: 'Create passkey' }))
+    const name = screen.getByRole('textbox', { name: 'Name' })
+    await waitFor(() => expect(name).toHaveFocus())
+
+    await user.type(name, 'A')
+    expect(name).toHaveFocus()
+    expect(screen.queryByText('Enter your name.')).not.toBeInTheDocument()
+    expect(name).not.toHaveAttribute('aria-invalid')
+    // The other field keeps its message until it's edited too.
+    expect(screen.getByRole('textbox', { name: 'Invite code' })).toHaveAccessibleDescription(
+      /That code isn’t right\./,
+    )
+  })
+
   it('registers and returns to where sign-in started', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/lists?tag=liked', { initialSession: SIGNED_OUT })

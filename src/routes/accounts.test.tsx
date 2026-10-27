@@ -115,6 +115,20 @@ describe('account settings (A2b)', () => {
     expect(api.state.signedIn?.name).toBe('Pat Key')
   })
 
+  // Issue #60: the message must go while typing, not on blur, or the Save button moves under
+  // the mouse and the click misses.
+  it('clears the name message as soon as the name is edited', async () => {
+    const user = userEvent.setup()
+    renderAccount()
+    const name = await screen.findByRole('textbox', { name: 'Name' })
+    await user.clear(name)
+    await user.click(screen.getByRole('button', { name: 'Save name' }))
+    expect(name).toHaveAccessibleDescription(/Enter your name\./)
+    await user.type(name, 'P')
+    expect(screen.queryByText('Enter your name.')).not.toBeInTheDocument()
+    expect(name).not.toHaveAttribute('aria-invalid')
+  })
+
   it('deletes the account only after a confirm, then lands on the landing page', async () => {
     const user = userEvent.setup()
     const { router } = renderAccount()

@@ -72,6 +72,9 @@ function ChangeName({ name, rename }: { name: string; rename: (name: string) => 
           defaultValue={name}
           isRequired
           autoComplete="name"
+          // Clear the message while typing, not on blur: on blur it vanishes as the mouse goes
+          // down on Save name, the button jumps up and the click misses (issue #60).
+          onChange={() => setErrors({})}
           className="group grid gap-1.5"
         >
           <Label className="text-sm font-bold">Name</Label>

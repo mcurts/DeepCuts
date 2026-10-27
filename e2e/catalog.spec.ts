@@ -456,6 +456,22 @@ test.describe('signing in and registering', () => {
     await expect(page.getByRole('navigation', { name: 'Main' })).toHaveCount(0)
   })
 
+  test('after a field error, fixing it and clicking Create passkey once registers (issue #60)', async ({
+    page,
+  }) => {
+    await page.goto('/register?invite=AAAAAAAAAAAAAAAAAAAAAA')
+    const name = page.getByRole('textbox', { name: 'Name' })
+    const create = page.getByRole('button', { name: 'Create passkey' })
+    await create.click()
+    await expect(name).toHaveAttribute('aria-invalid', 'true')
+    // The message goes while typing, so the button is already in place when the mouse goes down.
+    await name.fill('Ada Lovelace')
+    await expect(page.getByText('Enter your name.')).toHaveCount(0)
+    await create.click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(toasts(page).getByText('Account created. Signed in as Ada.')).toBeVisible()
+  })
+
   test('register from an invite link with the keyboard; errors pass axe; the practice account survives a reload (ADR-0031)', async ({
     page,
   }) => {

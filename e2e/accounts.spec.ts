@@ -159,9 +159,14 @@ test.describe('account settings', () => {
     await page.getByRole('button', { name: 'Create passkey' }).click()
     await expect(page).not.toHaveURL(/\/register/)
 
-    // Change name: saved on the server, so it survives a reload.
+    // Change name: an empty name is refused on the field. Fixing it and clicking Save once with
+    // the mouse saves it (issue #60), on the server, so it survives a reload.
     await page.goto('/account')
-    await page.getByRole('textbox', { name: 'Name' }).fill('Grace B. Hopper')
+    const name = page.getByRole('textbox', { name: 'Name' })
+    await name.fill('')
+    await page.getByRole('button', { name: 'Save name' }).click()
+    await expect(name).toHaveAttribute('aria-invalid', 'true')
+    await name.fill('Grace B. Hopper')
     await page.getByRole('button', { name: 'Save name' }).click()
     await expect(page.getByText('Name saved.')).toBeVisible()
     await page.reload()
