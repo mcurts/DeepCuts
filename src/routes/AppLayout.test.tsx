@@ -11,14 +11,18 @@ describe('navigation', () => {
     const { router } = renderRoute('/lists')
     await screen.findByRole('heading', { level: 1, name: 'My Lists' })
     expect(screen.queryByRole('navigation', { name: 'Main' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('link', { name: 'Deep Cuts, go to Home' }))
+    await user.click(screen.getByRole('link', { name: /go to Home/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
   })
 
   it('shows the tagline under the logo, inside the Home link', async () => {
     renderRoute('/lists')
-    const home = await screen.findByRole('link', { name: 'Deep Cuts, go to Home' })
-    // Visible from `md` only (a CSS class jsdom doesn't apply); the link's name stays "Deep Cuts".
+    // The link's name includes the tagline it shows (WCAG 2.5.3, Label in Name), so a voice
+    // control user can say what they see.
+    const home = await screen.findByRole('link', {
+      name: 'Deep Cuts, The B-sides of cinema, go to Home',
+    })
+    // Visible from `md` only (a CSS class jsdom doesn't apply).
     expect(within(home).getByText('The B-sides of cinema')).toBeInTheDocument()
   })
 
