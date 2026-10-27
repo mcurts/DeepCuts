@@ -33,15 +33,44 @@ const optionsSchema = z.object({
 })
 const errorSchema = z.object({ error: z.string().max(64) })
 
-/** Calls the accounts API (same origin, cookies included) and validates the answer. */
-async function api<T>(method: string, path: string, schema: z.ZodType<T>, body?: unknown) {
-  const res = await fetch(path, {
-    method,
-    credentials: 'same-origin',
-    headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
-    body: body === undefined ? null : JSON.stringify(body),
-  })
-  const data: unknown = await res.json().catch(() => undefined)
+// How long the startup session check waits for an answer before giving up (issue #19). The app
+// waits for it before its first paint (main.tsx), so a stalled request would otherwise leave a
+// blank page; 5 seconds is far beyond a normal answer (well under a second) yet short enough that
+// the person gets a "can't reach your account" screen with a retry instead of waiting forever.
+export const SESSION_TIMEOUT_MS = 5000
+
+/**
+ * Calls the accounts API (same origin, cookies included) and validates the answer.
+ * @param timeoutMs - Gives up (rejects with an AbortError) when the whole answer hasn't arrived
+ *   by then. Only the session check sets one; sign-in calls wait as long as the browser does.
+ */
+async function api<T>(
+  method: string,
+  path: string,
+  schema: z.ZodType<T>,
+  body?: unknown,
+  timeoutMs?: number,
+) {
+  const controller = new AbortController()
+  const timer =
+    timeoutMs === undefined ? undefined : setTimeout(() => controller.abort(), timeoutMs)
+  let res: Response
+  let data: unknown
+  try {
+    res = await fetch(path, {
+      method,
+      credentials: 'same-origin',
+      headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
+      body: body === undefined ? null : JSON.stringify(body),
+      signal: controller.signal,
+    })
+    // The body counts too: a server can send headers and then stall. A body that isn't JSON (or is
+    // cut off by the timeout) reads as `undefined` and is judged below.
+    data = await res.json().catch(() => undefined)
+  } finally {
+    clearTimeout(timer)
+  }
+  if (controller.signal.aborted) throw controller.signal.reason
   if (!res.ok)
     throw new AccountsApiError(res.status, errorSchema.safeParse(data).data?.error ?? 'error')
   const parsed = schema.safeParse(data)
@@ -73,10 +102,27 @@ export function createCloudflareSessionProvider(
   return {
     async getSession() {
       try {
-        const user = await api('GET', '/api/auth/session', userSchema.nullable())
+        const user = await api(
+          'GET',
+          '/api/auth/session',
+          userSchema.nullable(),
+          undefined,
+          SESSION_TIMEOUT_MS,
+        )
         if (user) return accountSession(user)
-      } catch {
-        // The API can't be reached or answered oddly: treated as signed out, below.
+      } catch (error) {
+        // A 401 is a clear "no session": signed out, below. Anything else (a timeout, no network,
+        // a 5xx such as the daily Functions quota running out, or HTML instead of JSON) means we
+        // can't tell whether a passkey account is signed in (issue #19). Showing signed out then
+        // would quietly hide a signed-in person's lists, so this rejects and the app shows "can't
+        // reach your account" with a retry (startup.tsx). The demo account still works: it lives on
+        // this device, and signing in with a passkey ends it, so if it's here it's the session.
+        const signedOut = error instanceof AccountsApiError && error.status === 401
+        if (!signedOut) {
+          const onDevice = await local.getSession()
+          if (onDevice.kind === 'account') return onDevice
+          throw error
+        }
       }
       // Signed out of a passkey account: the demo account if this device has one.
       return local.getSession()

@@ -14,6 +14,7 @@ import { shouldRetry } from './api/retry'
 import { reloadOnStaleChunk } from './reloadOnStaleChunk'
 import { AppSessionProvider } from './session/AppSessionProvider'
 import { routes } from './router'
+import { startApp } from './startup'
 import './index.css'
 
 // A tab left open across a deploy reloads once to get the new pages, instead of erroring.
@@ -43,11 +44,10 @@ const sessionProvider =
     ? createCloudflareSessionProvider()
     : createMockSessionProvider()
 // Read the saved session before the first render, so the app never flashes a guest state for
-// someone who is signed in.
-const initialSession = await sessionProvider.getSession()
-
-// StrictMode runs extra checks in development only (e.g. effects run twice to expose bugs).
-createRoot(root).render(
+// someone who is signed in. If it can't be read (the accounts server timed out or failed), this
+// shows "can't reach your account" with a retry instead (issue #19, startup.tsx).
+await startApp(createRoot(root), sessionProvider, (initialSession) => (
+  // StrictMode runs extra checks in development only (e.g. effects run twice to expose bugs).
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppSessionProvider provider={sessionProvider} initialSession={initialSession}>
@@ -61,5 +61,5 @@ createRoot(root).render(
         <AppToaster />
       </AppSessionProvider>
     </QueryClientProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+))

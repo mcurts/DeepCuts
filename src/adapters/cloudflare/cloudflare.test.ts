@@ -100,6 +100,44 @@ describe('CloudflareSessionProvider', () => {
     expect(await createCloudflareSessionProvider().getSession()).toEqual(demo)
   })
 
+  // Issue #19: when the server can't say, the session check rejects instead of showing signed out,
+  // so a signed-in person isn't quietly shown the landing page.
+  it.each([
+    ['no network', () => HttpResponse.error()],
+    ['a 5xx (e.g. the Functions quota used up)', () => new HttpResponse('quota', { status: 503 })],
+    ['HTML instead of JSON (Functions skipped)', () => HttpResponse.html('<html>')],
+    ['a 429', () => HttpResponse.json({ error: 'rate_limited' }, { status: 429 })],
+  ])('rejects the session check on %s, rather than saying signed out', async (_, answer) => {
+    server.use(http.get('/api/auth/session', answer))
+    await expect(createCloudflareSessionProvider().getSession()).rejects.toBeDefined()
+  })
+
+  it('gives up on a session check that hangs, after 5 seconds', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    try {
+      // Never answers.
+      server.use(http.get('/api/auth/session', () => new Promise<Response>(() => {})))
+      const check = createCloudflareSessionProvider().getSession()
+      const settled = vi.fn()
+      check.then(settled, settled)
+      await vi.advanceTimersByTimeAsync(4_900)
+      expect(settled).not.toHaveBeenCalled()
+      await vi.advanceTimersByTimeAsync(100)
+      await expect(check).rejects.toMatchObject({ name: 'AbortError' })
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('treats a 401 from the session check as signed out', async () => {
+    server.use(
+      http.get('/api/auth/session', () =>
+        HttpResponse.json({ error: 'unauthorized' }, { status: 401 }),
+      ),
+    )
+    expect(await createCloudflareSessionProvider().getSession()).toEqual({ kind: 'signedOut' })
+  })
+
   it('treats a non-JSON answer (Functions skipped) as an error, not a session', async () => {
     server.use(http.post('/api/auth/authenticate/options', () => HttpResponse.html('<html>')))
     await expect(createCloudflareSessionProvider().signIn('passkey')).rejects.toMatchObject({
