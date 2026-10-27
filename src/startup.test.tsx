@@ -78,4 +78,30 @@ describe('startApp', () => {
     await user.click(screen.getByRole('button', { name: 'Try again' }))
     expect(await screen.findByText('App: account')).toBeInTheDocument()
   })
+
+  // ADR-0057: the first render replaces the pre-rendered landing page, so it waits for the page's
+  // code too, rather than putting an empty frame up first.
+  it('keeps what #root holds until the first page is ready, then replaces it', async () => {
+    server.use(http.get('/api/auth/session', () => HttpResponse.json(null)))
+    // A fresh container that starts with pre-rendered HTML, as index.html's #root does.
+    const prerendered = document.createElement('div')
+    prerendered.innerHTML = '<p>Pre-rendered</p>'
+    document.body.append(prerendered)
+    const ownRoot = createRoot(prerendered)
+    let markReady = () => {}
+    const ready = new Promise<void>((resolve) => (markReady = resolve))
+
+    const started = startApp(ownRoot, createCloudflareSessionProvider(), renderApp, ready)
+    // The session has answered, but the page isn't ready: the HTML stays.
+    await act(() => new Promise((r) => setTimeout(r, 50)))
+    expect(screen.getByText('Pre-rendered')).toBeInTheDocument()
+    expect(renderApp).not.toHaveBeenCalled()
+
+    markReady()
+    await act(() => started)
+    expect(screen.getByText('App: signedOut')).toBeInTheDocument()
+    expect(screen.queryByText('Pre-rendered')).not.toBeInTheDocument()
+    act(() => ownRoot.unmount())
+    prerendered.remove()
+  })
 })

@@ -28,6 +28,9 @@ export const test = base.extend<{ page: Page; signedIn: boolean }>({
               name: 'deepcuts:v1:account',
               value: JSON.stringify({ id: 'demo', name: 'Mike Curts', method: 'demo' }),
             },
+            // What the app records after any signed-in visit (ADR-0057), so the boot script
+            // hides the pre-rendered landing page as it would for a returning visitor.
+            { name: 'deepcuts:v1:signed-in', value: 'true' },
           ],
         },
       ],

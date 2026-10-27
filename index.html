@@ -34,9 +34,14 @@
          same-origin script, so the CSP stays script-src 'self'. Comes after the theme-color meta,
          which it updates. -->
     <script src="/theme-boot.js"></script>
+    <!-- Hides the pre-rendered landing page below wherever this visit will show another page
+         (ADR-0057): any address but `/`, or a device that's signed in. Same reasons as above. -->
+    <script src="/shell-boot.js"></script>
   </head>
   <body>
-    <!-- React renders the whole app into #root (src/main.tsx). -->
+    <!-- React renders the whole app into #root (src/main.tsx). The production build first fills
+         it with the signed-out landing page as HTML (scripts/prerender.mjs, ADR-0057), so a first
+         visit paints before the JavaScript has loaded; the app's first render replaces it. -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
