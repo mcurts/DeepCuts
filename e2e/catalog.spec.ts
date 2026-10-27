@@ -8,6 +8,28 @@ import { expect, expectNoA11yViolations, expectNoHorizontalOverflow, test } from
 // Sonner's toast area (src/notify.ts): action outcomes ("Saved.", "Signed in as Mike.") show here.
 const toasts = (page: Page) => page.getByRole('region', { name: /^Notifications/ })
 
+/**
+ * Lets a test make the demo account's saves fail, as they would with browser storage full. The
+ * local repositories write through `localStorage.setItem` (src/adapters/local/), so while writes
+ * are switched off it throws the browser's own "quota exceeded" error.
+ * @returns A switch: `fail(true)` makes every save fail, `fail(false)` lets them through again.
+ */
+async function failableStorage(page: Page) {
+  await page.addInitScript(() => {
+    const w = window as unknown as { failWrites: boolean }
+    w.failWrites = false
+    const setItem = Storage.prototype.setItem
+    Storage.prototype.setItem = function (key, value) {
+      if (w.failWrites) throw new DOMException('Storage is full', 'QuotaExceededError')
+      setItem.call(this, key, value)
+    }
+  })
+  return (on: boolean) =>
+    page.evaluate((v) => {
+      ;(window as unknown as { failWrites: boolean }).failWrites = v
+    }, on)
+}
+
 for (const path of ['/', '/movie/1091', '/lists', '/account']) {
   test(`${path} has no axe violations and no horizontal overflow`, async ({ page }) => {
     await page.goto(path)
@@ -275,6 +297,19 @@ test.describe('reordering the Top Ten (ADR-0041)', () => {
     await expect(titlesOf(page)).toHaveText(['#1 Charlie', '#2 Alpha', '#3 Bravo'])
     await expect(shelf(page).getByRole('status')).toHaveText('Charlie moved to #1.')
   })
+
+  test('a move that can’t be saved goes back and says so', async ({ page }) => {
+    const fail = await failableStorage(page)
+    // failableStorage only applies from the next page load.
+    await page.reload()
+    await shelf(page).getByRole('button', { name: 'Reorder' }).click()
+    await fail(true)
+    await shelf(page).getByRole('button', { name: 'Move Charlie earlier' }).click()
+    await expect(toasts(page).getByText('Your new order wasn’t saved. Try again.')).toBeVisible()
+    await expect(titlesOf(page)).toHaveText(['#1 Alpha', '#2 Bravo', '#3 Charlie'])
+    await page.reload()
+    await expect(titlesOf(page)).toHaveText(['Alpha', 'Bravo', 'Charlie'])
+  })
 })
 
 test.describe('reordering the watchlist on My Lists (ADR-0041)', () => {
@@ -520,6 +555,90 @@ test('tag and genre colors reach the page (runtime CSS variables, ADR-0020/0027)
     }, tag)
     expect(icon, name).toBe(expected)
   }
+})
+
+test.describe('when something fails', () => {
+  test('a tag save that fails says so and keeps the picks; Save again works', async ({ page }) => {
+    const fail = await failableStorage(page)
+    await page.goto('/movie/1091')
+    const want = page
+      .getByRole('group', { name: 'Your tags' })
+      .getByRole('button', { name: 'Want to see' })
+    await want.click()
+    await fail(true)
+    await page.getByRole('button', { name: 'Save' }).click()
+    await expect(
+      toasts(page).getByText(
+        'Your changes weren’t all saved. Your picks are still selected, so try Save again.',
+      ),
+    ).toBeVisible()
+    // Detail stays open with the pick still selected, ready for another try.
+    await expect(page).toHaveURL(/\/movie\/1091$/)
+    await expect(want).toHaveAttribute('aria-pressed', 'true')
+
+    await fail(false)
+    await page.getByRole('button', { name: 'Save' }).click()
+    await expect(toasts(page).getByText('Saved. The Thing: Want to see.')).toBeVisible()
+  })
+
+  test('adding to a Top Ten that can’t be saved says so', async ({ page }) => {
+    const fail = await failableStorage(page)
+    await page.goto('/movie/1091')
+    await fail(true)
+    await page.getByRole('button', { name: /Add to Top 10/ }).click()
+    await expect(
+      toasts(page).getByText('Couldn’t update your Top Ten. Please try again.'),
+    ).toBeVisible()
+  })
+
+  test('a film TMDB can’t send shows Film not found, with a way Home', async ({ page }) => {
+    await page.route(/\/api\/tmdb\/movie\/\d+(\?.*)?$/, (route) =>
+      route.fulfill({ status: 500, json: {} }),
+    )
+    await page.goto('/movie/1091')
+    await expect(page.getByRole('heading', { level: 1, name: 'Film not found' })).toBeVisible()
+    await page.getByRole('link', { name: /^Go to / }).click()
+    await expect(page).toHaveURL(/\/$/)
+  })
+
+  test('Discovery says when TMDB is unavailable, and the page still passes axe', async ({
+    page,
+  }) => {
+    // The starter shelf (no likes yet) is the only part of Home that asks TMDB for new films.
+    await page.route('**/api/tmdb/discover/movie**', (route) =>
+      route.fulfill({ status: 500, json: {} }),
+    )
+    await page.goto('/')
+    await expect(
+      page.getByText('Discovery is unavailable right now. Try again in a moment.'),
+    ).toBeVisible()
+    await expectNoA11yViolations(page)
+    await expectNoHorizontalOverflow(page)
+  })
+})
+
+test('Account page (phones): Sign out asks first, Cancel keeps you signed in, Open My Lists works', async ({
+  page,
+}, testInfo) => {
+  // From `md` these cards are hidden and the account menu covers them (tested above).
+  test.skip(testInfo.project.name === 'desktop-1280', 'Phone-width cards only')
+  await page.goto('/account')
+  await page.getByRole('link', { name: 'Open My Lists' }).click()
+  await expect(page).toHaveURL(/\/lists$/)
+
+  await page.goto('/account')
+  const signOut = page.getByRole('button', { name: 'Sign out', exact: true })
+  await signOut.click()
+  await expect(page.getByRole('button', { name: 'Yes, sign out' })).toBeFocused()
+  await page.getByRole('button', { name: 'Cancel' }).click()
+  await expect(signOut).toBeFocused()
+  await expect(page).toHaveURL(/\/account$/)
+
+  await signOut.click()
+  await page.getByRole('button', { name: 'Yes, sign out' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  await expect(toasts(page).getByText('Signed out.')).toBeVisible()
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible()
 })
 
 test('the dev-only labs are not part of the production site', async ({ page }) => {

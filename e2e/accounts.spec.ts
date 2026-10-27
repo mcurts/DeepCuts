@@ -5,7 +5,8 @@
 //
 // One flow, start to finish: invite → register → reload (still signed in) → the session ends on
 // the server mid-use → Sign in with the passkey → back on the same page, the lists still there →
-// sign out. Then axe on the account pages at all three widths.
+// sign out. Then renaming and deleting an account, the "can't reach your account" screen when the
+// session check fails, and axe on the account pages at all three widths.
 import { execFileSync } from 'node:child_process'
 import type { Page } from '@playwright/test'
 import { expect, expectNoA11yViolations, test } from './fixtures'
@@ -141,6 +142,59 @@ test('a used invite is refused on the invite field', async ({ page }) => {
   await expect(page.getByRole('textbox', { name: 'Invite code' })).toHaveAccessibleDescription(
     /may have expired or been used already/,
   )
+})
+
+test.describe('account settings', () => {
+  // Its own rate-limit bucket: with the flow above, this file makes more account changes than
+  // the 10-a-minute auth limit allows one client (server/rateLimit.ts). The limiter keys on
+  // CF-Connecting-IP, which `wrangler pages dev` passes through; on Cloudflare a client can't set
+  // it. 203.0.113.0/24 is the documentation-only range.
+  test.use({ extraHTTPHeaders: { 'CF-Connecting-IP': '203.0.113.7' } })
+  test('a passkey account can change its name and delete itself (ADR-0031 A2b)', async ({
+    page,
+  }) => {
+    await addAuthenticator(page)
+    await page.goto(newInvitePath())
+    await page.getByRole('textbox', { name: 'Name' }).fill('Grace Hopper')
+    await page.getByRole('button', { name: 'Create passkey' }).click()
+    await expect(page).not.toHaveURL(/\/register/)
+
+    // Change name: saved on the server, so it survives a reload.
+    await page.goto('/account')
+    await page.getByRole('textbox', { name: 'Name' }).fill('Grace B. Hopper')
+    await page.getByRole('button', { name: 'Save name' }).click()
+    await expect(page.getByText('Name saved.')).toBeVisible()
+    await page.reload()
+    await expect(page.getByRole('heading', { level: 1, name: 'Grace B. Hopper' })).toBeVisible()
+
+    // Delete asks first; Cancel keeps the account.
+    const remove = page.getByRole('button', { name: 'Delete account' })
+    await remove.click()
+    await page.getByRole('button', { name: 'Cancel' }).click()
+    await expect(remove).toBeFocused()
+    await remove.click()
+    await page.getByRole('button', { name: 'Yes, delete my account' }).click()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByText('Your account was deleted.')).toBeVisible()
+    expect(await (await page.request.get('/api/auth/session')).json()).toBeNull()
+  })
+})
+
+test('when the session check fails, the app says so and Try again recovers (issue #19)', async ({
+  page,
+}) => {
+  // The accounts server answers with an error instead of "signed in" or "signed out".
+  await page.route('**/api/auth/session', (route) => route.fulfill({ status: 500, json: {} }))
+  await page.goto('/')
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Can’t reach your account' }),
+  ).toBeVisible()
+  await expectNoA11yViolations(page)
+
+  // The server is back: Try again starts the app (signed out here, so the landing page).
+  await page.unroute('**/api/auth/session')
+  await page.getByRole('button', { name: 'Try again' }).click()
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible()
 })
 
 for (const [width, height] of [
