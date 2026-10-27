@@ -139,4 +139,4 @@ source only. [SECURITY.md](SECURITY.md) covers reporting a vulnerability.
 
 ## License
 
-The code is [MIT](LICENSE)-licensed. Film data and images come from [TMDB](https://www.themoviedb.org/) under its own terms and aren't covered; this product uses the TMDB API but is not endorsed or certified by TMDB. Fonts and other dependencies keep their own licenses.
+All rights reserved: the code is public for review only, not open source. No one may use, copy, change or redistribute it without written permission; see [LICENSE](LICENSE). Film data and images come from [TMDB](https://www.themoviedb.org/) under its own terms and aren't covered; this product uses the TMDB API but is not endorsed or certified by TMDB. Fonts and other dependencies keep their own licenses.
