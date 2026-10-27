@@ -5,7 +5,7 @@
 // demo and practice accounts' lists in this browser, and signed out there is an empty store that
 // refuses writes. Nothing moves between stores: there is no guest or device profile to move from.
 import { useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { createCloudflareTagRepository } from '@/adapters/cloudflare/CloudflareTagRepository'
 import { createCloudflareTopTenRepository } from '@/adapters/cloudflare/CloudflareTopTenRepository'
 import { createMockSessionProvider } from '@/adapters/local/MockSessionProvider'
@@ -16,6 +16,7 @@ import { signedOutTags, signedOutTopTen } from '@/adapters/signedOutTags'
 import type { TagRepository } from '@/adapters/TagRepository'
 import type { TopTenRepository } from '@/adapters/TopTenRepository'
 import { SessionContext, type SessionValue } from './SessionContext'
+import { useSessionEnded } from './useSessionEnded'
 
 interface Props {
   children: ReactNode
@@ -53,6 +54,14 @@ export function AppSessionProvider({
   // Created once and kept for the life of the app.
   const [provider] = useState(() => injected ?? createMockSessionProvider())
   const [session, setSession] = useState(initialSession)
+  // True once the server ended the passkey session (issue #18), until the next sign-in or
+  // sign-out. The route guards read it to send the person to Sign in rather than the landing page.
+  const [sessionEnded, setSessionEnded] = useState(false)
+  const endSession = useCallback(() => {
+    setSessionEnded(true)
+    setSession(SIGNED_OUT)
+  }, [])
+  useSessionEnded(session, endSession)
 
   const value = useMemo<SessionValue>(() => {
     // The tag store for the current session.
@@ -75,6 +84,7 @@ export function AppSessionProvider({
     // tagQueries.ts).
     async function become(next: Session) {
       setSession(next)
+      setSessionEnded(false)
       await queryClient.invalidateQueries({ queryKey: ['tags'] })
       await queryClient.invalidateQueries({ queryKey: ['topTen'] })
       return next
@@ -82,6 +92,7 @@ export function AppSessionProvider({
 
     return {
       session,
+      sessionEnded,
       tags,
       topTen,
       signInMethods: provider.signInMethods(),
@@ -103,6 +114,7 @@ export function AppSessionProvider({
     }
   }, [
     session,
+    sessionEnded,
     provider,
     createLocalTags,
     createRemoteTags,

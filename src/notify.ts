@@ -84,6 +84,12 @@ export async function withToast(
   }
 }
 
+/**
+ * When the server ended the passkey session (30 idle days, or signed out or deleted on another
+ * device, issue #18). The app is already on its way to Sign in when this shows.
+ */
+export const SESSION_ENDED = 'You were signed out. Sign in again to pick up where you left off.'
+
 /** When a one-tap tag change (Search, Tune) didn't save. The toggle still shows the old state. */
 export const TAG_ERROR = 'Your change wasn’t saved. Nothing was changed. Try again.'
 

@@ -16,6 +16,7 @@ import {
   type TagRecord,
   type TagRepository,
 } from '../TagRepository'
+import { reportStatus } from './sessionEnded'
 
 /** A failed tags API call. */
 export class TagApiError extends Error {
@@ -48,6 +49,8 @@ async function call<T>(method: string, path: string, schema: z.ZodType<T>, body?
     body: body === undefined ? null : JSON.stringify(body),
   })
   if (!res.ok) {
+    // A 401 means the session ended on the server (issue #18): the app signs out.
+    reportStatus(res.status)
     // A reorder for a watchlist that changed elsewhere is expected, not a failure (ADR-0041).
     const body: unknown = await res.json().catch(() => undefined)
     if (
