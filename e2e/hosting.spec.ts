@@ -20,6 +20,18 @@ test('hashed assets are cached for a year (H6)', async ({ page, request }) => {
   expect(h['cache-control']).toBe('public, max-age=31536000, immutable')
 })
 
+test('a missing asset is a 404 that is never cached, not the app page (#17)', async ({
+  request,
+}) => {
+  // An old deploy's chunk name. Pages answers unknown page URLs with index.html (see "deep links"
+  // below); public/assets/404.html makes /assets/* the exception.
+  const res = await request.get('/assets/SearchPage-gone1234.js')
+  expect(res.status()).toBe(404)
+  expect(await res.text()).not.toContain('id="root"')
+  // Not the year-long cache real assets get: a rollback can bring the name back.
+  expect(res.headers()['cache-control']).toBe('no-store')
+})
+
 test('API answers carry the security headers too (Functions middleware)', async ({ request }) => {
   const h = (await request.get('/api/tmdb/account')).headers()
   expect(h['x-content-type-options']).toBe('nosniff')
