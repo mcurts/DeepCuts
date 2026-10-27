@@ -1,0 +1,86 @@
+{
+  "$description": "Tier 1 for Midnight Rental (ADR-0056): an 80s video store after dark. Indigo night, hot pink and electric cyan neon.",
+  "palette": {
+    "$type": "color",
+    "night": {
+      "$value": "#0e0b1f"
+    },
+    "night-raised": {
+      "$value": "#18142e"
+    },
+    "night-overlay": {
+      "$value": "#241e40"
+    },
+    "haze": {
+      "$value": "#f3f0ff"
+    },
+    "haze-soft": {
+      "$value": "#d9d3f5"
+    },
+    "lilac": {
+      "$value": "#a9a3c9"
+    },
+    "grid": {
+      "$value": "#2f2852"
+    },
+    "grid-strong": {
+      "$value": "#463d75"
+    },
+    "wire": {
+      "$value": "#8f88b5"
+    },
+    "pink": {
+      "$value": "#ff5fae"
+    },
+    "pink-bright": {
+      "$value": "#ff8cc6"
+    },
+    "cyan": {
+      "$value": "#3fe0ff"
+    },
+    "red": {
+      "$value": "#ff4d6d"
+    },
+    "red-soft": {
+      "$value": "#ff8a9a"
+    },
+    "sky": {
+      "$value": "#7cc8ff"
+    },
+    "yellow": {
+      "$value": "#ffd84d"
+    },
+    "coral": {
+      "$value": "#ff3b6b"
+    },
+    "orange": {
+      "$value": "#ff7a3d"
+    },
+    "amber": {
+      "$value": "#ffc53d"
+    },
+    "lime": {
+      "$value": "#c6f432"
+    },
+    "mint": {
+      "$value": "#39ff88"
+    },
+    "black": {
+      "$value": "#000000"
+    },
+    "glow": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [1.0, 0.3725, 0.6824],
+        "alpha": 0.45
+      }
+    },
+    "glow-cyan": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [0.2471, 0.8784, 1.0],
+        "alpha": 0.35
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$comment": "Not tokens: how the app lists and loads this theme (ADR-0056). `fonts` are @fontsource stylesheets, loaded only when the theme is chosen.",
+  "label": "Midnight Rental",
+  "colorScheme": "dark",
+  "default": false,
+  "fonts": [
+    "@fontsource/bungee/400.css",
+    "@fontsource/space-grotesk/400.css",
+    "@fontsource/space-grotesk/700.css",
+    "@fontsource/space-mono/400.css"
+  ]
+}

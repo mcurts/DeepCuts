@@ -1,0 +1,40 @@
+{
+  "$description": "Type roles for Midnight Rental (ADR-0056).",
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "body": {
+        "$value": [
+          "Space Grotesk",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif"
+        ]
+      },
+      "display": {
+        "$value": ["Bungee", "Impact", "sans-serif"]
+      },
+      "label": {
+        "$value": ["Space Mono", "Courier New", "monospace"]
+      }
+    },
+    "display": {
+      "weight": {
+        "$type": "string",
+        "$value": "400"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "0.02em"
+      },
+      "case": {
+        "$type": "string",
+        "$value": "uppercase"
+      }
+    }
+  }
+}
