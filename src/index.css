@@ -3,25 +3,29 @@
    components as Tailwind classes. */
 @import 'tailwindcss';
 /* Fonts are bundled with the app, not loaded from Google: the CSP allows no third-party font
-   hosts (ADR-0008). Only the weights in use are imported. */
-@import '@fontsource/anton/400.css';
-@import '@fontsource/special-elite/400.css';
-@import '@fontsource/courier-prime/400.css';
-@import '@fontsource/courier-prime/700.css';
+   hosts (ADR-0008). The default theme's fonts load here (its meta.json lists them); other themes'
+   load when chosen (useTheme, ADR-0056). */
+@import './styles/theme-fonts.css';
 @import './styles/tokens.css';
 
-/* Tokens (ADR-0027): tiers 1–3, the dark theme layer, and the Tailwind theme GENERATED from them
-   (sd.config.mjs), so every class name is a token name. The default palette and scales are
-   replaced, so only token values can be used. */
-@import './styles/theme-dark.css';
+/* Tokens (ADR-0027, ADR-0056): the shared tiers, every theme's layer (under its `data-theme`; the
+   default also under :root), and the Tailwind theme GENERATED from them (sd.config.mjs), so every
+   class name is a token name. The default palette and scales are replaced, so only token values
+   can be used. */
+@import './styles/themes.css';
 @import './styles/theme.css';
 
 @layer base {
-  :root {
-    color-scheme: dark;
-  }
+  /* Each theme sets its own color-scheme (light or dark) in its layer. */
   body {
     @apply bg-surface font-body text-fg antialiased;
+  }
+  /* Display type takes its theme's weight and letter spacing (ADR-0056). In the base layer, so a
+     component's own `font-bold` or `tracking-wide` (utilities) still wins, while the class
+     selector outranks the reset's `font-weight: inherit` on headings. */
+  .font-display {
+    font-weight: var(--dc-font-display-weight);
+    letter-spacing: var(--dc-font-display-tracking);
   }
   /* Design v2: a 3px ring with a surface-colored gap, raised above neighbours so dense lists
      never hide it (WCAG 2.4.11/2.4.13). Inputs show it on their whole field via `focus-ring-within`. */
@@ -121,6 +125,13 @@
   }
 }
 
+/* Headlines, buttons and labels set in display type take their theme's letter case: capitals in
+   Vintage and Midnight Rental; a theme can choose `none` to keep text as written (ADR-0056). Use it instead of
+   `uppercase` wherever the case is part of the brand; film titles keep `font-display` alone. */
+@utility case-display {
+  text-transform: var(--dc-font-display-case);
+}
+
 /* Page accent (ADR-0020): a tag-filtered page swaps the contextual accent to that tag's color. */
 @utility page-accent-watchlist {
   --dc-color-contextual: var(--dc-color-tag-watchlist);
@@ -170,18 +181,18 @@
 @utility film-grain {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")
     0 0 / 180px 180px;
-  opacity: 0.22;
+  opacity: var(--dc-texture-grain);
   mix-blend-mode: overlay;
   @media (forced-colors: active) {
     display: none;
   }
 }
 
-/* Faint vertical scratches on the page background, like a worn print. */
+/* Faint vertical scratches on the page background, like a worn print. The theme sets how faint. */
 @utility film-scratch {
   background-image: repeating-linear-gradient(
     90deg,
-    color-mix(in srgb, var(--color-fg) 3.5%, transparent) 0 1px,
+    color-mix(in srgb, var(--color-fg) calc(var(--dc-texture-scratch) * 1%), transparent) 0 1px,
     transparent 1px 140px
   );
 }
@@ -189,15 +200,16 @@
 /* A halftone dot screen, for poster placeholders and illustration wells. */
 @utility halftone {
   background-image: radial-gradient(
-    color-mix(in srgb, var(--color-shadow) 35%, transparent) 1.2px,
+    color-mix(in srgb, var(--color-shadow) calc(var(--dc-texture-halftone) * 1%), transparent) 1.2px,
     transparent 1.4px
   );
   background-size: 7px 7px;
 }
 
-/* The hard black text shadow under blood-red headline words (ADR-0040). */
+/* The hard text shadow under highlighted headline words (ADR-0040); its offset is the theme's, so
+   a theme can turn it off (ADR-0056). */
 @utility text-shadow-hard {
-  text-shadow: 4px 4px 0 var(--color-shadow);
+  text-shadow: var(--dc-text-shadow-offset) var(--dc-text-shadow-offset) 0 var(--color-shadow);
 }
 
 /* The mustard dashed rule in section headers: grows to fill the row between title and meta. */
@@ -275,4 +287,13 @@
       opacity: 0;
     }
   }
+}
+
+/* Switching theme (useTheme, ADR-0056) cross-fades the whole page with the View Transitions API, so
+   fonts, corners and shadows change as smoothly as colors. It uses the `enter` motion role
+   (ADR-0053); browsers without the API, and reduced motion, switch at once. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: --theme(--motion-enter-duration);
+  animation-timing-function: --theme(--motion-enter-easing);
 }

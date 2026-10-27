@@ -16,7 +16,7 @@ export function Prompt({
     // Fades in each time a step appears (off under reduced motion).
     <div className="animate-enter">
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h1 className="max-w-md font-display text-5xl leading-none tracking-wide text-balance uppercase md:text-6xl">
+      <h1 className="max-w-md font-display text-5xl leading-none tracking-wide text-balance case-display md:text-6xl">
         {title}
       </h1>
       {children}

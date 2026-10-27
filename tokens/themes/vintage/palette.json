@@ -1,6 +1,6 @@
 {
-  "$description": "Tier 1: the 'Triple Feature' palette (ADR-0040, docs repo: design/triple-feature/). Warm ink, bone and dust, with mustard and blood as the two accents. The genre ramps are generated separately in hues.json (ADR-0023).",
-  "color": {
+  "$description": "Tier 1 for Vintage, the Triple Feature identity: the brand's raw palette (ADR-0040, ADR-0056; docs repo: design/triple-feature/). Warm ink, bone and dust, with mustard and blood as the two accents. Free-form: other themes name their own. The genre ramps are shared (tokens/primitive/hues.json).",
+  "palette": {
     "$type": "color",
     "ink": {
       "default": {
@@ -65,22 +65,22 @@
       }
     },
     "heat": {
-      "$description": "The heat ramp: the match sticker's steps between blood (0%) and neon (100%), picked in OKLCH along red \u2192 orange \u2192 yellow \u2192 green at lightnesses where ink text passes 4.5:1 (owner, 2026-10-13).",
+      "$description": "The heat ramp: the match sticker's steps between blood (0%) and neon (100%), picked in OKLCH along red → orange → yellow → green at lightnesses where ink text passes 4.5:1 (owner, 2026-10-13).",
       "20": {
         "$value": "#ef6c05",
-        "$description": "Orange: 20\u201339%"
+        "$description": "Orange: 20–39%"
       },
       "40": {
         "$value": "#f7a307",
-        "$description": "Amber: 40\u201359%"
+        "$description": "Amber: 40–59%"
       },
       "60": {
         "$value": "#c6e101",
-        "$description": "Lime: 60\u201379%"
+        "$description": "Lime: 60–79%"
       },
       "80": {
         "$value": "#39ff14",
-        "$description": "Neon green: 80\u2013100%"
+        "$description": "Neon green: 80–100%"
       }
     }
   }

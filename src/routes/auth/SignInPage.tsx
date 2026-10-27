@@ -43,7 +43,7 @@ export function SignInPage() {
     <AuthLayout title="Sign in">
       <div>
         <Eyebrow>Your account</Eyebrow>
-        <h1 className="font-display text-4xl leading-none tracking-wide uppercase">
+        <h1 className="font-display text-4xl leading-none tracking-wide case-display">
           Sign in to Deep Cuts
         </h1>
         <p className="mt-2 text-sm text-fg-muted">
@@ -58,7 +58,7 @@ export function SignInPage() {
             <Button
               onPress={() => start(m.id)}
               isPending={pending !== null}
-              className="flex min-h-13 w-full items-center gap-3 border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 text-left text-sm font-bold hover:border-accent data-pending:opacity-70"
+              className="flex min-h-13 w-full items-center gap-3 rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 text-left text-sm font-bold hover:border-accent data-pending:opacity-70"
             >
               <span className="grid size-8 shrink-0 place-items-center bg-surface-overlay text-accent">
                 <Icon name="user" className="size-4.5" />

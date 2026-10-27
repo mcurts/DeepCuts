@@ -1,0 +1,37 @@
+{
+  "$description": "Type roles for Vintage, the Triple Feature identity (ADR-0040). Families are self-hosted (ADR-0008) and listed in meta.json; sizes and spacing come from the shared Tailwind scale (ADR-0027).",
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "body": {
+        "$value": ["Courier Prime", "Courier New", "monospace"],
+        "$description": "All body copy, film titles in captions, metadata and inputs"
+      },
+      "display": {
+        "$value": ["Anton", "Impact", "Arial Narrow", "sans-serif"],
+        "$description": "Headlines, section titles, buttons, rank numbers and stamps"
+      },
+      "label": {
+        "$value": ["Special Elite", "Courier New", "monospace"],
+        "$description": "Typewriter labels: 'Feature Nº 1', reasons, the footer. Sentence case, never long text"
+      }
+    },
+    "display": {
+      "weight": {
+        "$type": "string",
+        "$value": "inherit",
+        "$description": "A CSS font-weight for display text. `inherit` keeps the surrounding text's (Anton has one weight)"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "inherit",
+        "$description": "A CSS letter-spacing for display text. `inherit` keeps the surrounding text's, so a parent's tracking class still reaches it"
+      },
+      "case": {
+        "$type": "string",
+        "$value": "uppercase",
+        "$description": "text-transform for headlines and buttons (`case-display`). Film titles keep their own case"
+      }
+    }
+  }
+}

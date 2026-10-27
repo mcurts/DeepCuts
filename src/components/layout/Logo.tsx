@@ -61,12 +61,12 @@ export function Logo({
         data-align={align}
       />
       {tagline && (
-        // Bone white unless the costume's lit state sets `--logo-tagline`. Hidden from assistive
+        // The theme's tagline color unless the costume's lit state sets `--logo-tagline`. Hidden from assistive
         // tech with the artwork when decorative: the link around it already names the brand.
         <span
           aria-hidden={decorative || undefined}
           className={`logo-tagline font-label text-xs leading-none tracking-wider ${taglineClassName}`}
-          style={{ color: 'var(--logo-tagline, var(--dc-brand-logo-bone))' }}
+          style={{ color: 'var(--logo-tagline, var(--dc-brand-logo-tagline))' }}
         >
           {TAGLINE}
         </span>
@@ -81,14 +81,14 @@ function StandardLogo(props: LogoArtProps) {
     <svg viewBox="0 0 502 128" {...props}>
       {/* The whole mark leans 8° to the right, like a poster headline. */}
       <g transform="translate(18 2) skewX(-8)">
-        <rect width="238" height="124" style={{ fill: 'var(--dc-brand-logo-red)' }} />
-        <rect x="238" width="244" height="124" style={{ fill: 'var(--dc-brand-logo-bone)' }} />
-        <g fillRule="evenodd" style={{ fill: 'var(--dc-brand-logo-bone)' }}>
+        <rect width="238" height="124" style={{ fill: 'var(--dc-brand-logo-primary)' }} />
+        <rect x="238" width="244" height="124" style={{ fill: 'var(--dc-brand-logo-secondary)' }} />
+        <g fillRule="evenodd" style={{ fill: 'var(--dc-brand-logo-on-primary)' }}>
           {DEEP.map(([x, d]) => (
             <path key={x} transform={`translate(${x} 12)`} d={d} />
           ))}
         </g>
-        <g fillRule="evenodd" style={{ fill: 'var(--dc-brand-logo-ink)' }}>
+        <g fillRule="evenodd" style={{ fill: 'var(--dc-brand-logo-on-secondary)' }}>
           {CUTS.map(([x, d]) => (
             <path key={x} transform={`translate(${x} 12)`} d={d} />
           ))}

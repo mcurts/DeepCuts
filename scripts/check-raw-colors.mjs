@@ -3,11 +3,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
 // Generated from tokens/ by sd.config.mjs, where raw values belong (tier 1).
-const IGNORE = new Set([
-  'src/styles/tokens.css',
-  'src/styles/theme-dark.css',
-  'src/styles/theme.css',
-])
+const GENERATED = 'src/styles/'
 const RULES = [
   [/#[0-9a-fA-F]{3,8}\b/, 'raw hex color'],
   [/\b(?:rgb|rgba|hsl|hsla|oklch)\(/, 'raw color function'],
@@ -25,7 +21,7 @@ const walk = (dir) =>
 
 let problems = 0
 for (const file of walk('src')) {
-  if (IGNORE.has(file)) continue
+  if (file.startsWith(GENERATED)) continue
   readFileSync(file, 'utf8')
     .split('\n')
     .forEach((line, i) => {

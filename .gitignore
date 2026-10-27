@@ -45,7 +45,11 @@ src/styles/tokens.css
 test-results
 playwright-report
 src/styles/theme.css
-src/styles/theme-dark.css
+src/styles/themes/
+src/styles/themes.css
+src/styles/themes.ts
+src/styles/theme-fonts.css
+public/theme-boot.js
 storybook-static
 *storybook.log
 

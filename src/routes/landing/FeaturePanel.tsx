@@ -24,12 +24,12 @@ export function FeaturePanel({
   return (
     <section
       aria-labelledby={headingId}
-      className="flex h-full min-w-0 flex-col border-2 border-card-border bg-card-bg p-7"
+      className="flex h-full min-w-0 flex-col rounded-card border-2 border-card-border bg-card-bg p-7"
     >
       <Eyebrow className="mb-1">Feature Nº {feature}</Eyebrow>
       <h3
         id={headingId}
-        className="mb-5 font-display text-4xl leading-none tracking-wide uppercase"
+        className="mb-5 font-display text-4xl leading-none tracking-wide case-display"
       >
         {panel.title}
       </h3>

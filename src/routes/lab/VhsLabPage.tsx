@@ -437,7 +437,7 @@ function Controls({
   return (
     <form
       ref={form}
-      className="flex flex-col gap-5 border-2 border-card-border bg-card-bg p-4 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-12rem)] lg:overflow-y-auto"
+      className="flex flex-col gap-5 rounded-card border-2 border-card-border bg-card-bg p-4 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-12rem)] lg:overflow-y-auto"
       onSubmit={(e) => e.preventDefault()}
     >
       {section(

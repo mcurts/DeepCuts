@@ -16,10 +16,10 @@
       },
       "cta": {
         "bg": {
-          "$value": "{color.danger}"
+          "$value": "{color.highlight}"
         },
         "fg": {
-          "$value": "{color.fg.on-danger}"
+          "$value": "{color.fg.on-highlight}"
         }
       },
       "secondary": {
@@ -39,6 +39,12 @@
     "$type": "shadow",
     "button-cta": {
       "$value": "{elevation.cta}"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "button": {
+      "$value": "{radius.control}"
     }
   }
 }

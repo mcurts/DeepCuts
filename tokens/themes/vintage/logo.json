@@ -1,0 +1,28 @@
+{
+  "$description": "Vintage's wordmark (the Triple Feature design) and favicon colors (ADR-0040; docs repo: design/triple-feature/). Named by job so every theme can fill them (ADR-0056). Used only by the logo and the app icon.",
+  "brand": {
+    "$type": "color",
+    "logo": {
+      "primary": {
+        "$value": "#c8261b",
+        "$description": "The first block (DEEP) and the favicon's left half"
+      },
+      "on-primary": {
+        "$value": "#efe4cf",
+        "$description": "Lettering on the first block"
+      },
+      "secondary": {
+        "$value": "#efe4cf",
+        "$description": "The second block (CUTS)"
+      },
+      "on-secondary": {
+        "$value": "#120d0a",
+        "$description": "Lettering on the second block"
+      },
+      "tagline": {
+        "$value": "#efe4cf",
+        "$description": "The tagline under the wordmark (text: 4.5:1 on the page)"
+      }
+    }
+  }
+}

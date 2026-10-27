@@ -208,7 +208,7 @@ function Badge({ badge }: { badge: VhsBadge }) {
           className="absolute inset-0 z-2 grid animate-pop-in place-content-center bg-surface/60 p-3"
           style={tagColor(badge.tag) as CSSProperties}
         >
-          <span className="-rotate-8 border-2 border-shadow bg-(--tag) px-2 py-1 text-center font-display text-xl leading-none text-fg-on-accent uppercase shadow-stamp">
+          <span className="-rotate-8 border-2 border-shadow bg-(--tag) px-2 py-1 text-center font-display text-xl leading-none text-fg-on-accent case-display shadow-stamp">
             {badge.label}
           </span>
         </span>
@@ -224,7 +224,7 @@ function Badge({ badge }: { badge: VhsBadge }) {
     case 'ticket':
       // A bone ticket stub, stuck on slightly crooked, with a perforated right edge.
       return (
-        <span className="vhs-pin-top absolute top-3 left-3 z-2 -rotate-4 border-r-2 border-dashed border-fg-on-accent/40 bg-fg px-2 py-1 font-display text-xs tracking-widest text-fg-on-accent uppercase shadow-stamp">
+        <span className="vhs-pin-top absolute top-3 left-3 z-2 -rotate-4 border-r-2 border-dashed border-fg-on-accent/40 bg-fg px-2 py-1 font-display text-xs tracking-widest text-fg-on-accent case-display shadow-stamp">
           Admit one
         </span>
       )
@@ -235,7 +235,7 @@ function Badge({ badge }: { badge: VhsBadge }) {
       const colors = MATCH_CLASSES[matchStep(badge.match)]
       return (
         <span
-          className={`vhs-pin-bottom absolute bottom-3 left-2 z-2 grid size-18 -rotate-12 place-content-center text-center font-display leading-none uppercase sm:size-22 ${colors.text}`}
+          className={`vhs-pin-bottom absolute bottom-3 left-2 z-2 grid size-18 -rotate-12 place-content-center text-center font-display leading-none case-display sm:size-22 ${colors.text}`}
         >
           <svg viewBox="-4 -4 108 108" className="absolute inset-0 size-full overflow-visible">
             {/* The hard shadow: the same burst, offset down and right (elevation.stamp). */}

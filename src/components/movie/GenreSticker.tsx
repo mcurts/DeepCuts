@@ -79,7 +79,7 @@ export function GenreSticker({
         style={{ filter: `url(#${filterId})` }}
       />
       <span
-        className="relative col-start-1 row-start-1 font-display leading-none tracking-wider whitespace-nowrap text-sticker-ink/80 uppercase mix-blend-multiply"
+        className="relative col-start-1 row-start-1 font-display leading-none tracking-wider whitespace-nowrap text-sticker-ink/80 case-display mix-blend-multiply"
         style={{ fontSize }}
       >
         {genre.label}

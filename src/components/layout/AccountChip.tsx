@@ -23,7 +23,7 @@ import { Icon } from '@/components/ui/Icon'
 // Shared size for both states, so the header doesn't shift when someone signs in: 44px tall, in
 // the display face.
 const chip =
-  'flex min-h-11 items-center gap-2 font-display text-base tracking-wider whitespace-nowrap uppercase'
+  'flex min-h-11 items-center gap-2 font-display text-base tracking-wider whitespace-nowrap case-display'
 
 /** Header account control (ADR-0025): "Sign in" until signed in, then initial + first name. */
 export function AccountChip() {
@@ -43,7 +43,7 @@ export function AccountChip() {
     <Link
       to="/sign-in"
       state={{ from: pathname + search }}
-      className={`${chip} bg-button-primary-bg px-4 text-button-primary-fg hover:bg-button-primary-bg-hover`}
+      className={`${chip} rounded-button bg-button-primary-bg px-4 text-button-primary-fg hover:bg-button-primary-bg-hover`}
     >
       Sign in
     </Link>
@@ -70,7 +70,7 @@ function AccountMenu({ account, className }: { account: Account; className: stri
       <Popover
         placement="bottom end"
         offset={6}
-        className="w-72 border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
+        className="w-72 rounded-popover border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
       >
         <AccountMenuItems account={account} />
       </Popover>
@@ -100,7 +100,7 @@ function AccountMenuItems({ account }: { account: Account }) {
       {/* Who's signed in: a section heading, so screen readers announce it with the items. */}
       <MenuSection>
         <Header className="grid gap-0.5 px-3 pt-2.5 pb-3">
-          <span className="font-display text-xl tracking-wider uppercase">{account.name}</span>
+          <span className="font-display text-xl tracking-wider case-display">{account.name}</span>
           <span className="text-sm text-fg-muted">{SIGNED_IN_WITH[account.method]}</span>
           <span className="text-sm text-fg-muted">
             {films} {films === 1 ? 'film' : 'films'} tagged

@@ -27,7 +27,7 @@ export function EmptySlot({
           {mark}
         </span>
       )}
-      <span className="font-display text-xl tracking-widest uppercase">{title}</span>
+      <span className="font-display text-xl tracking-widest case-display">{title}</span>
       {note && <span className="font-label text-sm text-fg-muted">{note}</span>}
     </>
   )

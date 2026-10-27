@@ -317,7 +317,7 @@
     margin-bottom: calc(var(--band-h) * (1 + var(--vhs-band-order)) / 2);
   }
   .vhs-band-title {
-    @apply line-clamp-2 font-display leading-none tracking-wide uppercase;
+    @apply line-clamp-2 font-display leading-none tracking-wide case-display;
   }
   /* Over the art, under the grain: one broad, soft light falloff (matte, no glossy glare) and
      edges rubbed pale where the sleeve slid against its neighbours. (The dossier's pale hinge
@@ -410,7 +410,7 @@
   }
   /* The title, read top to bottom like a US tape spine; long titles end in "…". */
   .vhs-spine-title {
-    @apply truncate font-display tracking-wider uppercase;
+    @apply truncate font-display tracking-wider case-display;
     flex: 1;
     min-height: 0;
     padding-block: calc(var(--d) * 0.25);
@@ -459,7 +459,7 @@
      then turned 90° so the title reads top to bottom like the spine. (Vertical text in a box
      this narrow was placed unreliably, spilling off one side.) */
   .vhs-edge-label {
-    @apply truncate font-display tracking-wider uppercase;
+    @apply truncate font-display tracking-wider case-display;
     position: absolute;
     top: 50%;
     left: 50%;

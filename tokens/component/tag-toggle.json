@@ -14,5 +14,11 @@
         "$value": "{color.border.control}"
       }
     }
+  },
+  "radius": {
+    "$type": "dimension",
+    "tag-toggle": {
+      "$value": "{radius.control}"
+    }
   }
 }

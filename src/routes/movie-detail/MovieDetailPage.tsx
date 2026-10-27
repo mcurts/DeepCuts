@@ -239,7 +239,7 @@ function MovieDetail({ id, onDismiss }: { id: number; onDismiss: () => void }) {
             the tags below. Pressing it saves at once; it then becomes a short notice. */}
         <DetailTopTen movieId={m.id} title={m.title} className="mb-4" />
         <h1
-          className={`font-display tracking-wide text-balance wrap-anywhere uppercase ${titleSize(m.title)}`}
+          className={`font-display tracking-wide text-balance wrap-anywhere case-display ${titleSize(m.title)}`}
         >
           {m.title}
         </h1>
@@ -306,7 +306,7 @@ function NotFound() {
   return (
     <div className="px-5 pt-40">
       <title>Film not found · Deep Cuts</title>
-      <h1 className="font-display text-5xl uppercase">Film not found</h1>
+      <h1 className="font-display text-5xl case-display">Film not found</h1>
       <p className="mt-2 text-fg-muted">
         We couldn’t find that film.{' '}
         <Link to={HOME.path} className="text-accent underline">

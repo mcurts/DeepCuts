@@ -34,5 +34,14 @@
     "popover": {
       "$value": "{elevation.box}"
     }
+  },
+  "radius": {
+    "$type": "dimension",
+    "field": {
+      "$value": "{radius.control}"
+    },
+    "popover": {
+      "$value": "{radius.container}"
+    }
   }
 }

@@ -90,7 +90,7 @@ function PicksRow() {
     <g>
       <rect x="22" y="34" width="56" height="84" className={poster} strokeWidth="2" />
       <rect x="162" y="34" width="56" height="84" className={poster} strokeWidth="2" />
-      <rect x="92" y="26" width="56" height="92" className="fill-danger" />
+      <rect x="92" y="26" width="56" height="92" className="fill-highlight" />
       <g transform="rotate(-12 120 40)">
         <circle cx="120" cy="40" r="24" strokeWidth="3" className="fill-accent stroke-surface" />
         <text
