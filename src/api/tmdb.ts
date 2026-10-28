@@ -144,10 +144,21 @@ export type WatchProviders = z.infer<typeof watchProvidersSchema>
 /** A TMDB request that came back with an error status (e.g. 404 for an unknown film). */
 export class TmdbError extends Error {
   readonly status: number
-  constructor(status: number) {
+  /** On a 429: how many seconds the server asked us to wait (`Retry-After`), if it said. */
+  readonly retryAfter: number | undefined
+  constructor(status: number, retryAfter?: number) {
     super(`TMDB request failed (${status})`)
     this.status = status
+    this.retryAfter = retryAfter
   }
+}
+
+// The rate limiter's `Retry-After` in whole seconds (server/rateLimit.ts sends 60). Anything that
+// isn't a sensible number (the HTTP-date form, junk, or more than ten minutes) is ignored, so the
+// retry falls back to the limiter's period (api/retry.ts).
+function retryAfterOf(res: Response) {
+  const seconds = Number(res.headers.get('Retry-After') ?? NaN)
+  return Number.isInteger(seconds) && seconds >= 0 && seconds <= 600 ? seconds : undefined
 }
 
 // Fetches one proxy path, throws on an error status, and validates the JSON with `schema`.
@@ -165,7 +176,7 @@ async function get<T>(
 ) {
   const qs = params ? `?${new URLSearchParams(params)}` : ''
   const res = await fetch(`/api/tmdb/${path}${qs}`, signal ? { signal } : {})
-  if (!res.ok) throw new TmdbError(res.status)
+  if (!res.ok) throw new TmdbError(res.status, retryAfterOf(res))
   if (!res.headers.get('Content-Type')?.includes('application/json')) throw new TmdbError(502)
   const parsed = schema.safeParse(await res.json().catch(() => undefined))
   if (!parsed.success) throw new TmdbError(502)

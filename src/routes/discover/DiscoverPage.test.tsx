@@ -621,3 +621,30 @@ describe('home with a liked film in a series (ADR-0032, ADR-0037)', () => {
     expect(screen.queryByText(/Announced/)).not.toBeInTheDocument()
   })
 })
+
+describe('home over the rate limit (ADR-0029)', () => {
+  it('asks once for a film the limiter refused, instead of again on every re-render', async () => {
+    // The Thing is in the Top Ten; every film it recommends is refused with a 429, as when a
+    // reload goes over the per-client limit.
+    await createLocalTopTenRepository('account-demo-top-ten').add(1091)
+    const asks = new Map<string, number>()
+    server.use(
+      http.get('/api/tmdb/movie/:id', ({ params }) => {
+        const id = String(params.id)
+        if (!candidateDetailFixtures[Number(id)]) return undefined
+        asks.set(id, (asks.get(id) ?? 0) + 1)
+        return HttpResponse.json(
+          { error: 'rate_limited' },
+          { status: 429, headers: { 'Retry-After': '60' } },
+        )
+      }),
+    )
+    renderRoute('/', { appRetries: true })
+    await screen.findByRole('heading', { level: 2, name: 'Your Top Ten of All Time' })
+    await waitFor(() => expect(asks.size).toBeGreaterThan(0))
+    // Give a loop time to show itself: before the fix, each refused film was asked for again
+    // every time the shelves re-rendered (781 times each in a live run).
+    await act(() => new Promise((resolve) => setTimeout(resolve, 1500)))
+    expect(Math.max(...asks.values())).toBe(1)
+  })
+})

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import type { Account, Session, SessionProvider } from '@/adapters/SessionProvider'
+import { retryOptions } from '@/api/retry'
 import { AppToaster } from '@/components/layout/AppToaster'
 import { AppSessionProvider } from '@/session/AppSessionProvider'
 import { FEATURES, type Features } from '@/config/features'
@@ -22,11 +23,18 @@ interface Options {
   sessionProvider?: SessionProvider
   /** Defaults to signed in to the demo account. */
   initialSession?: Session
+  /**
+   * Use the app's real retry rules (src/api/retry.ts) instead of none. Off by default, so a test
+   * of a failure sees it at once instead of after a retry.
+   */
+  appRetries?: boolean
 }
 
 export function renderRoute(path: string, options: Options = {}) {
   const routes = createRoutes({ ...FEATURES, ...options.features })
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: options.appRetries ? retryOptions : { retry: false } },
+  })
   const router = createMemoryRouter(routes, { initialEntries: [path] })
   return {
     router,
