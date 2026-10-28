@@ -623,7 +623,7 @@ describe('home with a liked film in a series (ADR-0032, ADR-0037)', () => {
 })
 
 describe('home over the rate limit (ADR-0029)', () => {
-  it('asks once for a film the limiter refused, instead of again on every re-render', async () => {
+  it('asks for a film the limiter refused once more at most, not on every re-render', async () => {
     // The Thing is in the Top Ten; every film it recommends is refused with a 429, as when a
     // reload goes over the per-client limit.
     await createLocalTopTenRepository('account-demo-top-ten').add(1091)
@@ -639,12 +639,13 @@ describe('home over the rate limit (ADR-0029)', () => {
         )
       }),
     )
-    renderRoute('/', { appRetries: true })
+    renderRoute('/')
     await screen.findByRole('heading', { level: 2, name: 'Your Top Ten of All Time' })
     await waitFor(() => expect(asks.size).toBeGreaterThan(0))
     // Give a loop time to show itself: before the fix, each refused film was asked for again
-    // every time the shelves re-rendered (781 times each in a live run).
+    // every time the shelves re-rendered (781 times each in a live run, 246 here in 1.5 s).
     await act(() => new Promise((resolve) => setTimeout(resolve, 1500)))
-    expect(Math.max(...asks.values())).toBe(1)
+    // The first ask and its one retry (after Retry-After live; at once in tests, renderRoute).
+    expect(Math.max(...asks.values())).toBe(2)
   })
 })

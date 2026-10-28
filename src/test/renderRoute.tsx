@@ -23,17 +23,15 @@ interface Options {
   sessionProvider?: SessionProvider
   /** Defaults to signed in to the demo account. */
   initialSession?: Session
-  /**
-   * Use the app's real retry rules (src/api/retry.ts) instead of none. Off by default, so a test
-   * of a failure sees it at once instead of after a retry.
-   */
-  appRetries?: boolean
 }
 
 export function renderRoute(path: string, options: Options = {}) {
   const routes = createRoutes({ ...FEATURES, ...options.features })
+  // The app's own retry rules (src/api/retry.ts), so screens behave here as they do live (a loop
+  // that only showed with them once reached production). Only the wait before a retry is cut, so
+  // a failure still settles quickly.
   const queryClient = new QueryClient({
-    defaultOptions: { queries: options.appRetries ? retryOptions : { retry: false } },
+    defaultOptions: { queries: { ...retryOptions, retryDelay: 0 } },
   })
   const router = createMemoryRouter(routes, { initialEntries: [path] })
   return {
