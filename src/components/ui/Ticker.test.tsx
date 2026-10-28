@@ -1,5 +1,5 @@
 // Tests for the ticker: screen readers get each item once, the scrolling copy is hidden, and it
-// only scrolls after a mouse rests on it for three seconds (never on touch), and it can hold its
+// only scrolls after a mouse rests on it for a second (never on touch), and it can hold its
 // room while its items load.
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -43,7 +43,7 @@ describe('Ticker', () => {
     expect(container.querySelector('.inline-block')).not.toHaveClass('motion-safe:animate-fade-in')
   })
 
-  it('starts scrolling only after a mouse rests on it for three seconds', () => {
+  it('starts scrolling only after a mouse rests on it for a second', () => {
     const { container } = render(<Ticker items={ITEMS} />)
     const band = container.firstElementChild as HTMLElement
     const track = band.querySelector('[aria-hidden="true"]') as HTMLElement

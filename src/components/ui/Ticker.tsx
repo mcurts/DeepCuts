@@ -1,7 +1,7 @@
 // The ticker band under the header on Home and the landing page (ADR-0040): a mustard strip of
 // live, real information (counts, the top pick, what each feature does), never filler.
 //
-// It is still by default. It only scrolls once a mouse pointer has rested on it for three seconds
+// It is still by default. It only scrolls once a mouse pointer has rested on it for a second
 // (so it never moves on its own or on touch), and eases back to the start when the pointer leaves.
 // Reduced motion keeps it still. Screen readers get the items once, as a list; the scrolling copy
 // is hidden from them. While its items load, the band can keep its room (`loading`), so the page
@@ -10,7 +10,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 
 /** How long the pointer must rest on the band before it starts scrolling (design §5). */
-export const TICKER_HOVER_DELAY = 3000
+export const TICKER_HOVER_DELAY = 1000
 
 // The track holds two equal halves, each made of copies of the item list. The loop scrolls by
 // exactly one half, so each half must be at least as wide as the band, but no wider: browsers paint
