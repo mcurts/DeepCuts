@@ -11,7 +11,7 @@ import { FilmTextures } from './components/layout/FilmTextures'
 import { applySeasonalFavicon } from './components/layout/seasonalLogos'
 import { createCloudflareSessionProvider } from './adapters/cloudflare/CloudflareSessionProvider'
 import { createMockSessionProvider } from './adapters/local/MockSessionProvider'
-import { shouldRetry } from './api/retry'
+import { retryOptions } from './api/retry'
 import { reloadOnStaleChunk } from './reloadOnStaleChunk'
 import { AppSessionProvider } from './session/AppSessionProvider'
 import { routes } from './router'
@@ -31,11 +31,11 @@ initTheme()
 const root = document.getElementById('root')
 if (!root) throw new Error('Root element #root not found')
 
-// Shared cache for every data request. Retry a failed request once, but never a rate-limit 429
-// (see api/retry.ts); don't re-fetch just because the window regained focus (movie data rarely
-// changes).
+// Shared cache for every data request. Retry a failed request once, a rate-limit 429 only after the
+// server's wait, and never just because another part of the page starts using it (api/retry.ts);
+// don't re-fetch just because the window regained focus (movie data rarely changes).
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: shouldRetry, refetchOnWindowFocus: false } },
+  defaultOptions: { queries: { ...retryOptions, refetchOnWindowFocus: false } },
 })
 const router = createBrowserRouter(routes)
 // Resolves once the router has loaded the first page's code (pages are lazy, router.tsx). Until

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import type { Account, Session, SessionProvider } from '@/adapters/SessionProvider'
+import { retryOptions } from '@/api/retry'
 import { AppToaster } from '@/components/layout/AppToaster'
 import { AppSessionProvider } from '@/session/AppSessionProvider'
 import { FEATURES, type Features } from '@/config/features'
@@ -26,7 +27,12 @@ interface Options {
 
 export function renderRoute(path: string, options: Options = {}) {
   const routes = createRoutes({ ...FEATURES, ...options.features })
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  // The app's own retry rules (src/api/retry.ts), so screens behave here as they do live (a loop
+  // that only showed with them once reached production). Only the wait before a retry is cut, so
+  // a failure still settles quickly.
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { ...retryOptions, retryDelay: 0 } },
+  })
   const router = createMemoryRouter(routes, { initialEntries: [path] })
   return {
     router,

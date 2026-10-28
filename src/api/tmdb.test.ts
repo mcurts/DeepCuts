@@ -28,6 +28,24 @@ describe('tmdb client', () => {
     await expect(tmdb.movie(999)).rejects.toEqual(new TmdbError(404))
   })
 
+  it('carries the rate limiter’s Retry-After on a 429, and ignores one that makes no sense', async () => {
+    const limited = (retryAfter: string) =>
+      server.use(
+        http.get('/api/tmdb/movie/:id', () =>
+          HttpResponse.json(
+            { error: 'rate_limited' },
+            { status: 429, headers: { 'Retry-After': retryAfter } },
+          ),
+        ),
+      )
+    limited('60')
+    await expect(tmdb.movie(1)).rejects.toMatchObject({ status: 429, retryAfter: 60 })
+    limited('Wed, 21 Oct 2026 07:28:00 GMT')
+    await expect(tmdb.movie(1)).rejects.toMatchObject({ status: 429, retryAfter: undefined })
+    limited('86400')
+    await expect(tmdb.movie(1)).rejects.toMatchObject({ status: 429, retryAfter: undefined })
+  })
+
   it('rejects responses that do not match the schema as an upstream error', async () => {
     server.use(http.get('/api/tmdb/movie/:id', () => HttpResponse.json({ id: 'nope' })))
     await expect(tmdb.movie(1)).rejects.toEqual(new TmdbError(502))
