@@ -12,10 +12,11 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react'
 /** How long the pointer must rest on the band before it starts scrolling (design §5). */
 export const TICKER_HOVER_DELAY = 3000
 
-// Copies of the item list in each half of the track. The loop scrolls by exactly one half, so each
-// half must be at least as wide as the band; three copies cover a 1440px window even for a short
-// list.
-const COPIES = 3
+// The track holds two equal halves, each made of copies of the item list. The loop scrolls by
+// exactly one half, so each half must be at least as wide as the band, but no wider: browsers paint
+// a moving layer in tiles near the screen, and on a very long track (it was 9,400px with a fixed
+// three copies) the tiles arriving from the right lagged, so the right of the band stuttered.
+// So the number of copies is measured when the pointer arrives, before the scroll starts.
 
 /**
  * A full-bleed ticker band. Pass the items in order of importance: on touch screens it never
@@ -28,6 +29,8 @@ export function Ticker({ items, loading = false }: { items: string[]; loading?: 
   const track = useRef<HTMLDivElement>(null)
   const timer = useRef<number | undefined>(undefined)
   const [playing, setPlaying] = useState(false)
+  // Copies of the list per half: one until measured, which is all a still band shows anyway.
+  const [copies, setCopies] = useState(1)
   // Whether it started empty: only items that arrive into the empty band fade in.
   const [startedEmpty] = useState(items.length === 0)
   // A pending start must not fire after the band has gone.
@@ -36,6 +39,11 @@ export function Ticker({ items, loading = false }: { items: string[]; loading?: 
   const start = (e: PointerEvent) => {
     // Touch and pen "hovers" are taps; only a resting mouse starts the scroll.
     if (e.pointerType !== 'mouse') return
+    // One copy's width is the track's width over its copy count (two halves of `copies`). Skip
+    // when nothing is laid out yet (width 0), e.g. in tests.
+    const el = track.current
+    const copyWidth = el ? el.offsetWidth / (copies * 2) : 0
+    if (copyWidth > 0) setCopies(Math.max(1, Math.ceil(e.currentTarget.clientWidth / copyWidth)))
     timer.current = window.setTimeout(() => setPlaying(true), TICKER_HOVER_DELAY)
   }
   const stop = () => {
@@ -61,7 +69,7 @@ export function Ticker({ items, loading = false }: { items: string[]; loading?: 
       </div>
     ) : null
   }
-  const loop = Array.from({ length: COPIES * 2 }, () => items).flat()
+  const loop = Array.from({ length: copies * 2 }, () => items).flat()
 
   return (
     // Full window width from inside the page's centred column: the band is pulled out to both
