@@ -15,8 +15,13 @@ export function findTheme(id: string | null | undefined): ThemeInfo | undefined 
 /** The default theme (generated, so it always exists). */
 const defaultTheme = () => findTheme(DEFAULT_THEME_ID) as ThemeInfo
 
-/** The theme on the page now. No `data-theme` (or an unknown one) means the default. */
+/**
+ * The theme on the page now. No `data-theme` (or an unknown one) means the default, and so does no
+ * page at all: the landing page is pre-rendered at build time (ADR-0057), where there is no
+ * `document`, and the app re-renders with the visitor's theme when it starts.
+ */
 export function currentTheme(): ThemeInfo {
+  if (typeof document === 'undefined') return defaultTheme()
   return findTheme(document.documentElement.dataset.theme) ?? defaultTheme()
 }
 

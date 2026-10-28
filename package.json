@@ -9,7 +9,7 @@
     "predev": "npm run tokens",
     "dev": "vite",
     "prebuild": "npm run tokens",
-    "build": "tsc -b && vite build && node scripts/generate-headers.mjs",
+    "build": "tsc -b && vite build && node scripts/prerender.mjs && node scripts/generate-headers.mjs",
     "preview": "vite preview",
     "preview:cf": "node scripts/preview-cf.mjs",
     "preview:accounts": "VITE_ACCOUNTS=cloudflare npm run build && npm run db:migrate:local && npm run preview:cf",

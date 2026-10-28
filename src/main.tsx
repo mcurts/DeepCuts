@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { AppToaster } from './components/layout/AppToaster'
+import { FilmTextures } from './components/layout/FilmTextures'
 import { applySeasonalFavicon } from './components/layout/seasonalLogos'
 import { createCloudflareSessionProvider } from './adapters/cloudflare/CloudflareSessionProvider'
 import { createMockSessionProvider } from './adapters/local/MockSessionProvider'
@@ -37,6 +38,33 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: shouldRetry, refetchOnWindowFocus: false } },
 })
 const router = createBrowserRouter(routes)
+// Resolves once the router has loaded the first page's code (pages are lazy, router.tsx). Until
+// then RouterProvider would render an empty frame, which at `/` would replace the pre-rendered
+// landing page with a blank one for a moment (ADR-0057). The router settles even when a load
+// fails (it then shows the error page), so this never rejects.
+const routerReady = new Promise<void>((resolve) => {
+  if (router.state.initialized) return resolve()
+  const unsubscribe = router.subscribe((state) => {
+    if (!state.initialized) return
+    unsubscribe()
+    resolve()
+  })
+})
+// Resolves just after the browser's next paint: a frame callback runs right before a paint, and a
+// timer set from it runs after.
+const nextPaint = () =>
+  new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
+// Resolves once the pre-rendered page has painted in its own fonts (ADR-0057). On a fast
+// connection the code can arrive before the headline's font: the app would then replace the
+// headline before it ever showed, and its copy would count as the Largest Contentful Paint, tying
+// that to the JavaScript. A paint first (so layout has asked for the fonts), then the fonts, then
+// a paint with them. On a slow connection the fonts are long in by now (they load ahead of the
+// scripts), and where #root is hidden no fonts are pending, so it costs a frame or two.
+const shellPainted = (async () => {
+  await nextPaint()
+  await document.fonts.ready
+  await nextPaint()
+})()
 // Which accounts the app uses (ADR-0031): with the build flag VITE_ACCOUNTS=cloudflare (not a
 // secret; set by `npm run preview:cf` and for the hosted build), real passkey accounts on the
 // server; otherwise the local mock, so `npm run dev` needs no setup.
@@ -49,21 +77,25 @@ const sessionProvider =
     : createMockSessionProvider()
 // Read the saved session before the first render, so the app never flashes a guest state for
 // someone who is signed in. If it can't be read (the accounts server timed out or failed), this
-// shows "can't reach your account" with a retry instead (issue #19, startup.tsx).
-await startApp(createRoot(root), sessionProvider, (initialSession) => (
-  // StrictMode runs extra checks in development only (e.g. effects run twice to expose bugs).
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AppSessionProvider provider={sessionProvider} initialSession={initialSession}>
-        {/* Textures (ADR-0040, index.css): faint scratches behind every page and film grain over
-            it, as strong as the theme sets (ADR-0056). Both are decoration only, pinned to the window, and let every
-            click through. Rendered once here so every layout gets them. */}
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 film-scratch" />
-        <RouterProvider router={router} />
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-60 film-grain" />
-        {/* Outside the router, so toasts stay up across route changes (src/notify.ts). */}
-        <AppToaster />
-      </AppSessionProvider>
-    </QueryClientProvider>
-  </StrictMode>
-))
+// shows "can't reach your account" with a retry instead (issue #19, startup.tsx). createRoot
+// replaces whatever #root holds (the pre-rendered landing page) on that first render.
+await startApp(
+  createRoot(root),
+  sessionProvider,
+  (initialSession) => (
+    // StrictMode runs extra checks in development only (e.g. effects run twice to expose bugs).
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <AppSessionProvider provider={sessionProvider} initialSession={initialSession}>
+          {/* Rendered once here so every layout gets the textures. */}
+          <FilmTextures>
+            <RouterProvider router={router} />
+          </FilmTextures>
+          {/* Outside the router, so toasts stay up across route changes (src/notify.ts). */}
+          <AppToaster />
+        </AppSessionProvider>
+      </QueryClientProvider>
+    </StrictMode>
+  ),
+  Promise.all([routerReady, shellPainted]),
+)

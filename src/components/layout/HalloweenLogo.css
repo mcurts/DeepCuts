@@ -160,7 +160,8 @@
     & .halloween-logo__rib {
       filter: brightness(0.62) saturate(1.15);
     }
-    /* Duration and delay are set per pumpkin (HalloweenLogo.tsx) so they flicker out of step. */
+    /* Duration and delay are set per pumpkin, as utility classes (HalloweenLogo.tsx), so they flicker
+       out of step; utilities override this layer. */
     & .halloween-logo__face {
       fill: var(--dc-brand-halloween-flame-yellow);
       animation: halloween-flicker 1.7s steps(1, end) infinite;

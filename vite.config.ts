@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig, loadEnv } from 'vite'
+import { lowPriorityScripts } from './server/lowPriorityScripts.ts'
 import { preloadFonts } from './server/preloadFonts.ts'
 import { baseHeaders, contentSecurityPolicy } from './server/securityHeaders.ts'
 import { sonnerStyles } from './server/sonnerStyles.ts'
@@ -32,6 +33,8 @@ export default defineConfig(({ mode }) => ({
     sonnerStyles(),
     // Starts the web fonts downloading with the page, so headings don't reflow when they arrive.
     preloadFonts(),
+    // Lets the stylesheet and fonts, all the pre-rendered landing page needs, arrive first (ADR-0057).
+    lowPriorityScripts(),
     // `npm run analyze` only: a treemap of what's in the bundle, at build/bundle-report.html.
     mode === 'analyze' &&
       visualizer({ filename: 'build/bundle-report.html', gzipSize: true, template: 'treemap' }),
@@ -92,6 +95,8 @@ export default defineConfig(({ mode }) => ({
       include: ['src/**/*.{ts,tsx}', 'server/**/*.ts', 'functions/**/*.ts', 'scripts/**/*.ts'],
       exclude: [
         'src/main.tsx',
+        // The build-time render of the landing page (ADR-0057), checked by the build and e2e.
+        'src/prerender.tsx',
         'src/**/*.test.{ts,tsx}',
         'src/**/*.contract.ts',
         'src/test/**',

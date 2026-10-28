@@ -5,12 +5,13 @@
 // demo and practice accounts' lists in this browser, and signed out there is an empty store that
 // refuses writes. Nothing moves between stores: there is no guest or device profile to move from.
 import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { createCloudflareTagRepository } from '@/adapters/cloudflare/CloudflareTagRepository'
 import { createCloudflareTopTenRepository } from '@/adapters/cloudflare/CloudflareTopTenRepository'
 import { createMockSessionProvider } from '@/adapters/local/MockSessionProvider'
 import { createLocalTagRepository } from '@/adapters/local/LocalTagRepository'
 import { createLocalTopTenRepository } from '@/adapters/local/LocalTopTenRepository'
+import { saveSignedInHint } from '@/adapters/local/signedInHint'
 import { SIGNED_OUT, type Session, type SessionProvider } from '@/adapters/SessionProvider'
 import { signedOutTags, signedOutTopTen } from '@/adapters/signedOutTags'
 import type { TagRepository } from '@/adapters/TagRepository'
@@ -62,6 +63,10 @@ export function AppSessionProvider({
     setSession(SIGNED_OUT)
   }, [])
   useSessionEnded(session, endSession)
+  // Tells the next visit's boot script whether to hide the pre-rendered landing page (ADR-0057).
+  // Every route to a session change (sign-in, sign-out, the server ending it) passes through here.
+  const signedIn = session.kind === 'account'
+  useEffect(() => saveSignedInHint(signedIn), [signedIn])
 
   const value = useMemo<SessionValue>(() => {
     // The tag store for the current session.
