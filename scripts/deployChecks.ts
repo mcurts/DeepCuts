@@ -3,8 +3,10 @@
 // script only gathers the facts and acts on the answer.
 //
 // The rule they enforce: what goes live is exactly what was reviewed and merged. That means main,
-// nothing uncommitted, nothing unpushed or unpulled, a real database id in wrangler.toml, and the
-// Pages secrets the API can't run without.
+// nothing uncommitted, nothing unpushed or unpulled, a real database id in wrangler.toml, the
+// Pages secrets the API can't run without, every migration already applied to the live database,
+// and green CI on the exact commit going out.
+import { z } from 'zod'
 
 /** The all-zero id wrangler.toml ships with until the owner creates the D1 database. */
 export const PLACEHOLDER_DATABASE_ID = '00000000-0000-0000-0000-000000000000'
@@ -66,5 +68,73 @@ export function deployProblems(
         `The Pages secret ${name} isn't set. Run ` +
           `\`npx wrangler pages secret put ${name} --project-name deep-cuts\` first.`,
       )
+  return problems
+}
+
+/**
+ * The migration names recorded in the live database, from the JSON that
+ * `wrangler d1 execute deep-cuts --remote --json --command "SELECT name FROM d1_migrations"` prints:
+ * one entry per statement, each with its result rows. Zod checks the shape, so a change in
+ * wrangler's output stops the deploy instead of passing it by mistake.
+ */
+export function parseAppliedMigrations(executeJson: string): string[] {
+  const statements = z
+    .array(z.object({ results: z.array(z.object({ name: z.string() })) }))
+    .parse(JSON.parse(executeJson))
+  return statements.flatMap((s) => s.results.map((row) => row.name))
+}
+
+/**
+ * Why the deploy must stop over migrations: any file in `migrations/` the live database hasn't
+ * run yet. Code that needs a missing table or column answers 500, and migrations work with the
+ * previous deploy's code (AGENTS.md), so applying them first is always safe.
+ * @param files - The `.sql` file names in `migrations/`.
+ * @param applied - The names the live database has run (see {@link parseAppliedMigrations}).
+ */
+export function migrationProblems(files: readonly string[], applied: readonly string[]): string[] {
+  const pending = files.filter((f) => f.endsWith('.sql') && !applied.includes(f)).sort()
+  if (pending.length === 0) return []
+  return [
+    `The live database hasn't run ${pending.join(', ')}. Run ` +
+      '`npx wrangler d1 migrations apply deep-cuts --remote` first.',
+  ]
+}
+
+/** One GitHub Actions workflow run, as `gh run list --commit <sha> --json ...` prints it. */
+const workflowRun = z.object({
+  workflowName: z.string(),
+  status: z.string(),
+  // Empty until the run finishes.
+  conclusion: z.string(),
+})
+
+/** A workflow run on the commit being deployed (see {@link parseWorkflowRuns}). */
+export type WorkflowRun = z.infer<typeof workflowRun>
+
+/** The runs in `gh run list --commit <sha> --json workflowName,status,conclusion` output. */
+export function parseWorkflowRuns(listJson: string): WorkflowRun[] {
+  return z.array(workflowRun).parse(JSON.parse(listJson))
+}
+
+/**
+ * Why the deploy must stop over CI: the commit going out has no CI run, a run still going, or a
+ * run that didn't pass. Every push to main runs CI and CodeQL, so merged work always has runs;
+ * a skipped run (nothing to do) counts as a pass.
+ * @param runs - The workflow runs on the commit (see {@link parseWorkflowRuns}).
+ */
+export function ciProblems(runs: readonly WorkflowRun[]): string[] {
+  if (!runs.some((r) => r.workflowName === 'CI'))
+    return [
+      "CI hasn't run on this commit. Wait for it after the merge (`gh run list --branch main`).",
+    ]
+  const problems: string[] = []
+  for (const r of runs) {
+    if (r.status !== 'completed')
+      problems.push(`${r.workflowName} is still running on this commit. Wait for it to finish.`)
+    else if (r.conclusion !== 'success' && r.conclusion !== 'skipped')
+      problems.push(
+        `${r.workflowName} ended "${r.conclusion}" on this commit. Fix main through a PR first.`,
+      )
+  }
   return problems
 }
