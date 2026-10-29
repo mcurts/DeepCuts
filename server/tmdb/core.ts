@@ -7,6 +7,7 @@
 // (allowlist.ts), adds the secret read token, calls TMDB and returns the JSON. Errors are
 // reduced to a short code, so TMDB's own messages (or the token) never reach the browser
 // (ADR-0008, ADR-0013).
+import { ignoreErrors, type ReportError } from '../errorLog.ts'
 import { json } from '../http.ts'
 import { resolveTmdbRequest } from './allowlist.ts'
 
@@ -80,6 +81,11 @@ export type TmdbOptions = {
    * runs pass nothing.
    */
   cache?: Cache
+  /**
+   * Hears why TMDB failed, for the error log (ADR-0058). A 404 isn't a failure: it's how TMDB
+   * answers a film id that doesn't exist, which anyone can ask for.
+   */
+  report?: ReportError
 }
 
 /**
@@ -91,7 +97,7 @@ export type TmdbOptions = {
 export async function handleTmdb(
   request: Request,
   token: string | undefined,
-  { fetchImpl = fetch, cache }: TmdbOptions = {},
+  { fetchImpl = fetch, cache, report = ignoreErrors }: TmdbOptions = {},
 ): Promise<Response> {
   // Read-only: only GET is forwarded.
   if (request.method !== 'GET') return json(405, { error: 'method_not_allowed' })
@@ -102,7 +108,10 @@ export async function handleTmdb(
   if (!result.ok)
     return json(result.status, { error: result.status === 404 ? 'not_found' : 'bad_request' })
   // No token configured (e.g. in E2E tests): a clear error instead of a failed TMDB call.
-  if (!token) return json(503, { error: 'tmdb_token_missing' })
+  if (!token) {
+    report({ cause: 'tmdb_token_missing' })
+    return json(503, { error: 'tmdb_token_missing' })
+  }
 
   // The upstream URL is rebuilt from validated values only (allowlist), so it's a safe cache key:
   // equivalent requests share one entry, and it never contains the token (that goes in a header).
@@ -120,7 +129,11 @@ export async function handleTmdb(
       // Give up after 8 seconds rather than leaving the page waiting.
       signal: AbortSignal.timeout(8000),
     })
-    if (!upstream.ok) return json(upstream.status === 404 ? 404 : 502, { error: 'upstream_error' })
+    if (upstream.status === 404) return json(404, { error: 'upstream_error' })
+    if (!upstream.ok) {
+      report({ cause: 'tmdb_upstream', upstreamStatus: upstream.status })
+      return json(502, { error: 'upstream_error' })
+    }
     const body = trimCredits(await upstream.json())
     // Only successful answers are cached; errors (and 429s from the limiter) never reach here.
     // (The Cache API decides expiry from the stored response's Cache-Control.)
@@ -131,7 +144,8 @@ export async function handleTmdb(
       )
       .catch(() => undefined)
     return json(200, body)
-  } catch {
+  } catch (error) {
+    report({ cause: 'tmdb_timeout', error })
     return json(504, { error: 'upstream_timeout' })
   }
 }

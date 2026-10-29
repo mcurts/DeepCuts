@@ -25,6 +25,7 @@ import {
 } from '@simplewebauthn/server'
 import { z } from 'zod'
 import { registrationSchema } from '../../src/adapters/SessionProvider.ts'
+import { ignoreErrors, type ReportError } from '../errorLog.ts'
 import { fail, json, readJson } from '../http.ts'
 import { base64url, randomToken, sha256Hex } from './crypto.ts'
 import type { AccountsEnv, D1Like, D1Stmt } from './d1.ts'
@@ -181,9 +182,15 @@ const verifySchema = z.object({
 /**
  * `POST /api/auth/register/verify` `{ challengeId, response }`: verifies the new passkey, then in
  * one D1 batch creates the user (unless recovering), claims the invite, stores the passkey and
- * starts a session.
+ * starts a session. A failed batch is reported to the error log (ADR-0058): it usually means D1
+ * failed, though it's also how a lost race for one invite ends.
  */
-export async function registerVerify(request: Request, env: AccountsEnv, now = Date.now()) {
+export async function registerVerify(
+  request: Request,
+  env: AccountsEnv,
+  now = Date.now(),
+  report: ReportError = ignoreErrors,
+) {
   const body = await readJson(request, verifySchema)
   if ('error' in body) return body.error
   const challenge = await consumeChallenge(env.DB, body.data.challengeId, 'register', now)
@@ -252,7 +259,8 @@ export async function registerVerify(request: Request, env: AccountsEnv, now = D
         ),
       session.statement,
     ])
-  } catch {
+  } catch (error) {
+    report({ cause: 'signup_batch_failed', error })
     return fail(400, 'invalid_invite')
   }
   const user = await db

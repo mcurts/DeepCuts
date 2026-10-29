@@ -1,10 +1,13 @@
 // `npm run preview:cf`: runs the built app on Cloudflare's real runtime, locally (ADR-0029,
 // Stage 4 H9). Nothing is deployed and no Cloudflare account is needed.
 //
-// Starts two local processes and stops both together:
+// Starts three local processes and stops them together:
 // 1. the rate-limit Worker (workers/rate-limit/) with `wrangler dev`, on port 8790;
-// 2. the Pages project (`dist/` + `functions/`) with `wrangler pages dev`, on port 8788. Its
-//    RATE_LIMITER service binding finds the Worker through Wrangler's local dev registry.
+// 2. the error-log Worker (workers/error-log/, ADR-0058), on port 8791, which prints error lines
+//    here;
+// 3. the Pages project (`dist/` + `functions/`) with `wrangler pages dev`, on port 8788. Its
+//    RATE_LIMITER and ERROR_LOG service bindings find the Workers through Wrangler's local dev
+//    registry.
 //
 // Options (environment variables):
 // - PREVIEW_CF_NO_TOKEN=1 blanks TMDB_READ_TOKEN, as the E2E tests need. Otherwise Wrangler reads
@@ -31,7 +34,7 @@ const children = []
 const run = (args) => {
   const child = spawn('npx', ['wrangler', ...args], { stdio: 'inherit' })
   children.push(child)
-  // If either process stops, stop the other and exit with its code.
+  // If any process stops, stop the others and exit with its code.
   child.on('exit', (code) => shutdown(code ?? 1))
   return child
 }
@@ -47,4 +50,5 @@ process.on('SIGINT', () => shutdown(0))
 process.on('SIGTERM', () => shutdown(0))
 
 run(['dev', '-c', 'workers/rate-limit/wrangler.toml', '--port', '8790', '--inspector-port', '9230'])
+run(['dev', '-c', 'workers/error-log/wrangler.toml', '--port', '8791', '--inspector-port', '9232'])
 run(['pages', 'dev', 'dist', '--port', port, '--inspector-port', '9231', ...hostArgs, ...tokenArgs])

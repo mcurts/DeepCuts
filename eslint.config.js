@@ -101,6 +101,13 @@ export default defineConfig([
     files: ['src/adapters/local/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },
+  // Server code never logs on its own (ADR-0058): only the error log may write, so nothing
+  // personal (an IP, a cookie, a search term) can reach the logs by accident.
+  {
+    files: ['server/**/*.ts', 'functions/**/*.ts', 'workers/**/*.ts'],
+    ignores: ['server/errorLog.ts', 'workers/error-log/src/index.ts', '**/*.test.ts'],
+    rules: { 'no-console': 'error' },
+  },
   // Build scripts and config files run in Node, not the browser.
   {
     files: ['scripts/**/*.mjs', '*.config.{js,mjs,ts}', 'sd.config.mjs'],

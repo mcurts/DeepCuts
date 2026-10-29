@@ -1,5 +1,5 @@
 // TypeScript settings for code that runs on Cloudflare's Workers runtime (ADR-0029): the Pages
-// Functions here, the rate-limit Worker (../workers/) and the shared server code they import.
+// Functions here, the rate-limit and error-log Workers (../workers/) and the shared server code they import.
 // Type-checking only; Wrangler bundles the code. `tsc -b` checks it via the root tsconfig.json.
 {
   "compilerOptions": {
@@ -32,6 +32,7 @@
     "../server/rateLimit.ts",
     "../server/securityHeaders.ts",
     "../server/http.ts",
+    "../server/errorLog.ts",
     "../server/apiGuard.ts",
     "../server/accounts",
     "../server/pagesFunction.test.ts"
