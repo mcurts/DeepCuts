@@ -18,6 +18,13 @@ compatibility_date = "2026-10-01"
 binding = "RATE_LIMITER"
 service = "deep-cuts-rate-limit"
 
+# The error-log Worker (workers/error-log/, ADR-0058): keeps the API's error lines in Workers Logs,
+# which Pages Functions can't use themselves. If it isn't deployed, logging still prints to the
+# real-time tail and the API answers as normal.
+[[services]]
+binding = "ERROR_LOG"
+service = "deep-cuts-error-log"
+
 # The accounts database (ADR-0031, Stage 6): Cloudflare D1 (SQLite), Free plan. Schema changes are
 # versioned SQL files in migrations/. Locally, `npm run db:migrate:local` creates it under
 # .wrangler/ (git-ignored). The id below is the hosted database's, created with

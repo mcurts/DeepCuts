@@ -60,15 +60,21 @@ export function isSameOrigin(request: Request): boolean {
   return request.headers.get('Origin') === new URL(request.url).origin
 }
 
+/**
+ * What a route's handler gets: the request, the bindings, and Pages' per-request `data`, which
+ * carries the error reporter from functions/api/_middleware.ts (read it with `reporterFrom`).
+ */
+export type HandlerContext<Env> = { request: Request; env: Env; data?: Record<string, unknown> }
+
 /** A request handler for one HTTP method. */
-export type Handler<Env> = (context: { request: Request; env: Env }) => Promise<Response>
+export type Handler<Env> = (context: HandlerContext<Env>) => Promise<Response>
 
 /**
  * Builds a Pages `onRequest` from one handler per method. Any other method gets a 405, so a route
  * never falls through to the app's HTML.
  */
 export function route<Env>(handlers: Partial<Record<string, Handler<Env>>>) {
-  return (context: { request: Request; env: Env }): Promise<Response> => {
+  return (context: HandlerContext<Env>): Promise<Response> => {
     const handler = handlers[context.request.method]
     return handler ? handler(context) : Promise.resolve(fail(405, 'method_not_allowed'))
   }

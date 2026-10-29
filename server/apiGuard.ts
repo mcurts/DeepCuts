@@ -9,6 +9,7 @@
 //    against a tighter limit than everything else.
 // 3. CSRF protection: any request that can change data (anything but GET/HEAD/OPTIONS) must come
 //    from this site's own pages, judged by its `Origin` header. Otherwise 403 `bad_origin`.
+import type { ReportError } from './errorLog.ts'
 import { fail, isSameOrigin, SAFE_METHODS } from './http.ts'
 import { rateLimit, type RateLimiterBinding } from './rateLimit.ts'
 
@@ -28,15 +29,19 @@ export function isAllowedHost(request: Request, canonicalHost: string | undefine
   return !canonicalHost || hostname === canonicalHost || LOOPBACK.has(hostname)
 }
 
-/** Returns the response that stops the request (421, 429 or 403), or null to let it through. */
+/**
+ * Returns the response that stops the request (421, 429 or 403), or null to let it through.
+ * `report` hears about a failing rate limiter (ADR-0058).
+ */
 export async function guardApi(
   request: Request,
   limiter: RateLimiterBinding | undefined,
   canonicalHost?: string,
+  report?: ReportError,
 ): Promise<Response | null> {
   // 421 Misdirected Request: this address isn't the one that serves the API.
   if (!isAllowedHost(request, canonicalHost)) return fail(421, 'wrong_host')
-  const limited = await rateLimit(request, limiter)
+  const limited = await rateLimit(request, limiter, report)
   if (limited) return limited
   if (!SAFE_METHODS.has(request.method) && !isSameOrigin(request)) return fail(403, 'bad_origin')
   return null

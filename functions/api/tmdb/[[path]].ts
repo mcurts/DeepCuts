@@ -4,6 +4,7 @@
 //
 // Only `/api/*` reaches Functions at all (public/_routes.json), so static files never use the
 // Function quota.
+import { reporterFrom } from '../../../server/errorLog.ts'
 import { handleTmdb } from '../../../server/tmdb/core.ts'
 
 /** What the Pages project gives this Function (the dashboard secret, or `.dev.vars` locally). */
@@ -12,6 +13,9 @@ export type Env = {
   TMDB_READ_TOKEN?: string
 }
 
-/** Every method lands here; the core answers anything but GET with 405. */
-export const onRequest: PagesFunction<Env> = async ({ request, env }) =>
-  handleTmdb(request, env.TMDB_READ_TOKEN, { cache: caches.default })
+/**
+ * Every method lands here; the core answers anything but GET with 405. TMDB failures are reported
+ * to the `/api` middleware's error log (ADR-0058).
+ */
+export const onRequest: PagesFunction<Env> = async ({ request, env, data }) =>
+  handleTmdb(request, env.TMDB_READ_TOKEN, { cache: caches.default, report: reporterFrom(data) })

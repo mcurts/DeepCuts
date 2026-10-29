@@ -1,0 +1,18 @@
+# The error-log Worker (ADR-0058). Bound to the Pages project as ERROR_LOG. Pages Functions can't
+# keep logs, so they hand each error line to this Worker, which has Workers Logs on (Free plan:
+# kept for days; past the daily allowance Cloudflare stops taking logs, it never bills).
+# No secrets belong in this file; it is committed.
+name = "deep-cuts-error-log"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+# No public URL: the Pages Function reaches this Worker only through its service binding.
+workers_dev = false
+preview_urls = false
+
+# Keep only our own lines. Cloudflare's per-call records (invocation logs) would add request
+# metadata we don't need, so they're off.
+[observability]
+enabled = true
+
+[observability.logs]
+invocation_logs = false

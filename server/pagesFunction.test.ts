@@ -1,13 +1,15 @@
 // @vitest-environment node
 // Tests for the Cloudflare Pages Functions glue (ADR-0029, ADR-0031): the TMDB proxy Function
 // passes the same contract as the local proxy; the `/api` middleware rate-limits and checks the
-// Origin; the catch-all answers a JSON 404; the root middleware adds the security headers.
+// Origin and writes the error log (ADR-0058); the catch-all answers a JSON 404; the root
+// middleware adds the security headers.
 // The Workers globals it uses (`caches.default`, `fetch`) are replaced with fakes.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { onRequest as apiCatchAll } from '../functions/api/[[path]]'
 import { onRequest, type Env } from '../functions/api/tmdb/[[path]]'
 import { onRequest as middleware } from '../functions/_middleware'
 import { onRequest as apiMiddleware, type ApiEnv } from '../functions/api/_middleware'
+import { reporterFrom, type ErrorLine, type ErrorNote } from './errorLog'
 import { productionHeaders } from './securityHeaders'
 import { tmdbProxyContract } from './tmdb/proxy.contract'
 
@@ -44,9 +46,13 @@ describe('/api middleware: rate limit (Stage 4 H4)', () => {
   async function viaApiMiddleware(request: Request, env: ApiEnv) {
     const next = vi.fn(async () => Response.json({ ok: true }))
     const withSite = { CANONICAL_HOST: site, ...env }
-    const res = await apiMiddleware({ request, env: withSite, next } as unknown as Parameters<
-      typeof apiMiddleware
-    >[0])
+    const res = await apiMiddleware({
+      request,
+      env: withSite,
+      next,
+      data: {},
+      waitUntil: () => {},
+    } as unknown as Parameters<typeof apiMiddleware>[0])
     return { res, next }
   }
   const get = (path: string) =>
@@ -100,9 +106,13 @@ describe('/api middleware: host pin', () => {
   async function viaApiMiddleware(url: string, env: ApiEnv) {
     const next = vi.fn(async () => Response.json({ ok: true }))
     const request = new Request(url, { headers: { 'CF-Connecting-IP': '203.0.113.7' } })
-    const res = await apiMiddleware({ request, env, next } as unknown as Parameters<
-      typeof apiMiddleware
-    >[0])
+    const res = await apiMiddleware({
+      request,
+      env,
+      next,
+      data: {},
+      waitUntil: () => {},
+    } as unknown as Parameters<typeof apiMiddleware>[0])
     return { res, next }
   }
 
@@ -146,6 +156,130 @@ describe('/api middleware: host pin', () => {
     expect(await res.json()).toEqual({ error: 'host_not_configured' })
     expect(check).not.toHaveBeenCalled()
     expect(next).not.toHaveBeenCalled()
+  })
+})
+
+describe('/api middleware: error log (ADR-0058)', () => {
+  /**
+   * Runs the middleware with `route` standing in for the Function behind it, waits for whatever
+   * it handed to `waitUntil`, and returns the answer plus the lines the log Worker received.
+   */
+  async function run(
+    route: (context: { data: Record<string, unknown> }) => Promise<Response>,
+    { method = 'GET', path = '/api/tags', env = {} as ApiEnv } = {},
+  ) {
+    const lines: ErrorLine[] = []
+    const pending: Promise<unknown>[] = []
+    const data: Record<string, unknown> = {}
+    const request = new Request(`https://${site}${path}`, {
+      method,
+      headers: { 'CF-Connecting-IP': '203.0.113.7', Origin: `https://${site}` },
+    })
+    const res = await apiMiddleware({
+      request,
+      env: {
+        CANONICAL_HOST: site,
+        ERROR_LOG: { report: async (line: ErrorLine) => void lines.push(line) },
+        ...env,
+      },
+      next: () => route({ data }),
+      data,
+      waitUntil: (p: Promise<unknown>) => pending.push(p),
+    } as unknown as Parameters<typeof apiMiddleware>[0])
+    await Promise.all(pending)
+    return { res, lines }
+  }
+
+  beforeEach(() => vi.spyOn(console, 'log').mockImplementation(() => {}))
+  afterEach(() => vi.restoreAllMocks())
+
+  it('answers an uncaught throw with 500 server_error and logs it', async () => {
+    const { res, lines } = await run(async () => {
+      throw new TypeError('secret detail from user input')
+    })
+    expect(res.status).toBe(500)
+    expect(await res.json()).toEqual({ error: 'server_error' })
+    expect(lines).toEqual([
+      expect.objectContaining({
+        route: '/api/tags',
+        status: 500,
+        code: 'server_error',
+        cause: 'uncaught',
+        errorName: 'TypeError',
+      }),
+    ])
+    expect(JSON.stringify(lines)).not.toContain('secret detail')
+  })
+
+  it('logs a 5xx answer no handler explained', async () => {
+    const { lines } = await run(async () => Response.json({ error: 'boom' }, { status: 503 }))
+    expect(lines).toEqual([
+      expect.objectContaining({ status: 503, code: 'boom', cause: 'status_5xx' }),
+    ])
+  })
+
+  it.each([400, 401, 403, 404, 409, 413])('logs nothing for an ordinary %i', async (status) => {
+    const { res, lines } = await run(async () => Response.json({ error: 'x' }, { status }))
+    expect(res.status).toBe(status)
+    expect(lines).toEqual([])
+  })
+
+  it('logs nothing for refusals made by the guard itself (421, 429)', async () => {
+    const wrongHost = await run(async () => Response.json({}), {
+      env: { CANONICAL_HOST: 'elsewhere.example' },
+    })
+    const limited = await run(async () => Response.json({}), {
+      env: { RATE_LIMITER: { check: async () => ({ allowed: false }) } },
+    })
+    expect([wrongHost.res.status, limited.res.status]).toEqual([421, 429])
+    expect([...wrongHost.lines, ...limited.lines]).toEqual([])
+  })
+
+  it('logs a note a handler left, even on a 4xx answer', async () => {
+    const note: ErrorNote = { cause: 'signup_batch_failed', error: new Error('D1 down') }
+    const { lines } = await run(
+      async ({ data }) => {
+        reporterFrom(data)(note)
+        return Response.json({ error: 'invalid_invite' }, { status: 400 })
+      },
+      { method: 'POST', path: '/api/auth/register/verify' },
+    )
+    expect(lines).toEqual([
+      expect.objectContaining({
+        route: '/api/auth/register/verify',
+        method: 'POST',
+        status: 400,
+        code: 'invalid_invite',
+        cause: 'signup_batch_failed',
+        errorName: 'Error',
+      }),
+    ])
+  })
+
+  it('logs a failing rate limiter but still lets the request through', async () => {
+    const { res, lines } = await run(async () => Response.json({ ok: true }), {
+      env: {
+        RATE_LIMITER: {
+          check: async () => {
+            throw new Error('limiter down')
+          },
+        },
+      },
+    })
+    expect(res.status).toBe(200)
+    expect(lines).toEqual([
+      expect.objectContaining({ status: 200, code: null, cause: 'rate_limiter_unavailable' }),
+    ])
+  })
+
+  it('answers normally when the log Worker is missing or failing', async () => {
+    const failing = await run(async () => Response.json({ error: 'x' }, { status: 500 }), {
+      env: { ERROR_LOG: { report: async () => Promise.reject(new Error('down')) } },
+    })
+    const missing = await run(async () => Response.json({ error: 'x' }, { status: 500 }), {
+      env: { ERROR_LOG: undefined },
+    })
+    expect([failing.res.status, missing.res.status]).toEqual([500, 500])
   })
 })
 

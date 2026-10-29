@@ -1,6 +1,7 @@
 // The per-client rate limit in front of every `/api/*` request (ADR-0029 Stage 4 H4, ADR-0031).
 // functions/api/_middleware.ts asks the rate-limit Worker (workers/rate-limit/) over a service
 // binding; over the limit, the client gets a short 429 and the request goes no further.
+import type { ReportError } from './errorLog.ts'
 import { json } from './http.ts'
 
 /** The rate-limit Worker as the Function sees it through the service binding (an RPC stub). */
@@ -33,11 +34,13 @@ const RETRY_AFTER_SECONDS = 60
  *
  * **Fails open.** If the limiter is missing or errors, the request is allowed. A limiter outage
  * shouldn't take the app down, and cost is already capped elsewhere: on Workers Free, requests
- * past the daily quota are refused, never billed (ADR-0024, ADR-0029).
+ * past the daily quota are refused, never billed (ADR-0024, ADR-0029). A limiter error is
+ * reported, so an unchecked API shows up in the error log (ADR-0058).
  */
 export async function rateLimit(
   request: Request,
   limiter: RateLimiterBinding | undefined,
+  report?: ReportError,
 ): Promise<Response | null> {
   if (!limiter) return null
   // Locally (`wrangler pages dev`) the header may be absent; everyone then shares one bucket.
@@ -45,7 +48,8 @@ export async function rateLimit(
   try {
     const { allowed } = await limiter.check(key, bucketFor(request))
     if (allowed) return null
-  } catch {
+  } catch (error) {
+    report?.({ cause: 'rate_limiter_unavailable', error })
     return null
   }
   return json(429, { error: 'rate_limited' }, { 'Retry-After': String(RETRY_AFTER_SECONDS) })

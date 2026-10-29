@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createClient, LOCAL_ORIGIN, ORIGIN } from '../testing/api'
 import { createFakeD1, type FakeD1 } from '../testing/fakeD1'
 import { createSoftAuthenticator } from '../testing/softAuthenticator'
+import { registerVerify } from './auth'
 import { inviteInsertSql, makeInvite } from './invites'
 import { LOCAL_SESSION_COOKIE, SESSION_COOKIE } from './sessions'
 
@@ -165,6 +166,28 @@ describe('registration (A2)', () => {
     expect(results.find((r) => r.status === 400)?.body).toEqual({ error: 'invalid_invite' })
     expect(db.rows('users')).toHaveLength(1)
     expect(db.rows('passkeys')).toHaveLength(1)
+  })
+
+  it('reports a failed sign-up batch to the error log (ADR-0058)', async () => {
+    const client = createClient(env)
+    const soft = await createSoftAuthenticator()
+    const options = await client.call('POST', '/api/auth/register/options', {
+      name: 'Mike',
+      invite: await invite(),
+    })
+    const body = JSON.stringify({
+      challengeId: options.body.challengeId,
+      response: await soft.create(options.body.options, ORIGIN),
+    })
+    const request = new Request(`${ORIGIN}/api/auth/register/verify`, { method: 'POST', body })
+    // D1 fails the batch that would create the account.
+    const failingDb = { ...db, batch: () => Promise.reject(new Error('D1')) }
+    const report = vi.fn()
+    const res = await registerVerify(request, { DB: failingDb }, Date.now(), report)
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: 'invalid_invite' })
+    expect(report).toHaveBeenCalledWith({ cause: 'signup_batch_failed', error: expect.any(Error) })
+    expect(db.rows('users')).toHaveLength(0)
   })
 
   it('validates the name and invite shape like the form does', async () => {

@@ -1,6 +1,7 @@
 // @vitest-environment node
 // Tests for the parts of the proxy core the contract suite doesn't cover: trimming credits, the
-// edge cache (ADR-0029, Stage 4 H5) and its time-to-live per endpoint.
+// edge cache (ADR-0029, Stage 4 H5) and its time-to-live per endpoint, and what it reports to the
+// error log (ADR-0058).
 import { describe, expect, it, vi } from 'vitest'
 import { edgeTtl, handleTmdb, trimCredits } from './core'
 
@@ -70,6 +71,45 @@ describe('edge cache (Stage 4 H5)', () => {
 describe('handleTmdb', () => {
   it('answers paths outside the proxy prefix with 404', async () => {
     expect((await handleTmdb(get('/api/other'), 't')).status).toBe(404)
+  })
+})
+
+describe('error reports (ADR-0058)', () => {
+  // Runs one request with TMDB answering via `fetchImpl` and returns the answer and the notes.
+  async function withTmdb(fetchImpl: () => Promise<Response>, token = 'secret-token') {
+    const report = vi.fn()
+    const res = await handleTmdb(get('/api/tmdb/movie/603'), token, {
+      fetchImpl: fetchImpl as typeof fetch,
+      report,
+    })
+    return { status: res.status, report }
+  }
+
+  it('reports a TMDB error with its status', async () => {
+    const { status, report } = await withTmdb(async () => new Response('', { status: 401 }))
+    expect(status).toBe(502)
+    expect(report).toHaveBeenCalledWith({ cause: 'tmdb_upstream', upstreamStatus: 401 })
+  })
+
+  it("doesn't report TMDB's 404, which anyone can cause with a made-up film id", async () => {
+    const { status, report } = await withTmdb(async () => new Response('', { status: 404 }))
+    expect(status).toBe(404)
+    expect(report).not.toHaveBeenCalled()
+  })
+
+  it('reports a timeout, and a missing token', async () => {
+    const timeout = await withTmdb(() => Promise.reject(new DOMException('', 'TimeoutError')))
+    expect(timeout.status).toBe(504)
+    expect(timeout.report).toHaveBeenCalledWith(expect.objectContaining({ cause: 'tmdb_timeout' }))
+    const noToken = await withTmdb(async () => Response.json({}), '')
+    expect(noToken.status).toBe(503)
+    expect(noToken.report).toHaveBeenCalledWith({ cause: 'tmdb_token_missing' })
+  })
+
+  it('reports nothing on success', async () => {
+    const { status, report } = await withTmdb(async () => Response.json({ id: 603 }))
+    expect(status).toBe(200)
+    expect(report).not.toHaveBeenCalled()
   })
 })
 

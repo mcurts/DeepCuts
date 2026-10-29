@@ -35,6 +35,19 @@ export default defineConfig(({ mode }) => ({
     preloadFonts(),
     // Lets the stylesheet and fonts, all the pre-rendered landing page needs, arrive first (ADR-0057).
     lowPriorityScripts(),
+    // dist/version.json: the error log reads it to stamp each line with this deploy's version
+    // (ADR-0058, server/errorLog.ts). The footer shows the same version.
+    {
+      name: 'version-file',
+      apply: 'build',
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'version.json',
+          source: JSON.stringify({ version }),
+        })
+      },
+    },
     // `npm run analyze` only: a treemap of what's in the bundle, at build/bundle-report.html.
     mode === 'analyze' &&
       visualizer({ filename: 'build/bundle-report.html', gzipSize: true, template: 'treemap' }),
