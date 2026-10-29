@@ -187,8 +187,7 @@ function WatchlistShelf({ ids, loading }: { ids: readonly number[]; loading: boo
   const films = shown.flatMap((id, i): FilmSlot[] => {
     const query = details[i]
     const movie = query?.data
-    if (movie)
-      return [{ id, item: { movie: summaryOf(movie), credits: creditsOf(movie) } }]
+    if (movie) return [{ id, item: { movie: summaryOf(movie), credits: creditsOf(movie) } }]
     return query?.isPending ? [{ id }] : []
   })
 
