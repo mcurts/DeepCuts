@@ -6,7 +6,8 @@
 // What goes live is exactly what was reviewed and merged:
 // 1. Pre-flight (scripts/deployChecks.ts): on main, nothing uncommitted, the same commit as GitHub's
 //    main, a real D1 database id in wrangler.toml, and the Pages secrets the API needs
-//    (CANONICAL_HOST, ADR-0047). Any problem stops it before anything runs.
+//    (CANONICAL_HOST, ADR-0047), every file in migrations/ applied to the live database, and CI
+//    green on the commit. Any problem stops it before anything runs.
 // 2. The version (ADR-0049): worked out from the commits since the last `vX.Y.Z` tag
 //    (scripts/releasePlan.ts). With nothing new, it's a redeploy of that version.
 // 3. A fresh build with real accounts on (VITE_ACCOUNTS=cloudflare, ADR-0031) and the version baked
@@ -18,8 +19,15 @@
 // It uses Direct Upload (`wrangler pages deploy`), not Pages' Git integration, which would publish
 // a public preview URL for every branch.
 import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
-import { deployProblems, parseSecretNames } from './deployChecks.ts'
+import { readdirSync, readFileSync } from 'node:fs'
+import {
+  ciProblems,
+  deployProblems,
+  migrationProblems,
+  parseAppliedMigrations,
+  parseSecretNames,
+  parseWorkflowRuns,
+} from './deployChecks.ts'
 import { commitsSince, latestTagVersion } from './releaseGit.mjs'
 import { planRelease } from './releasePlan.ts'
 
@@ -37,11 +45,12 @@ const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim()
 // 1. Pre-flight. Fetch first (tags too), so "the same as GitHub's main" and the last release
 // compare against the latest.
 git('fetch', '--quiet', '--tags', 'origin', 'main')
+const head = git('rev-parse', 'HEAD')
 const problems = deployProblems(
   {
     branch: git('branch', '--show-current'),
     status: git('status', '--porcelain'),
-    head: git('rev-parse', 'HEAD'),
+    head,
     originMain: git('rev-parse', 'origin/main'),
   },
   readFileSync('wrangler.toml', 'utf8'),
@@ -50,6 +59,42 @@ const problems = deployProblems(
     execFileSync('npx', ['wrangler', 'pages', 'secret', 'list', '--project-name', 'deep-cuts'], {
       encoding: 'utf8',
     }),
+  ),
+)
+// What the live database has run, read from wrangler's own record of it (the d1_migrations table),
+// so a pending file is caught here instead of as a 500 after the upload. Read-only and free.
+problems.push(
+  ...migrationProblems(
+    readdirSync('migrations'),
+    parseAppliedMigrations(
+      execFileSync(
+        'npx',
+        [
+          'wrangler',
+          'd1',
+          'execute',
+          'deep-cuts',
+          '--remote',
+          '--json',
+          '--command',
+          'SELECT name FROM d1_migrations',
+        ],
+        { encoding: 'utf8' },
+      ),
+    ),
+  ),
+)
+// CI on the exact commit going out: every push to main runs it, so a red or unfinished run means
+// this commit hasn't passed what every PR has to.
+problems.push(
+  ...ciProblems(
+    parseWorkflowRuns(
+      execFileSync(
+        'gh',
+        ['run', 'list', '--commit', head, '--json', 'workflowName,status,conclusion'],
+        { encoding: 'utf8' },
+      ),
+    ),
   ),
 )
 if (problems.length) {
@@ -72,7 +117,7 @@ Cloudflare Workers Free limits (ADR-0029, as of 2026-10-07):
 ⚠  NEVER upgrade this Cloudflare account to Workers Paid, and never add a payment method.
    On the Free plan, going over a limit fails; on Paid, it bills.
 
-Deploying v${version}${plan ? ` (${plan.bump})` : ' again'}: ${git('rev-parse', '--short', 'HEAD')} (${git('log', '-1', '--format=%s')})
+Deploying v${version}${plan ? ` (${plan.bump})` : ' again'}: ${head.slice(0, 7)} (${git('log', '-1', '--format=%s')})
 `)
 
 // 3. A fresh build with real accounts on and the version for the footer (vite.config.ts).

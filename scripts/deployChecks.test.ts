@@ -1,12 +1,17 @@
 // @vitest-environment node
 // Tests for the deploy pre-flight (scripts/deployChecks.ts): only reviewed, merged main with a real
-// database id and the required Pages secrets may go live.
+// database id, the required Pages secrets, every migration applied and green CI may go live.
 import { describe, expect, it } from 'vitest'
 import {
+  ciProblems,
   deployProblems,
+  migrationProblems,
+  parseAppliedMigrations,
   parseSecretNames,
+  parseWorkflowRuns,
   PLACEHOLDER_DATABASE_ID,
   type GitState,
+  type WorkflowRun,
 } from './deployChecks'
 
 const clean: GitState = { branch: 'main', status: '', head: 'abc123', originMain: 'abc123' }
@@ -62,5 +67,72 @@ describe('parseSecretNames', () => {
 
   it('finds none in an empty list', () => {
     expect(parseSecretNames('')).toEqual([])
+  })
+})
+
+describe('migrationProblems', () => {
+  const files = ['0001_init.sql', '0002_top_ten.sql']
+
+  it('lets a database that has run every file through', () => {
+    expect(migrationProblems(files, files)).toEqual([])
+  })
+
+  it('names every file the live database has not run, in order', () => {
+    const [problem] = migrationProblems(['0003_c.sql', ...files], ['0001_init.sql'])
+    expect(problem).toMatch(/0002_top_ten\.sql, 0003_c\.sql/)
+    expect(problem).toMatch(/migrations apply deep-cuts --remote/)
+  })
+
+  it('ignores files that are not migrations', () => {
+    expect(migrationProblems(['README.md', ...files], files)).toEqual([])
+  })
+})
+
+describe('parseAppliedMigrations', () => {
+  it('reads the names from wrangler d1 execute --json', () => {
+    const out = JSON.stringify([
+      { results: [{ name: '0001_init.sql' }, { name: '0002_top_ten.sql' }], success: true },
+    ])
+    expect(parseAppliedMigrations(out)).toEqual(['0001_init.sql', '0002_top_ten.sql'])
+  })
+
+  it('refuses output it does not recognise', () => {
+    expect(() => parseAppliedMigrations('{"error":"no such table"}')).toThrow()
+  })
+})
+
+describe('ciProblems', () => {
+  const pass = (workflowName: string): WorkflowRun => ({
+    workflowName,
+    status: 'completed',
+    conclusion: 'success',
+  })
+
+  it('lets a commit with passing runs through, skipped ones included', () => {
+    expect(ciProblems([pass('CI'), { ...pass('CodeQL'), conclusion: 'skipped' }])).toEqual([])
+  })
+
+  it('refuses a commit CI has not run on', () => {
+    expect(ciProblems([pass('CodeQL')])[0]).toMatch(/CI hasn't run/)
+    expect(ciProblems([])).toHaveLength(1)
+  })
+
+  it('refuses a run still going, and one that failed', () => {
+    const problems = ciProblems([
+      { ...pass('CI'), status: 'in_progress', conclusion: '' },
+      { ...pass('CodeQL'), conclusion: 'failure' },
+    ])
+    expect(problems).toHaveLength(2)
+    expect(problems[0]).toMatch(/CI is still running/)
+    expect(problems[1]).toMatch(/CodeQL ended "failure"/)
+  })
+})
+
+describe('parseWorkflowRuns', () => {
+  it('reads gh run list --json output', () => {
+    const out = '[{"conclusion":"success","status":"completed","workflowName":"CI"}]'
+    expect(parseWorkflowRuns(out)).toEqual([
+      { workflowName: 'CI', status: 'completed', conclusion: 'success' },
+    ])
   })
 })
