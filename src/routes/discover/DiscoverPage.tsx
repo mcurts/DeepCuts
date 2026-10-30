@@ -177,7 +177,7 @@ function RankedList({ films, openSlot }: { films: FilmSlot[]; openSlot?: number 
 }
 
 /**
- * The first films on the watchlist, each with its ADMIT ONE ticket; My Lists has them all.
+ * The first films on the watchlist; My Lists has them all.
  * @param loading - The list itself is still loading: show a row of placeholders.
  */
 function WatchlistShelf({ ids, loading }: { ids: readonly number[]; loading: boolean }) {
@@ -187,8 +187,7 @@ function WatchlistShelf({ ids, loading }: { ids: readonly number[]; loading: boo
   const films = shown.flatMap((id, i): FilmSlot[] => {
     const query = details[i]
     const movie = query?.data
-    if (movie)
-      return [{ id, item: { movie: summaryOf(movie), credits: creditsOf(movie), ticket: true } }]
+    if (movie) return [{ id, item: { movie: summaryOf(movie), credits: creditsOf(movie) } }]
     return query?.isPending ? [{ id }] : []
   })
 
