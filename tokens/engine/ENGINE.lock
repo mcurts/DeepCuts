@@ -4,7 +4,7 @@
   "files": {
     "lib/build.ts": "468e227bc15c1bfc25ed4b24ebf26db0dc050ee21ab16899aae3a31d1b894924",
     "lib/codemod.ts": "1689d87753f021605caec758331a72d3e4b6efe44960f11311d9dc151c3e672d",
-    "lib/comments.ts": "461c0f42d5aaf04657ad5f406d8baff663d3b9e805673166b59ec00230febf5d",
+    "lib/comments.ts": "d28a5148891f9f6c02a18f6b111a5e0a184fd7047245131cc7263bc352d6c289",
     "lib/config.ts": "aa3a3af72e7eafedbc9443e13a9b8f4ab69ed30e6d87347105d0cfa0c12c87c8",
     "lib/contrast.ts": "c9f42208a1c13d20f24e386f85eaa4f5b738bd7b4453967ecd9aa1d76c04e972",
     "lib/emit.ts": "08621e48a70bd41999ee85bce88bdbc3a1fe6709484d0f78f2835f56433b8ee4",

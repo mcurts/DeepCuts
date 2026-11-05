@@ -25,8 +25,8 @@ interface Comment {
 
 export const DECISION_ID = /\b(?:TD|ADR)-\d+\b/;
 /**
- * Words that describe what the code once was, plus site-builder direction rounds ("round 11"),
- * which belong in direction.md. Phrases that also describe runtime conditions or UI copy ("a
+ * Words that describe what the code once was, plus site-builder direction-round labels (the
+ * word "round" and a number), which belong in direction.md. Phrases that also describe runtime conditions or UI copy ("a
  * theme that no longer exists", "nothing was changed", "values used to scale") are left out, so
  * the check has no false positives to argue with.
  */
