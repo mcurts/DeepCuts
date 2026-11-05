@@ -38,6 +38,7 @@ themes.sort(
 /** The page color, for the browser's theme-color. */
 const pageColor = (id) => values[id]['theme-color-background-default']
 
+mkdirSync('src/styles', { recursive: true })
 writeFileSync(
   'src/styles/theme-fonts.css',
   [`/* ${GENERATED} */`, ...defaultTheme.meta.fonts.map((f) => `@import '${f}';`), ''].join('\n'),
