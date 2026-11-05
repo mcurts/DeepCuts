@@ -1,4 +1,4 @@
-// Tests for the tag rules (ADR-0050): one tag per film, and what appears in feeds and lists.
+// Tests for the tag rules: one tag per film, and what appears in feeds and lists.
 import { describe, expect, it } from 'vitest'
 import {
   applyTag,
@@ -12,7 +12,7 @@ import {
 const set = (...tags: SystemTag[]): TagSet => new Set(tags)
 const sorted = (tags: TagSet) => [...tags].sort()
 
-describe('applyTag (ADR-0050)', () => {
+describe('applyTag', () => {
   it.each<[SystemTag[], SystemTag, SystemTag[]]>([
     [[], 'liked', ['liked']],
     [['watchlist'], 'liked', ['liked']],
@@ -22,7 +22,7 @@ describe('applyTag (ADR-0050)', () => {
     [['disliked'], 'watchlist', ['watchlist']],
     [['watchlist'], 'disliked', ['disliked']],
     [['liked'], 'liked', ['liked']],
-    // Data saved before ADR-0050 could hold two; a new pick still leaves only one.
+    // Data saved by older versions could hold two; a new pick still leaves only one.
     [['liked', 'watchlist'], 'disliked', ['disliked']],
   ])('%j + %s → %j', (before, tag, after) => {
     expect(sorted(applyTag(set(...before), tag, true))).toEqual(after)

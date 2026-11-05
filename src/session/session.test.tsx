@@ -1,4 +1,4 @@
-// Tests for sessions (ADR-0034): signed out reads nothing and saves nothing; each account has its
+// Tests for sessions: signed out reads nothing and saves nothing; each account has its
 // own lists; and the query cache follows the current session.
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
@@ -41,7 +41,7 @@ beforeEach(async () => {
 afterEach(() => vi.restoreAllMocks())
 
 describe('session', () => {
-  it('starts signed out, with empty lists, and refuses to save anything (ADR-0034)', async () => {
+  it('starts signed out, with empty lists, and refuses to save anything', async () => {
     const setItem = vi.spyOn(Storage.prototype, 'setItem')
     const { result } = renderHarness()
     expect(result.current.session).toEqual({ kind: 'signedOut' })
@@ -52,7 +52,7 @@ describe('session', () => {
     expect(setItem).not.toHaveBeenCalled()
   })
 
-  it('signing in opens that account’s own lists; nothing moves in (ADR-0034)', async () => {
+  it('signing in opens that account’s own lists; nothing moves in', async () => {
     await accountTags().setTag(4, 'liked', true)
     const { result } = renderHarness()
     await act(() => result.current.signIn('demo'))
@@ -63,7 +63,7 @@ describe('session', () => {
     await waitFor(() => expect(result.current.liked).toEqual([4]))
   })
 
-  it('a dislike updates the movie tags and the feed exclusions (ADR-0017)', async () => {
+  it('a dislike updates the movie tags and the feed exclusions', async () => {
     const { result } = renderHarness()
     await act(() => result.current.signIn('demo'))
     await act(() => result.current.setTag.mutateAsync({ tmdbId: 5, tag: 'disliked', on: true }))

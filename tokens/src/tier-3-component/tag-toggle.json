@@ -1,0 +1,39 @@
+{
+  "$description": "Tier 3: the four tag toggles. Selected and hover colors come from each tag's own color.",
+  "component": {
+    "tag-toggle": {
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.background.overlay}",
+        "$description": "Tag toggle fill when off."
+      },
+      "content": {
+        "$type": "color",
+        "$value": "{theme.color.content.default}",
+        "$description": "Full-strength text: the tag color stays on the icon, border and fill, so the label never depends on it for contrast",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["component.tag-toggle.background"],
+            "min": 4.5
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{theme.color.border.control}",
+        "$description": "Tag toggle outline (3:1, it identifies the control).",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.color.background.default"],
+            "min": 3
+          }
+        }
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{theme.border.control.radius}",
+        "$description": "Tag toggle corners."
+      }
+    }
+  }
+}

@@ -1,16 +1,16 @@
-// `npm run deploy`: builds the app and uploads it to Cloudflare Pages (ADR-0029, Stage 4 H10).
-// OFF BY DEFAULT (ADR-0024): it refuses to run unless DEEP_CUTS_DEPLOY=1 is set, and it is meant
+// `npm run deploy`: builds the app and uploads it to Cloudflare Pages (Stage 4 H10).
+// OFF BY DEFAULT: it refuses to run unless DEEP_CUTS_DEPLOY=1 is set, and it is meant
 // for the owner only, after the go-live checklist (docs repo: hosting/go-live-checklist.md). Agents and
 // CI never run it.
 //
 // What goes live is exactly what was reviewed and merged:
 // 1. Pre-flight (scripts/deployChecks.ts): on main, nothing uncommitted, the same commit as GitHub's
 //    main, a real D1 database id in wrangler.toml, and the Pages secrets the API needs
-//    (CANONICAL_HOST, ADR-0047), every file in migrations/ applied to the live database, and CI
+//    (CANONICAL_HOST), every file in migrations/ applied to the live database, and CI
 //    green on the commit. Any problem stops it before anything runs.
-// 2. The version (ADR-0049): worked out from the commits since the last `vX.Y.Z` tag
+// 2. The version: worked out from the commits since the last `vX.Y.Z` tag
 //    (scripts/releasePlan.ts). With nothing new, it's a redeploy of that version.
-// 3. A fresh build with real accounts on (VITE_ACCOUNTS=cloudflare, ADR-0031) and the version baked
+// 3. A fresh build with real accounts on (VITE_ACCOUNTS=cloudflare) and the version baked
 //    into the footer, so a stale or demo-only dist/ can never be uploaded by mistake.
 // 4. The dist secret scan, then the upload.
 // 5. Tags the deployed commit `vX.Y.Z`, pushes the tag and posts the release notes as a GitHub
@@ -33,7 +33,7 @@ import { planRelease } from './releasePlan.ts'
 
 if (process.env.DEEP_CUTS_DEPLOY !== '1') {
   console.error(
-    '✗ Deploying is off by default (ADR-0024). If you are the owner and have followed\n' +
+    '✗ Deploying is off by default. If you are the owner and have followed\n' +
       '  hosting/go-live-checklist.md in the docs repo, run: DEEP_CUTS_DEPLOY=1 npm run deploy',
   )
   process.exit(1)
@@ -108,7 +108,7 @@ const plan = planRelease(lastTag, commitsSince(lastTag))
 const version = plan?.version ?? lastTag
 
 console.log(`
-Cloudflare Workers Free limits (ADR-0029, as of 2026-10-07):
+Cloudflare Workers Free limits (as of 2026-10-07):
   • Static files: unlimited
   • Function + Worker requests (shared): 100,000 / day, reset 00:00 UTC.
     Past that, the API is skipped (fail open) and search shows "can't reach movie data". No charge.

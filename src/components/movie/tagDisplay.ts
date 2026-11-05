@@ -12,7 +12,7 @@ export interface TagDisplay {
   hint: string
 }
 
-// The three tags (ADR-0050), named for what they do to picks (ADR-0051). Color always comes with an icon and a label (ADR-0020).
+// The three tags, named for what they do to picks. Color always comes with an icon and a label.
 export const TAGS: TagDisplay[] = [
   {
     tag: 'watchlist',

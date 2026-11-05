@@ -1,5 +1,5 @@
 // `npm run version:next`: shows the version and release notes the next `npm run deploy` would
-// ship (ADR-0049), without changing anything. Safe for anyone, agents included.
+// ship, without changing anything. Safe for anyone, agents included.
 import { execFileSync } from 'node:child_process'
 import { planRelease } from './releasePlan.ts'
 import { commitsSince, latestTagVersion } from './releaseGit.mjs'

@@ -1,4 +1,4 @@
-// The Deep Cuts wordmark (ADR-0040): two skewed blocks, "DEEP" in bone on blood and "CUTS" in ink
+// The Deep Cuts wordmark: two skewed blocks, "DEEP" in bone on blood and "CUTS" in ink
 // on bone. Drawn inline from the owner's artwork (docs repo: design/triple-feature/deep-cuts-logo.svg),
 // with the letters as vector paths, so it looks identical before any font loads and stays sharp
 // at any size.
@@ -37,7 +37,7 @@ type LogoProps = {
 
 /**
  * The Deep Cuts wordmark, or holiday artwork when one is in season. Colors come from the brand
- * token tier, the artwork's exact values (ADR-0023), so the logo never changes with the page
+ * token tier, the artwork's exact values, so the logo never changes with the page
  * accent. Size it by height; the width follows. Pass `decorative` when a link around it already
  * says "Deep Cuts". Every variant keeps the accessible name "Deep Cuts": the brand doesn't change,
  * only its costume.
@@ -62,11 +62,11 @@ export function Logo({
       />
       {tagline && (
         // The theme's tagline color unless the costume's lit state sets `--logo-tagline`; a class,
-        // not a `style` attribute, which the CSP blocks in the pre-rendered HTML (ADR-0057). Hidden from assistive
+        // not a `style` attribute, which the CSP blocks in the pre-rendered HTML. Hidden from assistive
         // tech with the artwork when decorative: the link around it already names the brand.
         <span
           aria-hidden={decorative || undefined}
-          className={`logo-tagline font-label text-xs leading-none tracking-wider text-(--logo-tagline,var(--dc-brand-logo-tagline)) ${taglineClassName}`}
+          className={`logo-tagline font-label text-xs leading-none tracking-wider text-(--logo-tagline,var(--theme-logo-tagline)) ${taglineClassName}`}
         >
           {TAGLINE}
         </span>
@@ -75,20 +75,20 @@ export function Logo({
   )
 }
 
-/** The year-round wordmark (ADR-0040). */
+/** The year-round wordmark. */
 function StandardLogo(props: LogoArtProps) {
   return (
     <svg viewBox="0 0 502 128" {...props}>
       {/* The whole mark leans 8° to the right, like a poster headline. */}
       <g transform="translate(18 2) skewX(-8)">
-        <rect width="238" height="124" className="fill-(--dc-brand-logo-primary)" />
-        <rect x="238" width="244" height="124" className="fill-(--dc-brand-logo-secondary)" />
-        <g fillRule="evenodd" className="fill-(--dc-brand-logo-on-primary)">
+        <rect width="238" height="124" className="fill-(--theme-logo-primary)" />
+        <rect x="238" width="244" height="124" className="fill-(--theme-logo-secondary)" />
+        <g fillRule="evenodd" className="fill-(--theme-logo-primary-content)">
           {DEEP.map(([x, d]) => (
             <path key={x} transform={`translate(${x} 12)`} d={d} />
           ))}
         </g>
-        <g fillRule="evenodd" className="fill-(--dc-brand-logo-on-secondary)">
+        <g fillRule="evenodd" className="fill-(--theme-logo-secondary-content)">
           {CUTS.map(([x, d]) => (
             <path key={x} transform={`translate(${x} 12)`} d={d} />
           ))}

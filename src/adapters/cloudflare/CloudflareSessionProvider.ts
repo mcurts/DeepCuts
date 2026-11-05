@@ -1,8 +1,8 @@
-// The session provider for real accounts (ADR-0031, Stage 6 A4): passkeys against the accounts API
+// The session provider for real accounts (Stage 6 A4): passkeys against the accounts API
 // (`/api/auth/*`, Cloudflare Pages Functions + D1).
 //
 // Only passkey accounts live on the server. The demo account, which reviewers can try without an
-// invite (ADR-0025), stays on this device and is handed to the local provider unchanged.
+// invite, stays on this device and is handed to the local provider unchanged.
 //
 // The browser side of WebAuthn comes from @simplewebauthn/browser: `startRegistration` asks the
 // device to create a passkey, `startAuthentication` asks it to use one. Cancelling that prompt
@@ -89,7 +89,7 @@ const accountSession = (user: z.infer<typeof userSchema>): Session => ({
   account: { id: user.id, name: user.name, method: 'passkey' },
 })
 
-// Passkey first: it's the real account. The demo stays for reviewers (ADR-0025).
+// Passkey first: it's the real account. The demo stays for reviewers.
 const PASSKEY: SignInMethod = {
   id: 'passkey',
   label: 'Sign in with a passkey',

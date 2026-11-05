@@ -1,7 +1,7 @@
-// One film as a cassette tile: the VHS box (design approved 2026-10-09) with its badge, then the
-// caption (ADR-0040 §8): title, year · genre, director and writer (a Discovery pick's "Why this
+// One film as a cassette tile: the VHS box with its badge, then the
+// caption: title, year · genre, director and writer (a Discovery pick's "Why this
 // title?" sits just after the tile, PickReason). The whole
-// tile is the link (no separate "View details", owner 2026-10-13); its title lights up on hover.
+// tile is the link (no separate "View details"); its title lights up on hover.
 // Used by Home's shelves and My Lists. A tile rises gently into place when its film arrives,
 // usually replacing a CassetteSkeleton of the same size, so nothing around it moves.
 import { Link } from 'react-router'
@@ -17,7 +17,7 @@ export interface CassetteItem {
   match?: number
   /** Director and writer names, once the film's details have loaded. */
   credits?: Credits
-  /** Its place in a ranked list (the Top Ten, ADR-0036), shown as a "#1" tab on the box. */
+  /** Its place in a ranked list (the Top Ten), shown as a "#1" tab on the box. */
   rank?: number
   /** Show the ADMIT ONE ticket: the film is on the watchlist (Home's watchlist shelf). */
   ticket?: boolean
@@ -60,7 +60,7 @@ export function CassetteCard({ item, stagger = 0 }: { item: CassetteItem; stagge
       // The box follows the mouse over this link and turns when it has keyboard focus.
       data-vhs-target=""
       // Keyboard focus shows on the text block below the box, not around the whole tile, where
-      // the ring would box in the turning 3D box (owner's call, 2026-10-09). While the mouse
+      // the ring would box in the turning 3D box. While the mouse
       // turns the box, the VHS box styles raise the tile above its neighbours.
       // The entrance (`animate-enter`) runs only when motion is welcome. Its fill is `backwards`:
       // hidden during the stagger delay, but nothing held on the tile once it ends, so the 3D
@@ -70,8 +70,8 @@ export function CassetteCard({ item, stagger = 0 }: { item: CassetteItem; stagge
       <VhsBox movie={movie} badge={badgeOf(item)} />
       {/* The focus ring: the app's usual ring (3px focus color, 3px gap), drawn around the text
           while the link has keyboard focus. It's the whole visible indicator, so it must never
-          be clipped or covered (WCAG 2.4.7, 2.4.11; ADR-0009). */}
-      <div className="mt-4 flex flex-1 flex-col group-focus-visible:outline-3 group-focus-visible:outline-offset-3 group-focus-visible:outline-focus">
+          be clipped or covered (WCAG 2.4.7, 2.4.11). */}
+      <div className="mt-4 flex flex-1 flex-col group-focus-visible:outline-3 group-focus-visible:outline-offset-3 group-focus-visible:outline-focus-border">
         {/* The box and its badge are hidden from screen readers, so the rank comes first here,
             and the link's accessible name starts "#1 The Thing". */}
         {item.rank !== undefined && <span className="sr-only">#{item.rank} </span>}
@@ -79,14 +79,14 @@ export function CassetteCard({ item, stagger = 0 }: { item: CassetteItem; stagge
             in the page, so it's still the link's accessible name, and `title` shows it on hover. */}
         <h3
           title={movie.title}
-          className="line-clamp-2 min-h-14 text-lg font-bold underline-offset-4 group-hover:text-accent group-hover:underline"
+          className="line-clamp-2 min-h-14 text-lg font-bold underline-offset-4 group-hover:text-content-accent group-hover:underline"
         >
           {movie.title}
         </h3>
         {item.match !== undefined && <span className="sr-only">{item.match}% match</span>}
         {/* The stamp is on the hidden box, so say it here too: "On your watchlist." */}
         {item.stamp && <span className="sr-only">{quickAction(item.stamp).stamp}.</span>}
-        <p className="mt-1 min-h-5 text-sm text-fg-muted">{meta.join(' · ')}</p>
+        <p className="mt-1 min-h-5 text-sm text-content-muted">{meta.join(' · ')}</p>
         <CreditLines credits={item.credits} />
       </div>
     </Link>

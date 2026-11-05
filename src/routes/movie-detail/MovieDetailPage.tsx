@@ -1,6 +1,6 @@
 // The Detail page (/movie/:id): one film's details, your tags for it, and where to watch it.
 //
-// Information only (ADR-0018): no ratings or reviews of our own. It has its own full-bleed
+// Information only: no ratings or reviews of our own. It has its own full-bleed
 // layout, with the film's backdrop behind the page.
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
@@ -169,7 +169,7 @@ function DetailLayout({
         ref={backRef}
         onPress={() => onDismiss()}
         aria-label="Back to previous screen"
-        className="absolute top-[max(1.125rem,env(safe-area-inset-top))] left-5 z-10 grid size-12 place-items-center border-2 border-border-emphasis bg-surface-raised hover:border-accent hover:text-accent md:fixed"
+        className="absolute top-[max(1.125rem,env(safe-area-inset-top))] left-5 z-10 grid size-12 place-items-center border-2 border-border-emphasis bg-background-raised hover:border-border-accent hover:text-content-accent md:fixed"
       >
         <Icon name="back" className="size-6" />
       </Button>
@@ -222,20 +222,20 @@ function MovieDetail({ id, onDismiss }: { id: number; onDismiss: () => void }) {
           no screen shape crops its sides. On phones it sits at the top and fades into the page.
           From md the layer is fixed behind the page: the image sits at the top and fades out at
           its foot, and an overlay darkens the right side where the text sits. Scrims keep text
-          readable over any image (ADR-0009). */}
+          readable over any image. */}
       <div className="relative w-full md:fixed md:inset-0">
         <div className="relative aspect-video w-full">
           {backdrop && <LoadingImage src={backdrop} alt="" className="size-full object-cover" />}
           {/* On screens taller than 16:9 the image ends above the bottom, so blend its edge. */}
-          <div className="absolute inset-0 hidden bg-linear-to-b from-transparent from-60% to-surface md:block" />
+          <div className="absolute inset-0 hidden bg-linear-to-b from-transparent from-60% to-background md:block" />
         </div>
-        <div className="absolute inset-0 bg-linear-to-b from-surface/70 via-transparent via-35% to-surface md:hidden" />
-        <div className="absolute inset-0 hidden bg-linear-to-r from-transparent from-25% via-surface/85 via-55% to-surface to-75% md:block" />
-        <div className="absolute inset-0 hidden bg-linear-to-b from-surface/60 via-transparent via-20% md:block" />
+        <div className="absolute inset-0 bg-linear-to-b from-background/70 via-transparent via-35% to-background md:hidden" />
+        <div className="absolute inset-0 hidden bg-linear-to-r from-transparent from-25% via-background/85 via-55% to-background to-75% md:block" />
+        <div className="absolute inset-0 hidden bg-linear-to-b from-background/60 via-transparent via-20% md:block" />
       </div>
 
       <div className="relative z-1 -mt-12 flex flex-col px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:mt-0 md:ml-auto md:min-h-svh md:w-full md:max-w-xl md:justify-center md:pt-24 md:pr-13 md:pb-10 md:pl-6">
-        {/* Top Ten (ADR-0036): a sticker in the top-left corner of the details, set apart from
+        {/* Top Ten: a sticker in the top-left corner of the details, set apart from
             the tags below. Pressing it saves at once; it then becomes a short notice. */}
         <DetailTopTen movieId={m.id} title={m.title} className="mb-4" />
         <h1
@@ -243,7 +243,7 @@ function MovieDetail({ id, onDismiss }: { id: number; onDismiss: () => void }) {
         >
           {m.title}
         </h1>
-        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-fg-muted">
+        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-content-muted">
           <span>{meta.join(' · ')}</span>
           {rating && (
             <span
@@ -255,17 +255,20 @@ function MovieDetail({ id, onDismiss }: { id: number; onDismiss: () => void }) {
           )}
         </p>
         {/* Synopses are the one long text in the typewriter face, so the line stays under ~65
-            characters (owner, 2026-10-13). */}
+            characters. */}
         {m.overview && (
-          <p className="my-3.5 max-w-prose leading-relaxed text-fg-soft">{m.overview}</p>
+          <p className="my-3.5 max-w-prose leading-relaxed text-content-soft">{m.overview}</p>
         )}
 
-        {/* The three tag toggles, with Save and Cancel once anything changes (ADR-0050 rule). */}
+        {/* The three tag toggles, with Save and Cancel once anything changes. */}
         <DetailTags movieId={m.id} title={m.title} onDismiss={onDismiss} />
 
-        {/* A clear break between your tags and the streaming info (owner, 2026-10-07). */}
+        {/* A clear break between your tags and the streaming info. */}
         <section aria-labelledby="where-to-watch" className="mt-12">
-          <h2 id="where-to-watch" className="mb-2.5 font-label text-sm tracking-widest text-accent">
+          <h2
+            id="where-to-watch"
+            className="mb-2.5 font-label text-sm tracking-widest text-content-accent"
+          >
             Where to watch ({REGION})
           </h2>
           {/* Service logos (with the name as alt text), or a short message. The message is as
@@ -287,14 +290,16 @@ function MovieDetail({ id, onDismiss }: { id: number; onDismiss: () => void }) {
               })}
             </ul>
           ) : (
-            <p className="flex min-h-8 items-center text-sm text-fg-muted">
+            <p className="flex min-h-8 items-center text-sm text-content-muted">
               {providers.isPending
                 ? 'Checking providers…'
                 : 'Not streaming in your region right now.'}
             </p>
           )}
           {/* Attribution required for JustWatch data. */}
-          <p className="mt-3 text-xs text-fg-muted">Streaming availability data from JustWatch.</p>
+          <p className="mt-3 text-xs text-content-muted">
+            Streaming availability data from JustWatch.
+          </p>
         </section>
       </div>
     </article>
@@ -307,9 +312,9 @@ function NotFound() {
     <div className="px-5 pt-40">
       <title>Film not found · Deep Cuts</title>
       <h1 className="font-display text-5xl case-display">Film not found</h1>
-      <p className="mt-2 text-fg-muted">
+      <p className="mt-2 text-content-muted">
         We couldn’t find that film.{' '}
-        <Link to={HOME.path} className="text-accent underline">
+        <Link to={HOME.path} className="text-content-accent underline">
           Go to {HOME.label}
         </Link>
       </p>

@@ -1,4 +1,4 @@
-// Screen tests for real passkey accounts (ADR-0031, Stage 6 A2b/A4): with the Cloudflare session
+// Screen tests for real passkey accounts (Stage 6 A2b/A4): with the Cloudflare session
 // provider, registration drops the "practice" notice and explains a refused invite on its field;
 // sign-in offers the passkey first; the Account page renames and deletes a passkey account; a
 // session the server ends mid-use goes to Sign in and back (issue #18). The accounts API is the

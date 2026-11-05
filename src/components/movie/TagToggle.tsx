@@ -27,19 +27,19 @@ export function TagToggle({
       onChange={onChange}
       // Sets `--tag` to this tag's color; the classes below use it for the icon, hover and
       // selected state, so one component serves all three tags. Pressed, the button fills with
-      // the tag's color and its text and icon turn ink (ADR-0040), so on and off differ by far
+      // the tag's color and its text and icon turn ink, so on and off differ by far
       // more than a border.
       style={tagColor(tag.tag) as CSSProperties}
-      className={`group flex min-w-0 items-center justify-center gap-2 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-bg px-2 py-1.5 text-sm text-tag-toggle-fg hover:border-(--tag) data-selected:border-(--tag) data-selected:bg-(--tag) data-selected:text-fg-on-accent data-selected:shadow-stamp ${className}`}
+      className={`group flex min-w-0 items-center justify-center gap-2 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-background px-2 py-1.5 text-sm text-tag-toggle-content hover:border-(--tag) data-selected:border-(--tag) data-selected:bg-(--tag) data-selected:text-accent-content data-selected:shadow-stamp ${className}`}
     >
       <Icon
         name={tag.icon}
-        className="size-5 shrink-0 text-(--tag) group-data-selected:text-fg-on-accent"
+        className="size-5 shrink-0 text-(--tag) group-data-selected:text-accent-content"
       />
       <span className="flex flex-col gap-0.5">
         <strong className="font-bold">{tag.label}</strong>
         {detailed && (
-          <small className="text-sm font-normal text-fg-muted group-data-selected:text-fg-on-accent">
+          <small className="text-sm font-normal text-content-muted group-data-selected:text-accent-content">
             {tag.hint}
           </small>
         )}

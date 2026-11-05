@@ -17,14 +17,14 @@ export function FavoriteStep({ state, update }: StepProps) {
   return (
     <>
       <Prompt eyebrow="One more signal" title="What’s your favorite movie?">
-        <p className="mt-3 mb-4 max-w-md leading-relaxed text-fg-muted">
+        <p className="mt-3 mb-4 max-w-md leading-relaxed text-content-muted">
           Use the search above to find a favorite. You can tag it there and come right back.
         </p>
         {favorite && (
-          <p className="mb-3 ml-auto flex w-fit items-center gap-2 border-2 border-accent bg-surface-overlay px-3 py-1.5 text-fg">
+          <p className="mb-3 ml-auto flex w-fit items-center gap-2 border-2 border-border-accent bg-background-overlay px-3 py-1.5 text-content">
             <Icon name="check" />
             <span className="flex flex-col">
-              <small className="text-sm text-fg-muted">Your pick</small>
+              <small className="text-sm text-content-muted">Your pick</small>
               <strong className="text-sm">{favorite.title}</strong>
             </span>
           </p>
@@ -38,7 +38,7 @@ export function FavoriteStep({ state, update }: StepProps) {
         </Button>
         <Button
           onPress={() => update({ step: 2, pick: undefined, n: 1 })}
-          className="mt-1 ml-auto block min-h-11 px-3 text-sm text-fg-muted"
+          className="mt-1 ml-auto block min-h-11 px-3 text-sm text-content-muted"
         >
           {/* The favorite is optional. */}
           Skip favorite movie

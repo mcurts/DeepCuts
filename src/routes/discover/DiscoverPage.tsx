@@ -1,14 +1,14 @@
 // Home (/), signed in: the app's three ideas as three full-width shelves, stacked in the order
-// Top Ten, Watchlist, Discovery (ADR-0033, ADR-0040 §6b).
+// Top Ten, Watchlist, Discovery.
 //
-// Each shelf is a row of VHS boxes that wraps as its list grows: the whole Top Ten (ADR-0036)
+// Each shelf is a row of VHS boxes that wraps as its list grows: the whole Top Ten
 // with each box's rank on a tab and the next open slot, the first watchlist films, and
-// Discovery's picks. With likes, the picks come from the recommendation scorer (ADR-0026) with a
+// Discovery's picks. With likes, the picks come from the recommendation scorer with a
 // match stamp and the reason why (PickReason). Without likes, they are a starter shelf of acclaimed,
-// lesser-known older films (ADR-0042, minus any you've tagged), with a hint to like a few films. Each pick has quick actions under it (issue #76):
-// Want to see, Like, Not for me (ADR-0050), saved at once with Undo. On tuned picks a press is also saved
-// with the pick's scores, for the weights lab to learn from (ADR-0045). Every box names the film's director
-// and writer, from its details (the same cached call Detail makes). The Top Ten shelf has a reorder mode (ADR-0041).
+// lesser-known older films (minus any you've tagged), with a hint to like a few films. Each pick has quick actions under it (issue #76):
+// Want to see, Like, Not for me, saved at once with Undo. On tuned picks a press is also saved
+// with the pick's scores, for the weights lab to learn from. Every box names the film's director
+// and writer, from its details (the same cached call Detail makes). The Top Ten shelf has a reorder mode.
 //
 // Loading holds still (no jumps): every film that's still loading has a box-shaped placeholder in
 // its own place (CassetteSkeleton), a list that's still loading shows one row of them, and each
@@ -48,11 +48,11 @@ const ReorderList = lazy(() =>
 )
 
 // How many watchlist films Home shows: the first ones in the person's order (newest first until
-// they reorder, ADR-0041), the same ones the scorer already loads, so the shelf costs no extra
+// they reorder), the same ones the scorer already loads, so the shelf costs no extra
 // calls. My Lists has them all.
 const WATCHLIST_PREVIEW = LIMITS.watchlist
 
-/** Home: the headline, then the three shelves (ADR-0033, ADR-0040). */
+/** Home: the headline, then the three shelves. */
 export function HomePage() {
   // Discovery's picks are worked out once here and shared by the ticker and the shelf, so the
   // scorer runs once. The two lists are cached queries, so reading them twice costs nothing.
@@ -83,9 +83,9 @@ export function HomePage() {
 }
 
 /**
- * The person's Top Ten (ADR-0036), all of it, in their order: #1 first, then the next open slot
+ * The person's Top Ten, all of it, in their order: #1 first, then the next open slot
  * until all ten are ranked. Films are added and removed from their Detail page. With two or more
- * films, "Reorder" switches the shelf to reorder mode (ADR-0041) until "Done".
+ * films, "Reorder" switches the shelf to reorder mode until "Done".
  * @param loading - The list itself is still loading: show a row of placeholders.
  */
 function TopTenShelf({ ids, loading }: { ids: readonly number[]; loading: boolean }) {
@@ -113,9 +113,9 @@ function TopTenShelf({ ids, loading }: { ids: readonly number[]; loading: boolea
       id="top-ten"
       feature={1}
       title={PANELS['top-ten'].title}
-      // The star the Top Ten wears on Detail, in its color (ADR-0035).
+      // The star the Top Ten wears on Detail, in its color.
       icon={<Icon name="star" className="size-10 shrink-0 text-favourite" />}
-      // No "3 of 10 ranked" count (owner, 2026-10-13): the dashed rule runs to the edge instead.
+      // No "3 of 10 ranked" count: the dashed rule runs to the edge instead.
       ref={scopeRef}
       meta={ids.length >= 2 && <ReorderToggle ref={toggleRef} active={active} onPress={toggle} />}
     >
@@ -226,7 +226,7 @@ function WatchlistShelf({ ids, loading }: { ids: readonly number[]; loading: boo
 }
 
 /**
- * The ticker's live facts (ADR-0040), most important first. An empty list drops its item rather
+ * The ticker's live facts, most important first. An empty list drops its item rather
  * than showing a zero, and only scorer picks count as picks (the starter shelf isn't tuned).
  */
 function tickerItems(topTen: number, watchlist: number, discovery: DiscoveryPicks): string[] {
@@ -243,37 +243,36 @@ function tickerItems(topTen: number, watchlist: number, discovery: DiscoveryPick
 /** A Discovery tile: a cassette, plus why the scorer picked it (tuned picks only). */
 type ShelfPick = CassetteItem & { reason?: string }
 
-/** How the scorer saw a pick: what's saved with a quick-action press (ADR-0045). */
+/** How the scorer saw a pick: what's saved with a quick-action press. */
 type Scores = Pick<FeedbackEntry, 'parts' | 'penalty'>
 
 /** Discovery's picks and their state, from `useDiscoveryPicks`. */
 type DiscoveryPicks = ReturnType<typeof useDiscoveryPicks>
 
 /**
- * Discovery's picks (ADR-0026): the scorer's when there are likes, else a starter shelf of
- * acclaimed, lesser-known older films (ADR-0042), never this week's blockbusters. (The big
- * featured card is gone, owner 2026-10-09: the top pick is simply the first box.)
+ * Discovery's picks: the scorer's when there are likes, else a starter shelf of
+ * acclaimed, lesser-known older films, never this week's blockbusters. There is no
+ * featured card: the top pick is simply the first box.
  */
 function useDiscoveryPicks() {
   const tuned = useRecommendations(HOME_PICKS)
   const starter = useQuery(movieQueries.deepCuts())
-  // Every film you've tagged stays out of the starter picks, not just disliked ones (owner,
-  // 2026-10-15): a film you saved or liked with a quick action shouldn't come back. The
+  // Every film you've tagged stays out of the starter picks, not just disliked ones: a film you saved or liked with a quick action shouldn't come back. The
   // scorer's picks already leave out every tagged film. Your Top Ten films stay out too
-  // (ADR-0043): a favourite you already ranked isn't a discovery.
+  //: a favourite you already ranked isn't a discovery.
   const tagged = useQuery(useTagQueries().all()).data
   const topTenQuery = useTopTen()
   const topTen = topTenQuery.data ?? []
   const excluded = tagged && new Set([...tagged.map((r) => r.tmdbId), ...topTen])
   // Whether you have likes isn't known until your lists have loaded (a moment on a passkey
-  // account, ADR-0031). Until then the shelf counts as loading: choosing the starter shelf early
+  // account). Until then the shelf counts as loading: choosing the starter shelf early
   // would flash its hint and could hold starter picks for someone who has likes.
   const listsKnown = tagged !== undefined && !topTenQuery.isPending
 
   // Use the scorer's picks when there are likes and the scorer has (or is still finding) picks;
   // otherwise fall back to the starter shelf so the panel is never empty.
   const usePicks = tuned.hasLikes && (tuned.loading || tuned.recommendations.length > 0)
-  // While the scorer is still loading (both passes, ADR-0028), show nothing rather than early
+  // While the scorer is still loading (both passes), show nothing rather than early
   // picks that would reshuffle when the re-rank arrives.
   const shown: ShelfPick[] = (
     usePicks
@@ -287,7 +286,7 @@ function useDiscoveryPicks() {
           .map((movie) => ({ movie }))
   ).slice(0, HOME_PICKS)
   // How the scorer saw each tuned pick, saved with a quick-action press so the weights lab can
-  // learn from it (ADR-0045). Starter picks aren't scored, so they have none.
+  // learn from it. Starter picks aren't scored, so they have none.
   const scores = new Map<number, Scores>(
     usePicks
       ? tuned.recommendations.map((r) => [r.movie.id, { parts: r.parts, penalty: r.penalty }])
@@ -319,7 +318,7 @@ function DiscoveryShelf({ discovery }: { discovery: DiscoveryPicks }) {
     <ShelfSection id="discovery" feature={3} title={PANELS.discovery.title}>
       {/* Only the untuned feed explains itself: it's the one line that tells you what to do. */}
       {listsKnown && !usePicks && !failed && (
-        <p className="-mt-2 mb-6 text-base text-fg-soft">
+        <p className="-mt-2 mb-6 text-base text-content-soft">
           Mark a few films “More like this” to tune these picks to you.
         </p>
       )}
@@ -347,10 +346,10 @@ function DiscoveryShelf({ discovery }: { discovery: DiscoveryPicks }) {
           <ShelfSkeleton />
         </>
       ) : failed ? (
-        // The error chip (ADR-0040 §9): what failed and what to do.
+        // The error chip: what failed and what to do.
         <p
           role="status"
-          className="w-fit border-2 border-dashed border-danger px-4 py-3 font-label text-base text-fg"
+          className="w-fit border-2 border-dashed border-border-danger px-4 py-3 font-label text-base text-content"
         >
           Discovery is unavailable right now. Try again in a moment.
         </p>
@@ -366,9 +365,9 @@ function DiscoveryShelf({ discovery }: { discovery: DiscoveryPicks }) {
       )}
       {/* The weights lab is a dev-server tool, so the link only shows there (FEATURES.labs). */}
       {usePicks && FEATURES.labs && (
-        <p className="mt-6 text-sm text-fg-muted">
+        <p className="mt-6 text-sm text-content-muted">
           Curious how these are ranked?{' '}
-          <Link to="/lab/weights" className="text-accent underline">
+          <Link to="/lab/weights" className="text-content-accent underline">
             Tune the weights
           </Link>
         </p>
@@ -379,11 +378,11 @@ function DiscoveryShelf({ discovery }: { discovery: DiscoveryPicks }) {
 
 /**
  * Discovery's picks, held still while you work through them with the quick actions (issue #76,
- * the owner's "stamp in place"). Each action re-runs the scorer, which drops the tagged film and
+ * "stamp in place"). Each action re-runs the scorer, which drops the tagged film and
  * can reorder the rest; instead, the first full set of picks is kept for as long as Home is open,
  * a tagged pick stays in its place with a stamp and Undo, and new picks arrive the next time
  * Home opens. Credit lines that load later still fill in, from the details cache.
- * Each press is also saved with the pick's scores, and Undo takes it back out (ADR-0045).
+ * Each press is also saved with the pick's scores, and Undo takes it back out.
  * @param scores - How the scorer saw each tuned pick, by film id (none for starter picks).
  * @param ready - The picks are complete (not loading, not failed, not empty): hold them.
  */
@@ -475,7 +474,7 @@ function useHeldPicks(picks: ShelfPick[], scores: ReadonlyMap<number, Scores>, r
 }
 
 /**
- * Box-shaped placeholders for the picks while they load (ADR-0040 §9), one per pick to come, so
+ * Box-shaped placeholders for the picks while they load, one per pick to come, so
  * the shelf doesn't jump when the picks arrive.
  */
 function ShelfSkeleton() {

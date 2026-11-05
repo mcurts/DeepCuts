@@ -25,7 +25,7 @@ export function RateStep({ state, update }: StepProps) {
   const excluded = useQuery(queries.feedExclusions()).data
   const setTag = useSetTag()
   // The card is tracked by film id, so tagging it (even Dislike) never shifts the sequence.
-  // Films you had already disliked are never offered (ADR-0017).
+  // Films you had already disliked are never offered.
   const pool = (results ?? []).filter((m) => m.id !== state.favorite)
   const current = state.pick
     ? pool.findIndex((m) => m.id === state.pick)
@@ -79,15 +79,15 @@ export function RateStep({ state, update }: StepProps) {
       </div>
       <article
         aria-label={pick.title}
-        className="relative flex min-h-130 flex-col justify-end overflow-hidden rounded-card border-2 border-card-border bg-card-bg md:min-h-140"
+        className="relative flex min-h-130 flex-col justify-end overflow-hidden rounded-card border-2 border-card-border bg-card-background md:min-h-140"
       >
         {image && (
           <LoadingImage src={image} alt="" className="absolute inset-0 size-full object-cover" />
         )}
         {/* Fades the film image into the page so the title and buttons stay readable. */}
-        <div className="absolute inset-0 bg-linear-to-b from-transparent from-20% via-surface/30 via-45% to-surface to-70%" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent from-20% via-background/30 via-45% to-background to-70%" />
         <div className="relative px-4.5 pb-3">
-          <p className="mb-1 text-sm text-accent">{meta.join(' · ')}</p>
+          <p className="mb-1 text-sm text-content-accent">{meta.join(' · ')}</p>
           <h2
             className={`font-display ${pick.title.length > 55 ? 'text-3xl' : 'text-4xl'} leading-tight`}
           >
@@ -119,7 +119,7 @@ export function RateStep({ state, update }: StepProps) {
           ))}
           <Button
             onPress={next}
-            className="col-span-3 flex h-11 w-36 items-center justify-center gap-2 self-center justify-self-center rounded-button bg-button-primary-bg px-3.5 font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover md:col-span-1"
+            className="col-span-3 flex h-11 w-36 items-center justify-center gap-2 self-center justify-self-center rounded-button bg-button-primary-background px-3.5 font-display text-base tracking-widest text-button-primary-content case-display hover:bg-button-primary-background-hover md:col-span-1"
           >
             <Icon name="arrow" /> Next film
           </Button>

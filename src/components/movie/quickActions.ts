@@ -1,6 +1,5 @@
-// The three quick actions on a Discovery pick (issue #76; owner picked layout A with stamps,
-// 2026-10-15): save it, like it, or wave it off, straight from Home without opening Detail. Each
-// is one of the three tags (ADR-0050; named More / Less like this by ADR-0051), with the words the shelf, the stamp
+// The three quick actions on a Discovery pick (issue #76): save it, like it, or wave it off, straight from Home without opening Detail. Each
+// is one of the three tags (labelled More / Less like this), with the words the shelf, the stamp
 // and the toast use.
 import type { SystemTag } from '@/domain/tagRules'
 import type { IconName } from '@/components/ui/Icon'

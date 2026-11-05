@@ -1,4 +1,4 @@
-// Tag reads and writes through TanStack Query (ADR-0015).
+// Tag reads and writes through TanStack Query.
 //
 // TanStack Query caches each read under a "query key" and re-fetches when that key is
 // invalidated. Keys include a scope (signed out, or which account), so switching accounts never
@@ -23,7 +23,7 @@ export function tagQueries(repo: TagRepository, scope: string) {
         queryKey: ['tags', scope, 'movie', tmdbId],
         queryFn: () => repo.getTags(tmdbId),
       }),
-    /** The film ids on one list, newest first; the watchlist in its saved order (ADR-0041). */
+    /** The film ids on one list, newest first; the watchlist in its saved order. */
     list: (tag: SystemTag) =>
       queryOptions({ queryKey: ['tags', scope, 'list', tag], queryFn: () => repo.list(tag) }),
     /** Every tag record, e.g. to count the films someone has tagged. */
@@ -82,7 +82,7 @@ export function useSetTag() {
 }
 
 /**
- * Saves a new order for the watchlist (ADR-0041): `useReorderWatchlist().mutate(order)`.
+ * Saves a new order for the watchlist: `useReorderWatchlist().mutate(order)`.
  * Optimistic, with a rollback or a re-fetch on failure (useOrderMutation). Home's watchlist shelf
  * and the scorer read the same cached list, so they follow the new order at once.
  */

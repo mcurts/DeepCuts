@@ -1,4 +1,4 @@
-// Stories for TopTenNotice, the line Detail shows instead of the Top Ten sticker (ADR-0036).
+// Stories for TopTenNotice, the line Detail shows instead of the Top Ten sticker.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { TopTenNotice } from './TopTenNotice'
 

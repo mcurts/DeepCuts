@@ -1,4 +1,4 @@
-// Rules for a list someone puts in their own order (ADR-0041), shared by the Top Ten and the
+// Rules for a list someone puts in their own order, shared by the Top Ten and the
 // watchlist so both reorder the same way. Pure functions over arrays of TMDB film ids.
 //
 // - Moving a film shifts the films in between by one place; nothing else changes.
@@ -59,7 +59,7 @@ export function reorderList(
 }
 
 /**
- * A list's films in the person's saved order (ADR-0041): films missing from `saved` (added since
+ * A list's films in the person's saved order: films missing from `saved` (added since
  * the last reorder) come first, in the order given (the watchlist's newest first), then the
  * saved order. Saved films no longer on the list are skipped.
  * @param films - The films on the list, newest first.

@@ -1,19 +1,19 @@
-// Feeds the scorer (ADR-0026, ADR-0028, ADR-0032, ADR-0037, ADR-0043) from the person's tags,
+// Feeds the scorer from the person's tags,
 // their Top Ten and cached TMDB data.
 //
-// The Top Ten (ADR-0043) counts as extra likes: each Top Ten film is a liked film that weighs
+// The Top Ten counts as extra likes: each Top Ten film is a liked film that weighs
 // TOP_TEN_WEIGHT, whether or not it also has the liked tag, and is never suggested back.
 //
 // Two passes:
 // 1. One details call per tagged film (with recommended and similar films, keywords and credits
 //    appended), one series call per liked series (MAX_SERIES at most), and one keyword search
-//    per keyword your likes share most (KEYWORD_SEARCHES at most, ADR-0038) give the
+//    per keyword your likes share most (KEYWORD_SEARCHES at most) give the
 //    candidates; the scorer ranks them.
 // 2. The top RERANK candidates get one details call each for their keywords, credits and series, and
 //    the scorer ranks again with them. Every call is the same cached details query the Detail
 //    page uses, so opening a recommended film afterwards costs nothing.
 // Each pick then gets its one-sentence reason (pickReason.ts), named from the same data. Home
-// shows "Why this pick?", which opens it (PickReason, owner 2026-10-26).
+// shows "Why this pick?", which opens it (PickReason).
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { movieQueries } from '@/api/queries'
 import { crewOf, releaseYear, type MovieDetail, type MovieSummary } from '@/api/tmdb'
@@ -40,16 +40,16 @@ import { useTopTen } from './topTenQueries'
 /**
  * How many recent tags of each kind inform the feed (bounds the number of calls). Likes drive the
  * candidates, so they get the most; the watchlist and dislikes only nudge scores, so 5 each is
- * enough (cut from 10 to fit the rate limit, owner 2026-10-07). "Recent" for likes and dislikes;
- * for the watchlist it's the first 5 in the person's own order (ADR-0041), the same 5 Home shows.
+ * enough (kept low to fit the rate limit). "Recent" for likes and dislikes;
+ * for the watchlist it's the first 5 in the person's own order, the same 5 Home shows.
  */
 export const LIMITS = { liked: 20, watchlist: 5, disliked: 5 } as const
 /**
- * How many picks Home's Discovery shelf shows: two full rows in the 1200px column (ADR-0040). Each
+ * How many picks Home's Discovery shelf shows: two full rows in the 1200px column. Each
  * needs its details for the credit lines; most are already loaded by the re-rank (RERANK).
  */
 export const HOME_PICKS = 10
-/** How many top candidates get their keywords and directors loaded for the re-rank (ADR-0028). */
+/** How many top candidates get their keywords and directors loaded for the re-rank. */
 export const RERANK = 20
 /** How many liked series (most recent likes first) bring their films in as candidates. */
 export const MAX_SERIES = 10
@@ -95,14 +95,13 @@ function toScorerFilm(m: MovieSummary | MovieDetail): ScorerFilm {
 
 /** The person's taste, loaded once and scored as often as needed (Discover, the weights lab). */
 export interface Taste {
-  /** True when there's anything to recommend from: a liked film or a Top Ten film (ADR-0043). */
+  /** True when there's anything to recommend from: a liked film or a Top Ten film. */
   hasLikes: boolean
   loading: boolean
   /** Scores the taste, keeping picks whose TMDB summary is known (for posters and links). */
   score: (options?: RecommendOptions) => Recommendation[]
   /**
-   * Every candidate, scored but not ranked (best score first), for the weights lab's spread panel
-   * (ADR-0044).
+   * Every candidate, scored but not ranked (best score first), for the weights lab's spread panel.
    */
   candidates: (options?: RecommendOptions) => Recommendation[]
 }
@@ -136,7 +135,7 @@ export function useTaste(): Taste {
   // once, at the Top Ten weight.
   const inTopTen = new Set(topTen)
   const likedMovies = moviesFor([...new Set([...topTen, ...liked])])
-  // The series of your liked films (ADR-0032): one cached call each, newest likes first.
+  // The series of your liked films: one cached call each, newest likes first.
   const seriesIds = [
     ...new Set(likedMovies.flatMap((m) => m.belongs_to_collection?.id ?? [])),
   ].slice(0, MAX_SERIES)
@@ -168,7 +167,7 @@ export function useTaste(): Taste {
     wanted: moviesFor(wanted).map(toScorerFilm),
     disliked: moviesFor(disliked).map(toScorerFilm),
   }
-  // The keywords your likes share most, each searched for well-rated films (ADR-0038). Waits for
+  // The keywords your likes share most, each searched for well-rated films. Waits for
   // every tagged film's details, so the keywords don't change (and search again) as they arrive.
   const taggedLoaded = !topTenQuery.isPending && details.every((q) => !q.isPending)
   const keywordIds = taggedLoaded ? keywordsToSearch(tags) : []
@@ -193,7 +192,7 @@ export function useTaste(): Taste {
       keywordId,
       films: (keywordFilms[i] ?? []).map(toScorerFilm),
     })),
-    // Your own Top Ten films are never suggested back to you, tagged or not (ADR-0043).
+    // Your own Top Ten films are never suggested back to you, tagged or not.
     excluded: new Set([...(tagged?.map((r) => r.tmdbId) ?? []), ...topTen]),
   }
 

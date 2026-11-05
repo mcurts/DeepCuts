@@ -1,10 +1,10 @@
-// The Top Ten slot on the Detail page (ADR-0036): the top-left corner of the film's details.
+// The Top Ten slot on the Detail page: the top-left corner of the film's details.
 //
 // It shows one of three things, depending on the person's Top Ten:
 // - the film is in it:      the "Your pick: #4 in Top 10" sticker, with a small Remove button
 // - there's room for it:    the "Your pick? Add to Top 10" sticker
 // - the list is full:       "Your Top Ten is full." (choosing a film to replace it comes with the
-//                           Top Ten management screen, ADR-0033)
+//                           Top Ten management screen)
 // Unlike the tags, a press saves at once: there's nothing to stage, and Remove undoes it.
 //
 // This file owns the behavior; TopTenSticker, TopTenPick and TopTenNotice only draw. Replacing a

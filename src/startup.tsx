@@ -1,11 +1,11 @@
-// Starts the app once the session is known (issue #19, ADR-0055). main.tsx calls this before the
+// Starts the app once the session is known (issue #19). main.tsx calls this before the
 // first paint, so the app never flashes a signed-out state for someone who is signed in. When the
 // session check fails (it timed out, or the accounts server answered with an error), it shows the
 // "can't reach your account" screen with a retry instead of a blank page or the signed-out landing
 // page.
 //
 // It also waits for the first page's code (`ready`), so the first render is the whole page: at `/`
-// it replaces the pre-rendered landing page in index.html (ADR-0057) in one step, never with an
+// it replaces the pre-rendered landing page in index.html in one step, never with an
 // empty frame in between.
 import { StrictMode, type ReactNode } from 'react'
 import type { Root } from 'react-dom/client'

@@ -16,7 +16,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// All three tags in a group, as on the Detail page; pressing one clears the others (ADR-0050).
+// All three tags in a group, as on the Detail page; pressing one clears the others.
 function Group({ detailed = false, initial }: { detailed?: boolean; initial?: SystemTag }) {
   const [on, setOn] = useState<TagSet>(new Set(initial ? [initial] : []))
   return (

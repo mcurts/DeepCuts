@@ -1,4 +1,4 @@
-// Allowlist for the local TMDB proxy (ADR-0008, ADR-0013). Pure and unit-tested:
+// Allowlist for the local TMDB proxy. Pure and unit-tested:
 // only these endpoints and parameters reach TMDB; anything else is rejected.
 import { z } from 'zod'
 
@@ -39,8 +39,8 @@ const ROUTES: Route[] = [
   },
   {
     pattern: /^discover\/movie$/,
-    // No genre filters: taste comes only from tagged films, never declared genres (ADR-0032).
-    // One keyword id at a time, taken from the keywords of films you liked (ADR-0038).
+    // No genre filters: taste comes only from tagged films, never declared genres.
+    // One keyword id at a time, taken from the keywords of films you liked.
     params: z.strictObject({
       page: page.optional(),
       with_keywords: id.optional(),
@@ -48,7 +48,7 @@ const ROUTES: Route[] = [
         .enum(['popularity.desc', 'vote_average.desc', 'primary_release_date.desc'])
         .optional(),
       'vote_count.gte': voteCount.optional(),
-      // The starter shelf's band and cutoff (ADR-0042): at most so many votes, a minimum rating,
+      // The starter shelf's band and cutoff: at most so many votes, a minimum rating,
       // released on or before a date.
       'vote_count.lte': voteCount.optional(),
       'vote_average.gte': z.coerce.number().min(0).max(10).optional(),
@@ -59,8 +59,7 @@ const ROUTES: Route[] = [
   },
   {
     pattern: /^movie\/(\d+)$/,
-    // Only these extras may be appended, so Detail and the scorer each need one call (ADR-0024,
-    // ADR-0026, ADR-0028, ADR-0037): the content rating, recommended and similar films, keywords
+    // Only these extras may be appended, so Detail and the scorer each need one call: the content rating, recommended and similar films, keywords
     // and credits.
     params: z.strictObject({ append_to_response: appendList.optional() }),
     path: (m) => `movie/${id.parse(m[1])}`,
@@ -72,7 +71,7 @@ const ROUTES: Route[] = [
   },
   {
     // A film series ("Friday the 13th Collection"): its films become scorer candidates when you
-    // liked one of them (ADR-0032).
+    // liked one of them.
     pattern: /^collection\/(\d+)$/,
     params: z.strictObject({}),
     path: (m) => `collection/${id.parse(m[1])}`,

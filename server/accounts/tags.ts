@@ -1,15 +1,15 @@
-// The tags API for signed-in accounts (ADR-0031, Stage 6 A3).
+// The tags API for signed-in accounts (Stage 6 A3).
 //
 // - Every query is scoped to the session's user (`WHERE user_id = ?`); a user id is never taken
 //   from the client, so nobody can read or change someone else's lists.
 // - The tag rules (src/domain/tagRules.ts) run here too, through the same `applyTag` the app uses,
 //   so a modified client can't store a state the rules forbid (e.g. two tags on one film).
-// - Rows of a retired tag ("Seen it", ADR-0050) are never read: migration 0004 deletes them, and
+// - Rows of a retired tag ("Seen it") are never read: migration 0004 deletes them, and
 //   until it has run every query skips them, so deploy and migration can happen in either order.
 // - Changes are written as a diff (rows to delete, rows to add). The rows travel as one JSON
 //   parameter that SQLite expands with `json_each`, because D1 allows only 100 bound parameters
 //   per query and 50 queries per request: a 5,000-record import is still two statements.
-// - The watchlist's saved order (ADR-0041) lives in `watchlist_order`. Every tag change also drops
+// - The watchlist's saved order lives in `watchlist_order`. Every tag change also drops
 //   the rows of films no longer on the watchlist, so a film added again starts at the top.
 import { z } from 'zod'
 import { listOf } from '../../src/adapters/createTagRepository.ts'
@@ -33,7 +33,7 @@ const NO_STORE = { 'Cache-Control': 'no-store' }
 
 type Row = { tmdbId: number; tag: SystemTag; createdAt: string }
 
-// SQL that keeps only rows of today's tags (ADR-0050). Built from the constant SYSTEM_TAGS, never
+// SQL that keeps only rows of today's tags. Built from the constant SYSTEM_TAGS, never
 // from input, so it's safe to put into the query text.
 const CURRENT_TAG = `tag IN (${SYSTEM_TAGS.map((t) => `'${t}'`).join(', ')})`
 
@@ -60,7 +60,7 @@ async function loadOrder(db: D1Like, userId: string): Promise<number[]> {
 
 /**
  * One statement that drops saved places for films no longer on the watchlist: no `watchlist`
- * tag, or disliked (a disliked film is only on the Disliked list, ADR-0017). Runs last in every
+ * tag, or disliked (a disliked film is only on the Disliked list). Runs last in every
  * tag-changing batch, so it sees the batch's own changes.
  */
 const pruneOrder = (db: D1Like, userId: string) =>
@@ -128,7 +128,7 @@ function byFilm(rows: readonly Row[]) {
 
 /**
  * `GET /api/tags`: every one of the user's tag records, oldest first, and the saved watchlist
- * order (ADR-0041) as `watchlistOrder`, already limited to films still on the watchlist.
+ * order as `watchlistOrder`, already limited to films still on the watchlist.
  */
 export async function listTags(request: Request, env: AccountsEnv, now = Date.now()) {
   const user = await currentUser(env.DB, request, now)
@@ -231,7 +231,7 @@ const newOrder = z.object({ tag: z.literal('watchlist'), ids: savedOrderSchema }
 
 /**
  * `PATCH /api/tags/order` `{ tag: 'watchlist', ids }` saves a new order for the user's watchlist
- * (ADR-0041) and returns it as `{ ids }`. `ids` must be exactly the films on the watchlist: any
+ * and returns it as `{ ids }`. `ids` must be exactly the films on the watchlist: any
  * other set answers 409 `list_changed` (it changed elsewhere, so the client re-reads it), and a
  * malformed body answers 400. The order is rewritten in one batch, positions 1…n.
  */

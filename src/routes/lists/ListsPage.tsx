@@ -1,9 +1,9 @@
-// My Lists (/lists): the films on each of the three tag lists (ADR-0050).
+// My Lists (/lists): the films on each of the three tag lists.
 //
 // Four tiles pick the list (`?tag=`, so it's linkable); the page accent switches to that tag's
-// color (ADR-0020). Each film loads its details from TMDB, cached for a day. The films are VHS
-// boxes on the same shelf grid as Home, at every width (ADR-0040 §6, §11). The watchlist is in the
-// person's own order, and with two or more films it has a reorder mode (ADR-0041).
+// color. Each film loads its details from TMDB, cached for a day. The films are VHS
+// boxes on the same shelf grid as Home, at every width (§11). The watchlist is in the
+// person's own order, and with two or more films it has a reorder mode.
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { lazy, Suspense, type CSSProperties } from 'react'
 import { Link, useSearchParams } from 'react-router'
@@ -27,11 +27,11 @@ const ReorderList = lazy(() =>
   import('@/components/movie/ReorderList').then((m) => ({ default: m.ReorderList })),
 )
 
-// ?tag= is untrusted; anything unknown falls back to Want to see (ADR-0014). That includes an old
-// bookmark of the retired Seen list (`?tag=seen`, ADR-0050).
+// ?tag= is untrusted; anything unknown falls back to Want to see. That includes an old
+// bookmark of the retired Seen list (`?tag=seen`).
 const paramsSchema = z.object({ tag: z.enum(SYSTEM_TAGS).catch('watchlist').default('watchlist') })
 
-// Literal class names so Tailwind generates them (ADR-0020 page accent).
+// Literal class names so Tailwind generates them.
 const PAGE_ACCENT: Record<SystemTag, string> = {
   watchlist: 'page-accent-watchlist',
   liked: 'page-accent-liked',
@@ -72,12 +72,12 @@ export function ListsPage() {
               className={`flex min-h-27 flex-col items-start border p-3 md:min-h-34 ${
                 active
                   ? 'border-(--tag) bg-(--tag)/10'
-                  : 'rounded-card border-card-border bg-card-bg hover:border-border-control'
+                  : 'rounded-card border-card-border bg-card-background hover:border-border-control'
               }`}
             >
               <Icon name={t.icon} className="mb-auto size-5 text-(--tag)" />
               <strong className="mt-3 text-sm font-bold">{t.label}</strong>
-              <span className="mt-0.5 text-sm text-fg-muted">
+              <span className="mt-0.5 text-sm text-content-muted">
                 {n} {n === 1 ? 'film' : 'films'}
               </span>
             </Link>
@@ -93,7 +93,7 @@ export function ListsPage() {
 
 /**
  * The films on one list, under a bar saying which list and how many. The watchlist is an ordered
- * list in the person's order, with the reorder toggle (two or more films, ADR-0041); the other
+ * list in the person's order, with the reorder toggle (two or more films); the other
  * lists are newest first. While the list itself loads (`loading`), a row of placeholders stands in
  * for it, rather than the empty message, so the page doesn't jump when the films arrive.
  */
@@ -121,7 +121,7 @@ function FilmList({
     // An unlabelled <section> (so not a landmark): the area within which Escape leaves reorder mode.
     <section ref={scopeRef}>
       {/* Wraps below the heading on narrow screens when the toggle is there. */}
-      <div className="mt-4.5 mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border pb-2 text-sm text-fg-muted">
+      <div className="mt-4.5 mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border pb-2 text-sm text-content-muted">
         <h2>
           Filtered by <strong className="text-contextual">{label}</strong>
         </h2>

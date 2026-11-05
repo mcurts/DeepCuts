@@ -1,4 +1,4 @@
-// The Top Ten notice (ADR-0036): the line Detail shows instead of the Top Ten sticker when the
+// The Top Ten notice: the line Detail shows instead of the Top Ten sticker when the
 // list is full, "Your Top Ten is full." (A film already in the list gets TopTenPick instead.)
 //
 // It only shows a message; DetailTopTen decides when. Choosing a film to replace comes with the
@@ -27,7 +27,7 @@ export function TopTenNotice({
       tabIndex={-1}
       className={`flex min-h-11 items-center gap-2 font-bold ${className}`}
     >
-      {/* The star is the Top Ten's color (ADR-0035): decorative, always next to the words. */}
+      {/* The star is the Top Ten's color: decorative, always next to the words. */}
       <Icon name="star" className="size-5 shrink-0 text-favourite" />
       {children}
     </p>

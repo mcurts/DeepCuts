@@ -1,7 +1,7 @@
 // @vitest-environment node
-// Tests for the Cloudflare Pages Functions glue (ADR-0029, ADR-0031): the TMDB proxy Function
+// Tests for the Cloudflare Pages Functions glue: the TMDB proxy Function
 // passes the same contract as the local proxy; the `/api` middleware rate-limits and checks the
-// Origin and writes the error log (ADR-0058); the catch-all answers a JSON 404; the root
+// Origin and writes the error log; the catch-all answers a JSON 404; the root
 // middleware adds the security headers.
 // The Workers globals it uses (`caches.default`, `fetch`) are replaced with fakes.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -38,7 +38,7 @@ tmdbProxyContract('Pages Function', (url, { method, token, fetchImpl }) =>
   viaFunction(url, method, { TMDB_READ_TOKEN: token }, fetchImpl),
 )
 
-// A stand-in for the live site's address, which stays out of this public repo (ADR-0047).
+// A stand-in for the live site's address, which stays out of this public repo.
 const site = 'deep-cuts.example'
 
 describe('/api middleware: rate limit (Stage 4 H4)', () => {
@@ -147,7 +147,7 @@ describe('/api middleware: host pin', () => {
     },
   )
 
-  it('refuses everything when no site address is configured (fails closed, ADR-0047)', async () => {
+  it('refuses everything when no site address is configured (fails closed)', async () => {
     const check = vi.fn(async () => ({ allowed: true }))
     const { res, next } = await viaApiMiddleware(`https://${site}/api/tags`, {
       RATE_LIMITER: { check },
@@ -159,7 +159,7 @@ describe('/api middleware: host pin', () => {
   })
 })
 
-describe('/api middleware: error log (ADR-0058)', () => {
+describe('/api middleware: error log', () => {
   /**
    * Runs the middleware with `route` standing in for the Function behind it, waits for whatever
    * it handed to `waitUntil`, and returns the answer plus the lines the log Worker received.

@@ -37,19 +37,19 @@ export function MovieLink({
       ) : (
         <span
           aria-hidden="true"
-          className="h-24 w-16 border-b-3 border-(--tone) bg-poster-placeholder md:h-26 md:w-19"
+          className="h-24 w-16 border-b-3 border-(--tone) bg-poster-placeholder-background md:h-26 md:w-19"
         />
       )}
       <span className="flex min-w-0 flex-col gap-1.5">
-        <strong className="font-bold wrap-anywhere underline-offset-4 group-hover:text-accent group-hover:underline">
+        <strong className="font-bold wrap-anywhere underline-offset-4 group-hover:text-content-accent group-hover:underline">
           {movie.title}
         </strong>
-        <small className="text-sm text-fg-muted">
+        <small className="text-sm text-content-muted">
           {meta.join(' · ')}
           {disliked && <span className="ml-2 text-tag-disliked">Less like this</span>}
         </small>
         {movie.overview && (
-          <span className="line-clamp-2 text-sm leading-relaxed text-fg-soft">
+          <span className="line-clamp-2 text-sm leading-relaxed text-content-soft">
             {movie.overview}
           </span>
         )}

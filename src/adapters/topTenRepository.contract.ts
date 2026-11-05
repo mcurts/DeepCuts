@@ -1,4 +1,4 @@
-// Shared contract suite (ADR-0036): every TopTenRepository implementation must pass it unchanged,
+// Shared contract suite: every TopTenRepository implementation must pass it unchanged,
 // so the browser store, the server store and the test fakes all follow the same Top Ten rules.
 import { beforeEach, describe, expect, it } from 'vitest'
 import { TopTenChangedError, TopTenFullError } from '../domain/topTen'
@@ -47,7 +47,7 @@ export function topTenRepositoryContract(name: string, make: () => TopTenReposit
       expect(await repo.add(11)).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
     })
 
-    it('saves a new order for the same films (ADR-0041)', async () => {
+    it('saves a new order for the same films', async () => {
       for (const id of [1, 2, 3]) await repo.add(id)
       expect(await repo.reorder([3, 1, 2])).toEqual([3, 1, 2])
       expect(await repo.list()).toEqual([3, 1, 2])

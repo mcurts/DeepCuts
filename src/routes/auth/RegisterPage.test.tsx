@@ -1,4 +1,4 @@
-// Tests for registration (ADR-0031): every field validated at once with focus on the first
+// Tests for registration: every field validated at once with focus on the first
 // problem, the invite link filling in the code (then leaving the URL), a valid form making a
 // practice account and returning to where sign-in started, the honest "practice" label, and
 // failures.
@@ -22,7 +22,7 @@ async function fill(
   if (invite) await user.type(screen.getByRole('textbox', { name: 'Invite code' }), invite)
 }
 
-describe('registration (ADR-0031)', () => {
+describe('registration', () => {
   it('says it is practice only, never a real account', async () => {
     renderRoute('/register', { initialSession: SIGNED_OUT })
     expect(

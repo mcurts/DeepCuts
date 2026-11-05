@@ -1,4 +1,4 @@
-// Sign-in sessions (ADR-0031): a random id in a cookie the page's JavaScript can't read, and only
+// Sign-in sessions: a random id in a cookie the page's JavaScript can't read, and only
 // its SHA-256 hash in the database.
 //
 // Cookie: `__Host-dc_session` with `HttpOnly; Secure; SameSite=Lax; Path=/`. The `__Host-` prefix
@@ -15,7 +15,7 @@ import { randomToken, sha256Hex } from './crypto.ts'
 export const SESSION_COOKIE = '__Host-dc_session'
 /** The session cookie's name on plain `http://localhost` (see the file header). */
 export const LOCAL_SESSION_COOKIE = 'dc_session'
-/** How long a session lasts: 30 days (owner decision, 2026-10-07). */
+/** How long a session lasts: 30 days. */
 export const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000
 /** A session is renewed once less than this much of it remains. */
 const RENEW_BELOW_MS = SESSION_TTL_MS / 2

@@ -1,11 +1,11 @@
-// The tag store for passkey accounts (ADR-0031, Stage 6 A4): the account's lists on the server,
+// The tag store for passkey accounts (Stage 6 A4): the account's lists on the server,
 // through `/api/tags`. It implements the same TagRepository contract as the local stores, so no
 // screen changes; tagRepository.contract.ts proves the behaviors match.
 //
 // The server applies the tag rules itself (the same `applyTag`), so this adapter only sends what
 // the person did. To keep within the API rate limit (120 requests a minute), the account's records
 // are fetched once and reused for 30 seconds, and refreshed after every change. The same answer
-// carries the watchlist's saved order (ADR-0041), which `list('watchlist')` applies.
+// carries the watchlist's saved order, which `list('watchlist')` applies.
 import { z } from 'zod'
 import { applySavedOrder, ListChangedError } from '../../domain/ranking'
 import { listOf } from '../createTagRepository'
@@ -28,9 +28,9 @@ export class TagApiError extends Error {
 }
 
 const recordsSchema = z.object({
-  // Skips any "Seen it" row the server still holds (ADR-0050), rather than failing the lists.
+  // Skips any "Seen it" row the server still holds, rather than failing the lists.
   records: storedRecordsSchema,
-  // Optional, so a server from before ADR-0041 still reads as "no saved order".
+  // Optional, so an older server without saved orders still reads as "no saved order".
   watchlistOrder: savedOrderSchema.default([]),
 })
 const orderSchema = z.object({ ids: savedOrderSchema })
@@ -51,7 +51,7 @@ async function call<T>(method: string, path: string, schema: z.ZodType<T>, body?
   if (!res.ok) {
     // A 401 means the session ended on the server (issue #18): the app signs out.
     reportStatus(res.status)
-    // A reorder for a watchlist that changed elsewhere is expected, not a failure (ADR-0041).
+    // A reorder for a watchlist that changed elsewhere is expected, not a failure.
     const body: unknown = await res.json().catch(() => undefined)
     if (
       res.status === 409 &&
@@ -106,7 +106,7 @@ export function createCloudflareTagRepository(clock: () => number = Date.now): T
     async list(tag) {
       const { records, watchlistOrder } = await fetchAll()
       const newestFirst = listOf(records, tag)
-      // The watchlist follows the saved order, with films added since then on top (ADR-0041).
+      // The watchlist follows the saved order, with films added since then on top.
       return tag === 'watchlist' ? [...applySavedOrder(newestFirst, watchlistOrder)] : newestFirst
     },
     async reorder(tag, order) {

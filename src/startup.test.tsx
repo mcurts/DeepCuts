@@ -79,7 +79,7 @@ describe('startApp', () => {
     expect(await screen.findByText('App: account')).toBeInTheDocument()
   })
 
-  // ADR-0057: the first render replaces the pre-rendered landing page, so it waits for the page's
+  // the first render replaces the pre-rendered landing page, so it waits for the page's
   // code too, rather than putting an empty frame up first.
   it('keeps what #root holds until the first page is ready, then replaces it', async () => {
     server.use(http.get('/api/auth/session', () => HttpResponse.json(null)))

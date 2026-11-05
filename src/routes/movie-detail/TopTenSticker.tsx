@@ -1,4 +1,4 @@
-// The Top Ten sticker (ADR-0036) on Detail, drawn as a "staff pick" shelf talker: the card a
+// The Top Ten sticker on Detail, drawn as a "staff pick" shelf talker: the card a
 // rental clerk taped under a favourite tape. Its look lives in TopTenSticker.css.
 //
 // Two states, two components sharing that look:
@@ -84,7 +84,7 @@ export function TopTenPick({
         onPress={() => {
           if (!pending) onRemove()
         }}
-        className="inline-flex min-h-11 items-center text-sm text-fg-muted underline underline-offset-4 hover:text-fg aria-disabled:opacity-70"
+        className="inline-flex min-h-11 items-center text-sm text-content-muted underline underline-offset-4 hover:text-content aria-disabled:opacity-70"
       >
         Remove
       </Button>

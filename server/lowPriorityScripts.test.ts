@@ -1,4 +1,4 @@
-// Tests for the low-priority scripts plugin (ADR-0057): the app's entry and modulepreload tags get
+// Tests for the low-priority scripts plugin: the app's entry and modulepreload tags get
 // fetchpriority="low", and the boot scripts that must run before the first paint don't.
 import { describe, expect, it } from 'vitest'
 import { lowerScriptPriority } from './lowPriorityScripts.ts'

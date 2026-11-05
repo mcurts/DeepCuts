@@ -20,7 +20,7 @@ function before(name: string) {
   return { db, run: () => db.exec(readFileSync(join(MIGRATIONS, name), 'utf8')) }
 }
 
-describe('0004: one tag per film (ADR-0050)', () => {
+describe('0004: one tag per film', () => {
   it('deletes Seen, keeps each film’s newest tag, and drops stale watchlist places', () => {
     const { db, run } = before('0004_one_tag_per_film.sql')
     db.exec(`INSERT INTO users (id, name, created_at) VALUES ('a', 'A', 0), ('b', 'B', 0)`)

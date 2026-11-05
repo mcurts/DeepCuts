@@ -8,7 +8,7 @@
 
    Why a stylesheet: the lit state recolors a dozen parts of the SVG at once, and the flicker is a
    keyframe animation; neither reads well as utility classes (AGENTS.md). Colors are the
-   `brand.halloween` tokens (tokens/brand/halloween.json) plus the standard logo tokens for the
+   `theme.logo.halloween` tokens (tokens/src/tier-2-usage/halloween-logo.json) plus the standard logo tokens for the
    resting wordmark; brand tokens are allowed only in the logo's files (check-token-tiers.mjs).
 
    Motion: colors fade over half a second and the faces flicker a few times a second. The flicker
@@ -27,8 +27,7 @@
     /* The decorations reach past the wordmark; let them draw over the padding around the logo. */
     overflow: visible;
     /* The wordmark keeps the standard logo's size, and the decorations hang over the header's
-       padding. Nudged up a little so the bottom pumpkins clear the row below (owner,
-       2026-10-13). A transform, so no header's layout moves; the share is of the logo's own
+       padding. Nudged up a little so the bottom pumpkins clear the row below. A transform, so no header's layout moves; the share is of the logo's own
        height, so it holds at every logo size. */
     translate: 0 -8%;
 
@@ -39,7 +38,7 @@
       translate: -5% 0;
     }
 
-    /* Lights up slowly, on the glow motion role (tokens/semantic/motion.json). */
+    /* Lights up slowly, on the glow motion role (tokens/src/tier-2-usage/motion.json). */
     & * {
       transition-property: fill, opacity, filter;
       transition-duration: --theme(--motion-glow-duration);
@@ -58,7 +57,7 @@
 
      With the tagline under it, the logo also drops the upward nudge above: the tagline's gap
      already keeps the pumpkins off the row below, and without the nudge the logo and tagline sit
-     centred in the header (owner, 2026-10-15).
+     centred in the header.
 
      From `md` only, like the tagline: on phones it's in the DOM but hidden, and the phone header
      must stay exactly as it was. */
@@ -80,41 +79,41 @@
 
   /* ---- At rest ------------------------------------------------------------------------------ */
   .halloween-logo__deep {
-    fill: var(--dc-brand-logo-primary);
+    fill: var(--theme-logo-primary);
   }
   .halloween-logo__cuts {
-    fill: var(--dc-brand-logo-secondary);
+    fill: var(--theme-logo-secondary);
   }
   .halloween-logo__deep-letters {
-    fill: var(--dc-brand-logo-on-primary);
+    fill: var(--theme-logo-primary-content);
   }
   .halloween-logo__cuts-letters {
-    fill: var(--dc-brand-logo-on-secondary);
+    fill: var(--theme-logo-secondary-content);
   }
   .halloween-logo__moon {
-    fill: var(--dc-brand-halloween-moon);
+    fill: var(--theme-logo-halloween-moon);
   }
 
   /* Each colorway sets the three pumpkin colors once; the lobes read them. */
   .halloween-logo__pumpkin--rust {
-    --skin: var(--dc-brand-halloween-pumpkin-rust-skin);
-    --rib: var(--dc-brand-halloween-pumpkin-rust-rib);
-    --outline: var(--dc-brand-halloween-pumpkin-rust-outline);
+    --skin: var(--theme-logo-halloween-pumpkin-rust-skin);
+    --rib: var(--theme-logo-halloween-pumpkin-rust-rib);
+    --outline: var(--theme-logo-halloween-pumpkin-rust-outline);
   }
   .halloween-logo__pumpkin--gourd {
-    --skin: var(--dc-brand-halloween-pumpkin-gourd-skin);
-    --rib: var(--dc-brand-halloween-pumpkin-gourd-rib);
-    --outline: var(--dc-brand-halloween-pumpkin-gourd-outline);
+    --skin: var(--theme-logo-halloween-pumpkin-gourd-skin);
+    --rib: var(--theme-logo-halloween-pumpkin-gourd-rib);
+    --outline: var(--theme-logo-halloween-pumpkin-gourd-outline);
   }
   .halloween-logo__pumpkin--orange {
-    --skin: var(--dc-brand-halloween-pumpkin-orange-skin);
-    --rib: var(--dc-brand-halloween-pumpkin-orange-rib);
-    --outline: var(--dc-brand-halloween-pumpkin-orange-outline);
+    --skin: var(--theme-logo-halloween-pumpkin-orange-skin);
+    --rib: var(--theme-logo-halloween-pumpkin-orange-rib);
+    --outline: var(--theme-logo-halloween-pumpkin-orange-outline);
   }
   .halloween-logo__pumpkin--ember {
-    --skin: var(--dc-brand-halloween-pumpkin-ember-skin);
-    --rib: var(--dc-brand-halloween-pumpkin-ember-rib);
-    --outline: var(--dc-brand-halloween-pumpkin-ember-outline);
+    --skin: var(--theme-logo-halloween-pumpkin-ember-skin);
+    --rib: var(--theme-logo-halloween-pumpkin-ember-rib);
+    --outline: var(--theme-logo-halloween-pumpkin-ember-outline);
   }
   .halloween-logo__skin,
   .halloween-logo__rib {
@@ -127,33 +126,33 @@
     fill: var(--rib);
   }
   .halloween-logo__stem {
-    fill: var(--dc-brand-halloween-pumpkin-stem);
+    fill: var(--theme-logo-halloween-pumpkin-stem);
   }
   .halloween-logo__face {
-    fill: var(--dc-brand-halloween-pumpkin-face);
+    fill: var(--theme-logo-halloween-pumpkin-face);
   }
   .halloween-logo__glow {
-    fill: var(--dc-brand-halloween-flame-glow);
+    fill: var(--theme-logo-halloween-flame-glow);
     opacity: 0;
   }
 
   /* ---- Lit: hovered, or its link/button hovered or keyboard-focused -------------------------- */
   :is(.halloween-logo:hover, :is(a, button):is(:hover, :focus-visible) .halloween-logo) {
     & .halloween-logo__deep {
-      fill: var(--dc-brand-halloween-lit-deep);
+      fill: var(--theme-logo-halloween-lit-deep);
     }
     & .halloween-logo__cuts {
-      fill: var(--dc-brand-halloween-lit-cuts);
+      fill: var(--theme-logo-halloween-lit-cuts);
     }
     & .halloween-logo__deep-letters {
-      fill: var(--dc-brand-halloween-lit-letters);
+      fill: var(--theme-logo-halloween-lit-letters);
     }
     & .halloween-logo__moon {
-      fill: var(--dc-brand-halloween-moon-lit);
+      fill: var(--theme-logo-halloween-moon-lit);
     }
     /* The tagline (Logo.tsx) turns orange with CUTS. */
     & + .logo-tagline {
-      --logo-tagline: var(--dc-brand-halloween-lit-cuts);
+      --logo-tagline: var(--theme-logo-halloween-lit-cuts);
     }
     /* The pumpkins darken so the faces stand out. */
     & .halloween-logo__skin,
@@ -163,7 +162,7 @@
     /* Duration and delay are set per pumpkin, as utility classes (HalloweenLogo.tsx), so they flicker
        out of step; utilities override this layer. */
     & .halloween-logo__face {
-      fill: var(--dc-brand-halloween-flame-yellow);
+      fill: var(--theme-logo-halloween-flame-yellow);
       animation: halloween-flicker 1.7s steps(1, end) infinite;
     }
     & .halloween-logo__glow {
@@ -186,20 +185,20 @@
 @keyframes halloween-flicker {
   0%,
   37% {
-    fill: var(--dc-brand-halloween-flame-yellow);
+    fill: var(--theme-logo-halloween-flame-yellow);
   }
   12%,
   55%,
   84% {
-    fill: var(--dc-brand-halloween-flame-amber);
+    fill: var(--theme-logo-halloween-flame-amber);
   }
   18%,
   66% {
-    fill: var(--dc-brand-halloween-flame-bright);
+    fill: var(--theme-logo-halloween-flame-bright);
   }
   31%,
   61% {
-    fill: var(--dc-brand-halloween-flame-ember);
+    fill: var(--theme-logo-halloween-flame-ember);
   }
 }
 

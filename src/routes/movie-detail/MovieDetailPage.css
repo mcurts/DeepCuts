@@ -1,4 +1,4 @@
-/* Detail route motion: its 400ms fade uses the shared fade-in timing token (ADR-0009). */
+/* Detail route motion: its 400ms fade uses the shared fade-in timing token. */
 @reference "../../index.css";
 
 @layer components {

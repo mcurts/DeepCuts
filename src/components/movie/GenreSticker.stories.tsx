@@ -1,4 +1,4 @@
-// Stories for GenreSticker, the VHS rental-store genre sticker (design approved 2026-10-07).
+// Stories for GenreSticker, the VHS rental-store genre sticker.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { genreTone, GENRES } from '@/domain/genres'
 import { GenreSticker } from './GenreSticker'
@@ -12,7 +12,7 @@ const meta = {
     (Story, { args }) => (
       <div
         style={genreTone(args.genreIds)}
-        className="border-poster-border relative aspect-2/3 w-40 border border-b-3 border-b-(--tone) bg-poster-placeholder"
+        className="border-poster-border relative aspect-2/3 w-40 border border-b-3 border-b-(--tone) bg-poster-placeholder-background"
       >
         <Story />
       </div>
@@ -33,7 +33,7 @@ export const AllGenres: Story = {
       {Object.entries(GENRES).map(([id, g], i) => (
         <li key={id} style={genreTone([Number(id)])} className="flex flex-col items-center gap-2">
           <GenreSticker genreIds={[Number(id)]} seed={1000 + i * 37} />
-          <span className="text-xs text-fg-muted">{g.name}</span>
+          <span className="text-xs text-content-muted">{g.name}</span>
         </li>
       ))}
     </ul>

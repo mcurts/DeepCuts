@@ -1,4 +1,4 @@
-// Stories for ShelfSection, one of Home's full-width shelves (ADR-0040 §6b), with the three kinds
+// Stories for ShelfSection, one of Home's full-width shelves, with the three kinds
 // of header meta Home uses and the icon before a heading.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Icon } from '@/components/ui/Icon'
@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>
 
 /** A count on the right: Top Ten. */
 export const WithCount: Story = {
-  args: { meta: <p className="font-label text-sm text-fg-muted">0 of 10 ranked</p> },
+  args: { meta: <p className="font-label text-sm text-content-muted">0 of 10 ranked</p> },
 }
 /** A line of copy on the right: Discovery. */
 export const WithCopy: Story = {
@@ -34,7 +34,7 @@ export const WithCopy: Story = {
     id: 'discovery',
     feature: 3,
     title: 'Discovery',
-    meta: <p className="font-label text-sm text-fg-muted">Deep cuts, picked for your taste</p>,
+    meta: <p className="font-label text-sm text-content-muted">Deep cuts, picked for your taste</p>,
   },
 }
 /** No meta: the dashed rule runs to the edge. */

@@ -1,4 +1,4 @@
-// The current account's quick-action press log (ADR-0045), for Discovery's quick actions to save
+// The current account's quick-action press log, for Discovery's quick actions to save
 // to and the weights lab to learn from. One log per account, keyed like its cached lists
 // (tagScope), so switching accounts never mixes presses. Signed out there are no tuned picks to
 // press on, so there's no log.

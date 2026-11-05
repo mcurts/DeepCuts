@@ -9,10 +9,11 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 // Shown when code outside the storage adapters touches browser storage.
-const storageMsg = 'Browser storage is only allowed in src/adapters/local/ (ADR-0013).'
+const storageMsg = 'Browser storage is only allowed in src/adapters/local/.'
 
 export default defineConfig([
-  globalIgnores(['dist', 'build', 'coverage', 'storybook-static']),
+  // tokens/engine is vendored from site-builder (tested there); tokens/dist is generated.
+  globalIgnores(['dist', 'build', 'coverage', 'storybook-static', 'tokens/engine', 'tokens/dist']),
   // All TypeScript: recommended JS rules, strict TypeScript rules, React hooks rules, fast-refresh
   // safety, and strict accessibility (jsx-a11y).
   {
@@ -26,7 +27,7 @@ export default defineConfig([
     ],
     languageOptions: { globals: globals.browser },
     rules: {
-      // Browser storage only through src/adapters/local/ (ADR-0013).
+      // Browser storage only through src/adapters/local/.
       'no-restricted-globals': [
         'error',
         { name: 'localStorage', message: storageMsg },
@@ -38,12 +39,12 @@ export default defineConfig([
         { object: 'window', property: 'sessionStorage', message: storageMsg },
         { object: 'globalThis', property: 'localStorage', message: storageMsg },
       ],
-      // Raw HTML injection is an XSS risk (ADR-0008).
+      // Raw HTML injection is an XSS risk.
       'no-restricted-syntax': [
         'error',
         {
           selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
-          message: 'dangerouslySetInnerHTML is banned (ADR-0008).',
+          message: 'dangerouslySetInnerHTML is banned.',
         },
       ],
     },
@@ -101,7 +102,7 @@ export default defineConfig([
     files: ['src/adapters/local/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },
-  // Server code never logs on its own (ADR-0058): only the error log may write, so nothing
+  // Server code never logs on its own: only the error log may write, so nothing
   // personal (an IP, a cookie, a search term) can reach the logs by accident.
   {
     files: ['server/**/*.ts', 'functions/**/*.ts', 'workers/**/*.ts'],
@@ -110,7 +111,7 @@ export default defineConfig([
   },
   // Build scripts and config files run in Node, not the browser.
   {
-    files: ['scripts/**/*.mjs', '*.config.{js,mjs,ts}', 'sd.config.mjs'],
+    files: ['scripts/**/*.mjs', '*.config.{js,mjs,ts}'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },

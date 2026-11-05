@@ -1,4 +1,4 @@
-// First-load budget (runs after `npm run build`, part of `npm run verify` and CI; ADR-0052).
+// First-load budget (runs after `npm run build`, part of `npm run verify` and CI).
 //
 // The limits are a published baseline, not our own guess: Alex Russell's "The Performance
 // Inequality Gap, 2026" budget for a page that is interactive within 3 seconds for the 75th

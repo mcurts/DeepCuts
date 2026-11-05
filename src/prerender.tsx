@@ -1,4 +1,4 @@
-// Build-time entry (ADR-0057): renders the signed-out landing page at `/` to HTML, which
+// Build-time entry: renders the signed-out landing page at `/` to HTML, which
 // scripts/prerender.mjs writes into dist/index.html's #root. A first visit then paints the page
 // straight from the HTML, before any JavaScript has loaded; the app replaces it with the same
 // markup once it starts (main.tsx). Never shipped to the browser: `npm run build` bundles it for

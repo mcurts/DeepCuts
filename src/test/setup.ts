@@ -23,7 +23,7 @@ afterEach(async () => {
   toast.dismiss()
   cleanup()
   server.resetHandlers()
-  // Accounts, their tags and their Top Ten must not leak between tests (reset through the adapters, ADR-0013).
+  // Accounts, their tags and their Top Ten must not leak between tests (reset through the adapters).
   // Server tests run in plain Node, which has no browser storage.
   if (typeof window === 'undefined') return
   await createMockSessionProvider().signOut()

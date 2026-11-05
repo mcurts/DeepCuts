@@ -1,18 +1,18 @@
-// The landing page's three small illustrations, one per feature (ADR-0035, ADR-0040 §6a): ranked
+// The landing page's three small illustrations, one per feature: ranked
 // numerals beside posters, two overlapping ADMIT ONE stubs, and three posters with a match stamp.
 //
 // Inline SVG drawn only with theme tokens (`fill-*`, `stroke-*`), so it follows the theme and
 // needs no image files. It sits in a halftone "well" (FeaturePanel's content). Purely decorative
-// (`aria-hidden`): the panel's heading and copy carry the meaning (ADR-0009).
+// (`aria-hidden`): the panel's heading and copy carry the meaning.
 import type { PanelId } from '@/config/panels'
 
 // Shared look for the stand-in posters: raised ink with a line border, square like the boxes.
-const poster = 'fill-surface-raised stroke-border-strong'
+const poster = 'fill-background-raised stroke-border-strong'
 
 /** The illustration for one feature, in its halftone well (about 166px tall). */
 export function PanelArt({ id }: { id: PanelId }) {
   return (
-    <div className="grid h-42 place-items-center border-2 border-border bg-surface halftone px-4">
+    <div className="grid h-42 place-items-center border-2 border-border bg-background halftone px-4">
       <svg aria-hidden="true" viewBox="0 0 240 132" className="h-full max-h-36 w-full max-w-80">
         {id === 'top-ten' && <RankedList />}
         {id === 'watchlist' && <TicketStubs />}
@@ -34,13 +34,19 @@ function RankedList() {
               x="16"
               y={y + 30}
               textAnchor="middle"
-              className={`font-display text-4xl ${i === 0 ? 'fill-accent' : 'fill-fg-muted'}`}
+              className={`font-display text-4xl ${i === 0 ? 'fill-content-accent' : 'fill-content-muted'}`}
             >
               {i + 1}
             </text>
             <rect x="38" y={y} width="24" height="34" className={poster} strokeWidth="2" />
-            <rect x="74" y={y + 8} width={150 - i * 26} height="8" className="fill-fg/70" />
-            <rect x="74" y={y + 22} width={90 - i * 14} height="6" className="fill-fg-muted/50" />
+            <rect x="74" y={y + 8} width={150 - i * 26} height="8" className="fill-content/70" />
+            <rect
+              x="74"
+              y={y + 22}
+              width={90 - i * 14}
+              height="6"
+              className="fill-content-muted/50"
+            />
           </g>
         )
       })}
@@ -60,13 +66,13 @@ function Stub({ x, y, rotate, tone }: { x: number; y: number; rotate: number; to
         y2={y + 48}
         strokeDasharray="4 4"
         strokeWidth="2"
-        className="stroke-surface/60"
+        className="stroke-background/60"
       />
       <text
         x={x + 55}
         y={y + 33}
         textAnchor="middle"
-        className="fill-fg-on-accent font-display text-base tracking-widest"
+        className="fill-accent-content font-display text-base tracking-widest"
       >
         ADMIT ONE
       </text>
@@ -78,8 +84,8 @@ function Stub({ x, y, rotate, tone }: { x: number; y: number; rotate: number; to
 function TicketStubs() {
   return (
     <g>
-      <Stub x={34} y={24} rotate={-8} tone="fill-fg" />
-      <Stub x={66} y={58} rotate={5} tone="fill-accent" />
+      <Stub x={34} y={24} rotate={-8} tone="fill-content" />
+      <Stub x={66} y={58} rotate={5} tone="fill-content-accent" />
     </g>
   )
 }
@@ -90,14 +96,20 @@ function PicksRow() {
     <g>
       <rect x="22" y="34" width="56" height="84" className={poster} strokeWidth="2" />
       <rect x="162" y="34" width="56" height="84" className={poster} strokeWidth="2" />
-      <rect x="92" y="26" width="56" height="92" className="fill-highlight" />
+      <rect x="92" y="26" width="56" height="92" className="fill-content-highlight" />
       <g transform="rotate(-12 120 40)">
-        <circle cx="120" cy="40" r="24" strokeWidth="3" className="fill-accent stroke-surface" />
+        <circle
+          cx="120"
+          cy="40"
+          r="24"
+          strokeWidth="3"
+          className="fill-content-accent stroke-background"
+        />
         <text
           x="120"
           y="42"
           textAnchor="middle"
-          className="fill-fg-on-accent font-display text-base"
+          className="fill-accent-content font-display text-base"
         >
           92%
         </text>
@@ -106,7 +118,7 @@ function PicksRow() {
           y="53"
           textAnchor="middle"
           fontSize="8"
-          className="fill-fg-on-accent font-display"
+          className="fill-accent-content font-display"
         >
           MATCH
         </text>

@@ -1,4 +1,4 @@
-// Shared contract suite for the TMDB proxy (ADR-0013, ADR-0029): the local Vite middleware and the
+// Shared contract suite for the TMDB proxy: the local Vite middleware and the
 // Cloudflare Pages Function must both pass it unchanged, so the hosted proxy behaves exactly like
 // the one used in development and E2E. Same pattern as src/adapters/*.contract.ts.
 import { describe, expect, it, vi } from 'vitest'
@@ -90,7 +90,7 @@ export function tmdbProxyContract(name: string, call: ProxyCaller) {
       expect(res.status).toBe(504)
     })
 
-    it('trims appended credits to directors, writers and top-billed cast (ADR-0028, ADR-0038)', async () => {
+    it('trims appended credits to directors, writers and top-billed cast', async () => {
       const { res } = await run('/api/tmdb/movie/1', {
         upstream: Response.json({
           id: 1,

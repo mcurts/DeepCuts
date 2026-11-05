@@ -2,7 +2,7 @@
 // session check times out or the accounts server answers with an error, so a signed-in person is
 // never shown as signed out, and the page is never left blank. It renders outside the router and
 // the session (main.tsx, startup.tsx), so it uses no links, hooks or session data: only a retry
-// that runs the session check again. Mobile-first (ADR-0021); built from EmptyState and the
+// that runs the session check again. Mobile-first; built from EmptyState and the
 // existing button tokens.
 import { useState } from 'react'
 import { Button } from 'react-aria-components'
@@ -55,11 +55,11 @@ export function AccountUnreachable({ onRetry }: { onRetry: () => Promise<boolean
       <Button
         onPress={retry}
         isPending={pending}
-        className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover data-pending:opacity-70"
+        className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-background font-display text-base tracking-widest text-button-primary-content case-display hover:bg-button-primary-background-hover data-pending:opacity-70"
       >
         Try again
       </Button>
-      <p role="status" className="text-sm text-fg-muted empty:hidden">
+      <p role="status" className="text-sm text-content-muted empty:hidden">
         {status}
       </p>
     </main>

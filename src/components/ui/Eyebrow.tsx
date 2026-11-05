@@ -1,16 +1,16 @@
-// The small typewriter label above headings ("Feature Nº 1", "Your account"; ADR-0040).
+// The small typewriter label above headings ("Feature Nº 1", "Your account").
 import type { ReactNode } from 'react'
 
-// Colors an eyebrow may use. `contextual` follows the page accent (ADR-0020).
+// Colors an eyebrow may use. `contextual` follows the page accent.
 const TONES = {
-  accent: 'text-accent',
+  accent: 'text-content-accent',
   contextual: 'text-contextual',
-  muted: 'text-fg-muted',
+  muted: 'text-content-muted',
 } as const
 
 /**
  * Small typewriter label above a heading: Special Elite, sentence case, widely spaced
- * (ADR-0040). The tone carries no meaning on its own.
+ *. The tone carries no meaning on its own.
  * @param as - `h2` when the label is itself a section's heading (Home's sections), so the
  *   page's heading outline stays intact.
  */

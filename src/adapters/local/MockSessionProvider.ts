@@ -1,6 +1,6 @@
-// The MVP session provider (ADR-0013, ADR-0025, ADR-0034), running entirely in this browser.
+// The MVP session provider, running entirely in this browser.
 //
-// "Sign in" offers only a clearly labelled demo account. Registration (ADR-0031) makes a practice account: the invite code is validated and then
+// "Sign in" offers only a clearly labelled demo account. Registration makes a practice account: the invite code is validated and then
 // dropped, never stored, and no passkey is made. No network. When real sign-in methods are chosen, a new
 // provider implements the same SessionProvider interface and the screens don't change.
 import {
@@ -15,7 +15,7 @@ import { versionedStore } from './versionedStore'
 
 /**
  * Storage keys (without the `deepcuts:v1:` prefix) that older versions wrote for the retired
- * device profile, "Save my picks" (ADR-0034). Nothing reads them any more; they're listed so a
+ * device profile, "Save my picks". Nothing reads them any more; they're listed so a
  * later cleanup knows exactly what to remove.
  */
 export const RETIRED_PROFILE_KEYS = ['profile', 'tags'] as const
@@ -65,7 +65,7 @@ export function createMockSessionProvider(storage?: Storage): SessionProvider {
       // parse() throws a ZodError for invalid details; the form shows them before getting here.
       const { name } = registrationSchema.parse(details)
       // Only the name is kept. Any well-formed invite code is accepted: the real check (single
-      // use, not expired) happens on the server in the accounts stage (ADR-0031).
+      // use, not expired) happens on the server in the accounts stage.
       // One fixed id: registering again on this device returns to the same practice lists.
       const practice: Account = { id: 'practice', name, method: 'practice' }
       account.save(practice)

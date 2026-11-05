@@ -1,7 +1,6 @@
-// The account control at the right of the header (ADR-0025). Signed out it's "Sign in". Signed in
+// The account control at the right of the header. Signed out it's "Sign in". Signed in
 // it's the avatar + first name, a button that opens the account menu (who you are, My Lists,
-// settings, sign out). The menu is the way to My Lists at every width: there is no tab bar
-// (owner decisions 2026-10-12 and 2026-10-13, ADR-0040).
+// settings, sign out). The menu is the way to My Lists at every width: there is no tab bar.
 import { useQuery } from '@tanstack/react-query'
 import {
   Button,
@@ -25,7 +24,7 @@ import { Icon } from '@/components/ui/Icon'
 const chip =
   'flex min-h-11 items-center gap-2 font-display text-base tracking-wider whitespace-nowrap case-display'
 
-/** Header account control (ADR-0025): "Sign in" until signed in, then initial + first name. */
+/** Header account control: "Sign in" until signed in, then initial + first name. */
 export function AccountChip() {
   const { session } = useSession()
   const { pathname, search } = useLocation()
@@ -34,7 +33,7 @@ export function AccountChip() {
     return (
       <AccountMenu
         account={session.account}
-        className={`${chip} border-2 border-border py-1 pr-3 pl-1 text-fg hover:border-border-control`}
+        className={`${chip} border-2 border-border py-1 pr-3 pl-1 text-content hover:border-border-control`}
       />
     )
   }
@@ -43,7 +42,7 @@ export function AccountChip() {
     <Link
       to="/sign-in"
       state={{ from: pathname + search }}
-      className={`${chip} rounded-button bg-button-primary-bg px-4 text-button-primary-fg hover:bg-button-primary-bg-hover`}
+      className={`${chip} rounded-button bg-button-primary-background px-4 text-button-primary-content hover:bg-button-primary-background-hover`}
     >
       Sign in
     </Link>
@@ -52,7 +51,7 @@ export function AccountChip() {
 
 // One row in the menu: 44px tall for touch, highlighted while focused or hovered.
 const item =
-  'flex min-h-11 cursor-pointer items-center gap-2.5 px-3 text-sm font-bold text-fg outline-none data-focused:bg-surface-overlay'
+  'flex min-h-11 cursor-pointer items-center gap-2.5 px-3 text-sm font-bold text-content outline-none data-focused:bg-background-overlay'
 
 /**
  * The account menu: a chip-shaped button and its dropdown. React Aria's Menu gives
@@ -65,12 +64,12 @@ function AccountMenu({ account, className }: { account: Account; className: stri
       <Button aria-label={`Account menu for ${first}`} className={className}>
         <Avatar name={account.name} />
         {first}
-        <Icon name="back" className="size-4 -rotate-90 text-fg-muted" />
+        <Icon name="back" className="size-4 -rotate-90 text-content-muted" />
       </Button>
       <Popover
         placement="bottom end"
         offset={6}
-        className="w-72 rounded-popover border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
+        className="w-72 rounded-popover border-2 border-popover-border bg-popover-background p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
       >
         <AccountMenuItems account={account} />
       </Popover>
@@ -91,7 +90,7 @@ function AccountMenuItems({ account }: { account: Account }) {
       className="outline-none"
       onAction={(key) => {
         // Sign out is one press here: opening the menu is already a deliberate step, and the lists
-        // stay in the account (owner decision 2026-10-12). Once signed out, `/` shows the landing
+        // stay in the account. Once signed out, `/` shows the landing
         // page, and RequireAccount sends any signed-in-only page there.
         if (key === 'sign-out') void withToast(signOut, SIGN_OUT_MESSAGES)
         else navigate(String(key))
@@ -101,26 +100,26 @@ function AccountMenuItems({ account }: { account: Account }) {
       <MenuSection>
         <Header className="grid gap-0.5 px-3 pt-2.5 pb-3">
           <span className="font-display text-xl tracking-wider case-display">{account.name}</span>
-          <span className="text-sm text-fg-muted">{SIGNED_IN_WITH[account.method]}</span>
-          <span className="text-sm text-fg-muted">
+          <span className="text-sm text-content-muted">{SIGNED_IN_WITH[account.method]}</span>
+          <span className="text-sm text-content-muted">
             {films} {films === 1 ? 'film' : 'films'} tagged
           </span>
         </Header>
         <MenuItem id="/lists" className={item}>
-          <Icon name="list" className="size-5 text-fg-muted" />
+          <Icon name="list" className="size-5 text-content-muted" />
           My Lists
         </MenuItem>
-        {/* Only passkey accounts have settings: change name and delete (ADR-0031 A2b). */}
+        {/* Only passkey accounts have settings: change name and delete. */}
         {account.method === 'passkey' && (
           <MenuItem id="/account" className={item}>
-            <Icon name="user" className="size-5 text-fg-muted" />
+            <Icon name="user" className="size-5 text-content-muted" />
             Account settings
           </MenuItem>
         )}
       </MenuSection>
       <Separator className="my-1 border-t-2 border-dashed border-border" />
       <MenuItem id="sign-out" className={item}>
-        <Icon name="arrow" className="size-5 text-fg-muted" />
+        <Icon name="arrow" className="size-5 text-content-muted" />
         Sign out
       </MenuItem>
     </Menu>
@@ -132,7 +131,7 @@ export function Avatar({ name, large = false }: { name: string; large?: boolean 
   return (
     <span
       aria-hidden="true"
-      className={`grid shrink-0 place-items-center bg-accent font-display text-fg-on-accent ${
+      className={`grid shrink-0 place-items-center bg-accent-background font-display text-accent-content ${
         large ? 'size-14 text-3xl' : 'size-9 text-xl'
       }`}
     >

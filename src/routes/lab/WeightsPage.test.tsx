@@ -20,7 +20,7 @@ async function likeThenOpen(path: string, options: Parameters<typeof renderRoute
   return { user, ...rendered }
 }
 
-describe('weights lab (ADR-0026)', () => {
+describe('weights lab', () => {
   it('asks for likes first when there are none', async () => {
     renderRoute('/lab/weights')
     expect(
@@ -37,7 +37,7 @@ describe('weights lab (ADR-0026)', () => {
     expect(support).toHaveAccessibleDescription(
       'How many of your liked films recommend it, or share its series.',
     )
-    // Twelve score parts (ADR-0032, ADR-0038), genre variety and the dislike penalty (ADR-0044).
+    // Twelve score parts, genre variety and the dislike penalty.
     expect(screen.getAllByRole('slider')).toHaveLength(14)
     expect(screen.getByRole('slider', { name: 'Dislike penalty' })).toHaveValue('15')
     expect(screen.getByRole('slider', { name: 'Same writer' })).toHaveValue('5')
@@ -55,7 +55,7 @@ describe('weights lab (ADR-0026)', () => {
     expect(within(table).getByRole('columnheader', { name: /Avoid/ })).toBeInTheDocument()
   })
 
-  it('shows how spread out the scores are (ADR-0044)', async () => {
+  it('shows how spread out the scores are', async () => {
     await likeThenOpen('/lab/weights')
     const heading = await screen.findByRole('heading', { name: 'Score spread' })
     expect(heading).toBeVisible()
@@ -101,7 +101,7 @@ describe('weights lab (ADR-0026)', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Every weight is at zero')
   })
 
-  describe('learn from your presses (ADR-0045)', () => {
+  describe('learn from your presses', () => {
     // Saves `count` presses on Home's picks for the demo account: Wants have high quality, Nopes
     // low, so quality is what tells them apart.
     function savePresses(count: number) {

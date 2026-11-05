@@ -1,5 +1,5 @@
 // Shared setup for every E2E test: fake TMDB responses, a signed-in demo account by default
-// (almost every page needs an account, ADR-0034), and two reusable checks (accessibility scan,
+// (almost every page needs an account), and two reusable checks (accessibility scan,
 // no sideways scrolling).
 //
 // Tests of the signed-out experience opt out with `test.use({ signedIn: false })`.
@@ -11,7 +11,7 @@ import { movieFixture, providersFixture, searchFixture } from '../src/test/msw/f
 // and CDN images are aborted. Playwright tries the most recently added route first, so the
 // catch-all below is registered first and only fires for requests no fixture matches.
 export const test = base.extend<{ page: Page; signedIn: boolean }>({
-  // Start signed in to the demo account (the local mock's stand-in account, ADR-0025).
+  // Start signed in to the demo account (the local mock's stand-in account).
   signedIn: [true, { option: true }],
   // Signed in by seeding the browser context's storage with what the mock provider stores when
   // you sign in. It's applied once, when the context is created, so a test that signs out and
@@ -28,7 +28,7 @@ export const test = base.extend<{ page: Page; signedIn: boolean }>({
               name: 'deepcuts:v1:account',
               value: JSON.stringify({ id: 'demo', name: 'Mike Curts', method: 'demo' }),
             },
-            // What the app records after any signed-in visit (ADR-0057), so the boot script
+            // What the app records after any signed-in visit, so the boot script
             // hides the pre-rendered landing page as it would for a returning visitor.
             { name: 'deepcuts:v1:signed-in', value: 'true' },
           ],
@@ -61,7 +61,7 @@ export const test = base.extend<{ page: Page; signedIn: boolean }>({
 
 export { expect }
 
-/** Fails the test if axe finds any WCAG 2.2 A/AA violation on the page (ADR-0009). */
+/** Fails the test if axe finds any WCAG 2.2 A/AA violation on the page. */
 export async function expectNoA11yViolations(page: Page, disableRules: string[] = []) {
   // Let entrance animations finish first: mid-fade (Detail's animate-enter), text is partly
   // transparent and axe reports it as low contrast, which made the scan flaky. Only time-based
@@ -87,7 +87,7 @@ export async function expectNoA11yViolations(page: Page, disableRules: string[] 
   ).toEqual([])
 }
 
-/** Fails the test if the page scrolls sideways (WCAG 1.4.10 reflow, ADR-0021). */
+/** Fails the test if the page scrolls sideways (WCAG 1.4.10 reflow). */
 export async function expectNoHorizontalOverflow(page: Page) {
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

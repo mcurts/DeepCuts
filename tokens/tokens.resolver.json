@@ -1,0 +1,129 @@
+{
+  "name": "Deep Cuts",
+  "version": "2025.10",
+  "description": "Deep Cuts design tokens. Each theme (a folder in src/themes/) is a context of the \"theme\" modifier: its own Tier 1 palette plus the Tier 2 roles every theme defines. Motion, the Halloween logo costume and the Tier 3 component tokens are shared sets.",
+  "sets": {
+    "definitions": {
+      "description": "Tier 1: hue ramps, the spacing and type scales, motion primitives. Never emitted as CSS; Tailwind reads the scales as static values.",
+      "sources": [
+        {
+          "$ref": "src/tier-1-definitions/dimension.json"
+        },
+        {
+          "$ref": "src/tier-1-definitions/hues.json"
+        },
+        {
+          "$ref": "src/tier-1-definitions/motion.json"
+        },
+        {
+          "$ref": "src/tier-1-definitions/typography.json"
+        }
+      ]
+    },
+    "shared": {
+      "description": "Tier 2 roles no theme changes: motion and the seasonal logo costumes.",
+      "sources": [
+        {
+          "$ref": "src/tier-2-usage/motion.json"
+        },
+        {
+          "$ref": "src/tier-2-usage/halloween-logo.json"
+        }
+      ]
+    },
+    "components": {
+      "description": "Tier 3: one file per component.",
+      "sources": [
+        {
+          "$ref": "src/tier-3-component/button.json"
+        },
+        {
+          "$ref": "src/tier-3-component/card.json"
+        },
+        {
+          "$ref": "src/tier-3-component/field.json"
+        },
+        {
+          "$ref": "src/tier-3-component/poster.json"
+        },
+        {
+          "$ref": "src/tier-3-component/slider.json"
+        },
+        {
+          "$ref": "src/tier-3-component/sticker.json"
+        },
+        {
+          "$ref": "src/tier-3-component/tag-toggle.json"
+        },
+        {
+          "$ref": "src/tier-3-component/top-ten-sticker.json"
+        },
+        {
+          "$ref": "src/tier-3-component/vhs-box.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "description": "The brand look: one folder per theme in src/themes/.",
+      "contexts": {
+        "midnight-rental": [
+          {
+            "$ref": "src/themes/midnight-rental/palette.json"
+          },
+          {
+            "$ref": "src/themes/midnight-rental/color.json"
+          },
+          {
+            "$ref": "src/themes/midnight-rental/type.json"
+          },
+          {
+            "$ref": "src/themes/midnight-rental/shape.json"
+          },
+          {
+            "$ref": "src/themes/midnight-rental/texture.json"
+          },
+          {
+            "$ref": "src/themes/midnight-rental/logo.json"
+          }
+        ],
+        "vintage": [
+          {
+            "$ref": "src/themes/vintage/palette.json"
+          },
+          {
+            "$ref": "src/themes/vintage/color.json"
+          },
+          {
+            "$ref": "src/themes/vintage/type.json"
+          },
+          {
+            "$ref": "src/themes/vintage/shape.json"
+          },
+          {
+            "$ref": "src/themes/vintage/texture.json"
+          },
+          {
+            "$ref": "src/themes/vintage/logo.json"
+          }
+        ]
+      },
+      "default": "vintage"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/definitions"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    },
+    {
+      "$ref": "#/sets/shared"
+    },
+    {
+      "$ref": "#/sets/components"
+    }
+  ]
+}

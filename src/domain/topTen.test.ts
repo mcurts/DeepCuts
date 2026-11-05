@@ -1,4 +1,4 @@
-// Tests for the Top Ten rules (ADR-0036): ten films at most, no duplicates, ranked order kept.
+// Tests for the Top Ten rules: ten films at most, no duplicates, ranked order kept.
 import { describe, expect, it } from 'vitest'
 import {
   addToTopTen,
@@ -38,7 +38,7 @@ describe('Top Ten rules', () => {
     expect(removeFromTopTen([1, 2, 3], 9)).toEqual([1, 2, 3])
   })
 
-  it('moves a film to a new place, shifting the films in between (ADR-0041)', () => {
+  it('moves a film to a new place, shifting the films in between', () => {
     const list = [1, 2, 3, 4]
     expect(moveInTopTen(list, 3, 0)).toEqual([3, 1, 2, 4])
     expect(moveInTopTen(list, 1, 2)).toEqual([2, 3, 1, 4])

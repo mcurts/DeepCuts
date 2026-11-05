@@ -1,0 +1,14 @@
+{
+  "$description": "Tier 3: film posters in grids and rows. The bottom edge takes the film's genre tone at runtime.",
+  "component": {
+    "poster": {
+      "placeholder": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.background.overlay}",
+          "$description": "Where a poster will load, or where none exists."
+        }
+      }
+    }
+  }
+}

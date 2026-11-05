@@ -1,4 +1,4 @@
-// Stories for ReorderTile, a Top Ten film in Home's reorder mode (ADR-0041), and DropSlot, what a
+// Stories for ReorderTile, a Top Ten film in Home's reorder mode, and DropSlot, what a
 // tile shows while another film is dragged over it. Each sits in a box-sized column, as on Home.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'

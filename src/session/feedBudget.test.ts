@@ -1,4 +1,4 @@
-// Guards the rate-limit budget (ADR-0029, ADR-0032): a heavy profile's first Home load must fit
+// Guards the rate-limit budget: a heavy profile's first Home load must fit
 // inside the per-client API limit, with room to spare for clicking around straight afterwards.
 //
 // A reload in the same minute costs nothing: the proxy lets the browser keep its answers for longer
@@ -22,7 +22,7 @@ import { HOME_PICKS, LIMITS, MAX_SERIES, RERANK } from './useRecommendations'
 // are already loaded by the re-rank, but an explore slot can come from outside it.
 const HOME_CARDS = HOME_PICKS
 // Home's Top Ten shelf: one details call per ranked film, which may not be tagged. The scorer
-// reads the same cached details for the Top Ten's taste (ADR-0043), so that adds nothing. (The watchlist
+// reads the same cached details for the Top Ten's taste, so that adds nothing. (The watchlist
 // shelf shows the films the scorer already loads, LIMITS.watchlist, so it adds nothing.)
 const TOP_TEN = TOP_TEN_SIZE
 // Other calls a first load can make: the popular feed, the session check, and the account's
@@ -40,7 +40,7 @@ function apiLimit(toml: string): number {
   return Number(match[1])
 }
 
-// One details call per tagged film, one per liked series, one per keyword search (ADR-0038), one
+// One details call per tagged film, one per liked series, one per keyword search, one
 // per re-rank candidate, plus the shelves and other calls above.
 const tagged = LIMITS.liked + LIMITS.watchlist + LIMITS.disliked
 const worstCase =

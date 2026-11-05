@@ -1,5 +1,5 @@
 // POST /api/auth/register/options: check an invite, return passkey creation options.
-// The logic lives in server/accounts/ (ADR-0031); this file only routes methods to it. The rate
+// The logic lives in server/accounts/; this file only routes methods to it. The rate
 // limit and the Origin check run first, in functions/api/_middleware.ts.
 import { registerOptions } from '../../../../server/accounts/auth.ts'
 import { route } from '../../../../server/http.ts'

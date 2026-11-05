@@ -1,4 +1,4 @@
-// Random ids and hashing for the accounts API (ADR-0031), on the Web Crypto API that both
+// Random ids and hashing for the accounts API, on the Web Crypto API that both
 // Cloudflare Workers and Node provide.
 
 /** base64url (RFC 4648 §5) without padding: safe in URLs, cookies and our id regex. */

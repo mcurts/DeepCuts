@@ -1,4 +1,4 @@
-// Runs around every Pages Function (ADR-0029). Pages applies `_headers` only to static files, so
+// Runs around every Pages Function. Pages applies `_headers` only to static files, so
 // this gives Function answers (the `/api/*` JSON) the same security headers, from the same source
 // (server/securityHeaders.ts).
 import { productionHeaders } from '../server/securityHeaders.ts'

@@ -1,11 +1,11 @@
-// Learning the scorer's weights from quick-action presses (ADR-0045).
+// Learning the scorer's weights from quick-action presses.
 //
 // Each Want / Like / Nope press on a Discovery pick is a verdict on a film the scorer chose.
 // When a press is saved, the pick's twelve part scores and its dislike penalty are saved with it
 // (LocalFeedbackLog.ts). Here a logistic regression learns which parts predict a yes (Want to see
 // or Like) rather than "Not for me", and turns that into suggested weights for the weights lab.
 //
-// - Want and Like are a yes (1) and Nope a no (0). Like replaced Seen on the strip (ADR-0050):
+// - Want and Like are a yes (1) and Nope a no (0). Like replaced Seen on the strip:
 //   "I've seen it and liked it" says the scorer picked well, just as "I want to see it" does.
 // - Only presses saved by the current scorer version count. A new version computes the parts
 //   differently, so older numbers would mislead the fit.

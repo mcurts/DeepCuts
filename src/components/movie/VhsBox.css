@@ -1,4 +1,4 @@
-/* VHS box posters (VhsBox.tsx; design approved 2026-10-09).
+/* VHS box posters (VhsBox.tsx).
 
    Each film on Discover's grid drawn as a 3D cardboard VHS sleeve: the poster on the front, a
    printed spine on the left (genre band with the year, the title, a store barcode label), the
@@ -27,10 +27,10 @@
                 glide instead of snapping
      keyboard - focus turns the box to a fixed pose that shows the spine (24°, level)
      touch    - phones can't hover or focus a box, so boxes rest in the keyboard pose to show
-                their depth (owner's call, 2026-10-09). They can also tilt as they scroll past,
+                their depth. They can also tilt as they scroll past,
                 like walking along a shelf (a scroll-driven animation, --vhs-scroll-anim), but
-                that's off since 2026-10-15 (owner): the boxes hold the pose
-   With a mouse, boxes rest straight on until hovered (owner, 2026-10-13). Reduced motion keeps
+                that's off: the boxes hold the pose
+   With a mouse, boxes rest straight on until hovered. Reduced motion keeps
    every box still in its resting pose.
 
    Design system. Colors: the vhs-box component tokens and the film's genre tone (`--tone`, set
@@ -43,8 +43,8 @@
 
 @layer components {
   /* ---- Tuning knobs -------------------------------------------------------------------------
-     On :root so the lab can override them on any ancestor. Tuned by the owner in the lab
-     (2026-10-09, then 2026-10-15 for the shape, finish and current angles). */
+     On :root so the lab can override them on any ancestor. Tuned in the lab
+     (/lab/vhs). */
   :root {
     --vhs-depth: 0.195; /* depth as a share of the width */
     --vhs-rest-y: 0deg; /* turn at rest: straight on (positive shows the spine) */
@@ -54,24 +54,23 @@
     --vhs-focus-y: 24deg; /* keyboard focus (and touch at rest): turn */
     --vhs-focus-x: 0deg; /* keyboard focus (and touch at rest): tilt */
     --vhs-scroll-x: 8deg; /* touch: tilt at the top and bottom of the screen, when on */
-    /* touch: the scroll tilt's animation, `vhs-shelf` to turn it on (off, owner 2026-10-15) */
+    /* touch: the scroll tilt's animation, `vhs-shelf` to turn it on (off) */
     --vhs-scroll-anim: none;
     --vhs-lift: -2px; /* how far the box rises on hover and focus */
     --vhs-perspective: 1100px;
     /* The box's hard drop shadow: how far right and down it falls (2px more of each while the
-       mouse holds the box). Deeper than ADR-0040's 7px so the tall box reads as standing off
-       the shelf (owner, 2026-10-15). */
+       mouse holds the box). Deeper than the app's 7px box shadow so the tall box reads as standing off
+       the shelf. */
     --vhs-shadow-x: 10px;
     --vhs-shadow-y: 12px;
-    /* Rounded corners on every visible face, to soften the box's hard edges (owner, 2026-10-15;
-       the dossier drew square ones). */
+    /* Rounded corners on every visible face, to soften the box's hard edges. */
     --vhs-radius: 3px;
 
     /* Shape: the cover's height as a multiple of its width. Posters are 2:3 (1.5) and a real
-       sleeve is 1.83 (190 mm on 104 mm); the owner chose a taller 2.0 (2026-10-15). On a cover
+       sleeve is 1.83 (190 mm on 104 mm); this box is a taller 2.0. On a cover
        taller than the poster, --vhs-stretch says how much of the difference the art stretches
-       (1 = all of it, squashed sideways) and the rest is cropped evenly from the sides. The owner
-       chose 1 (2026-10-15): the whole poster always shows, nothing cut off, at the cost of
+       (1 = all of it, squashed sideways) and the rest is cropped evenly from the sides. It's set to
+       1: the whole poster always shows, nothing cut off, at the cost of
        squashing it to 75% of its width (TMDB has no taller artwork to use instead). */
     --vhs-aspect: 1.7;
     --vhs-stretch: 1;
@@ -90,7 +89,7 @@
        the art on the spine (0 = none, 1 = the plain dark spine) so its printing stays legible.
        --vhs-art-shift slides the wrapped art right (a share of the box's width) so the front
        shows it closer to centred: the strip on the spine stretches sideways to still cover the
-       whole spine, and the same amount is trimmed from the art's right edge. Owner's choice (2026-10-15): wrapped, tint
+       whole spine, and the same amount is trimmed from the art's right edge. The settings: wrapped, tint
        0.6, a slight shift, on a 1.7 box. There the cover and spine together are a little wider
        than the poster's own shape, so with full stretch it's about 5% wider than natural, and
        about 8% is trimmed from its right edge. */
@@ -104,7 +103,7 @@
        at baseFrequency 0.45 (coarse), 3 octaves, warm tan at 17% alpha, tiled every
        --vhs-grain-size. The lab rebuilds it from its sliders. --vhs-grain-blend is how the grain
        mixes with the poster on the cover (the spine keeps plain grain). --vhs-matte scales the
-       soft light falloff over the cover (1 = the 2026-10-09 strength, 0 = none), and --vhs-wear
+       soft light falloff over the cover (1 = the tuned strength, 0 = none), and --vhs-wear
        the pale rubbed edges (0 = none). */
     --vhs-grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.5 0 0 0 0 0.42 0 0 0 0.17 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
     --vhs-grain-size: 80px;
@@ -126,11 +125,12 @@
     container-type: inline-size;
     perspective: var(--vhs-perspective);
     perspective-origin: 50% 35%;
-    filter: drop-shadow(var(--vhs-shadow-x) var(--vhs-shadow-y) 0 var(--color-shadow));
+    filter: drop-shadow(var(--vhs-shadow-x) var(--vhs-shadow-y) 0 var(--color-shadow-decorative));
   }
   [data-vhs-active] .vhs-scene {
     filter: drop-shadow(
-      calc(var(--vhs-shadow-x) + 2px) calc(var(--vhs-shadow-y) + 2px) 0 var(--color-shadow)
+      calc(var(--vhs-shadow-x) + 2px) calc(var(--vhs-shadow-y) + 2px) 0
+        var(--color-shadow-decorative)
     );
   }
 
@@ -160,7 +160,7 @@
     /* The wrapped art's slide to the right (--vhs-art-shift; no slide unless wrapped). */
     --art-shift: calc(100cqw * var(--vhs-art-shift) * var(--vhs-wrap));
     /* The spine's strip of the wrapped art, stretched sideways to fill the whole spine when the
-       shift leaves a gap at its outer edge (owner, 2026-10-15), and still meeting the cover at
+       shift leaves a gap at its outer edge, and still meeting the cover at
        the fold. Plain numbers (shares of the box's width) rather than lengths, because dividing
        one length by another isn't supported everywhere yet. --sp-left: where the art would
        start on the spine; --sp-a0: how much of the art lies beyond the spine's outer edge (when
@@ -187,7 +187,7 @@
     --turn-x: var(--still-x);
     --rise: 0px;
     --grain: var(--vhs-grain-image) 0 0 / var(--vhs-grain-size) var(--vhs-grain-size);
-    --print: color-mix(in srgb, var(--tone) 75%, var(--color-vhs-box-card));
+    --print: color-mix(in srgb, var(--tone) 75%, var(--color-vhs-box-card-background));
     position: relative;
     display: block;
     width: 100cqw;
@@ -275,7 +275,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: var(--color-vhs-box-shell);
+    background: var(--color-vhs-box-shell-background);
   }
   /* The poster (or its placeholder), as tall as the cover less the band and as wide as
      --vhs-stretch says (see the knobs), centred so any extra width is cropped evenly from both
@@ -303,7 +303,7 @@
     padding-inline: calc(100cqw * 0.08);
     overflow: hidden;
     background: var(--vhs-band-bg, var(--print));
-    color: var(--vhs-band-fg, var(--color-vhs-box-ink));
+    color: var(--vhs-band-fg, var(--color-vhs-box-content));
     font-size: calc(100cqw * var(--vhs-band-text));
     text-align: center;
   }
@@ -320,8 +320,8 @@
     @apply line-clamp-2 font-display leading-none tracking-wide case-display;
   }
   /* Over the art, under the grain: one broad, soft light falloff (matte, no glossy glare) and
-     edges rubbed pale where the sleeve slid against its neighbours. (The dossier's pale hinge
-     strip down the left edge was removed, owner, 2026-10-15.) */
+     edges rubbed pale where the sleeve slid against its neighbours. No pale hinge strip down
+     the left edge: it read as a printing fault. */
   .vhs-front::before {
     content: '';
     position: absolute;
@@ -329,12 +329,20 @@
     z-index: 1;
     background: linear-gradient(
       160deg,
-      color-mix(in srgb, var(--color-vhs-box-card) calc(6% * var(--vhs-matte)), transparent),
+      color-mix(
+        in srgb,
+        var(--color-vhs-box-card-background) calc(6% * var(--vhs-matte)),
+        transparent
+      ),
       transparent 55%,
-      color-mix(in srgb, var(--color-vhs-box-shell) calc(18% * var(--vhs-matte)), transparent)
+      color-mix(
+        in srgb,
+        var(--color-vhs-box-shell-background) calc(18% * var(--vhs-matte)),
+        transparent
+      )
     );
     box-shadow: inset 0 0 calc(100cqw * 0.02 * var(--vhs-wear))
-      color-mix(in srgb, var(--color-vhs-box-card) 30%, transparent);
+      color-mix(in srgb, var(--color-vhs-box-card-background) 30%, transparent);
     pointer-events: none;
   }
   /* The paper grain, on top, blended into the art by --vhs-grain-blend. */
@@ -364,12 +372,12 @@
     background:
       var(--grain),
       linear-gradient(
-        color-mix(in srgb, var(--color-vhs-box-shell) 15%, transparent),
-        color-mix(in srgb, var(--color-vhs-box-shell) 15%, transparent)
+        color-mix(in srgb, var(--color-vhs-box-shell-background) 15%, transparent),
+        color-mix(in srgb, var(--color-vhs-box-shell-background) 15%, transparent)
       ),
-      color-mix(in srgb, var(--tone) 18%, var(--color-vhs-box-shell));
+      color-mix(in srgb, var(--tone) 18%, var(--color-vhs-box-shell-background));
     box-shadow: inset 0 0 calc(var(--d) * 0.12)
-      color-mix(in srgb, var(--color-vhs-box-card) 30%, transparent);
+      color-mix(in srgb, var(--color-vhs-box-card-background) 30%, transparent);
   }
   /* The wrapped poster's strip on the spine (--vhs-wrap): the same poster, continuing from the
      cover at the fold and stretched to reach the spine's outer edge (--sp-scale), level with
@@ -390,7 +398,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--color-vhs-box-shell);
+    background: var(--color-vhs-box-shell-background);
     opacity: calc(var(--vhs-wrap) * var(--vhs-spine-tint));
     pointer-events: none;
   }
@@ -404,7 +412,7 @@
     width: 100%;
     padding-block: calc(var(--d) * 0.18);
     background: var(--print);
-    color: var(--color-vhs-box-ink);
+    color: var(--color-vhs-box-content);
     font-size: calc(var(--d) * 0.3);
     text-align: center;
   }
@@ -414,11 +422,11 @@
     flex: 1;
     min-height: 0;
     padding-block: calc(var(--d) * 0.25);
-    color: var(--color-vhs-box-light);
+    color: var(--color-vhs-box-light-content);
     font-size: calc(var(--d) * 0.42);
     line-height: var(--d);
     /* A soft dark halo, so the title still reads over wrapped art. */
-    text-shadow: 0 0 calc(var(--d) * 0.12) var(--color-vhs-box-shell);
+    text-shadow: 0 0 calc(var(--d) * 0.12) var(--color-vhs-box-shell-background);
     writing-mode: vertical-rl;
   }
   /* The rental store's barcode label, stuck on slightly crooked at the bottom of the spine. */
@@ -426,7 +434,7 @@
     width: 82%;
     margin-bottom: calc(var(--d) * 0.35);
     padding: calc(var(--d) * 0.08);
-    background: var(--color-vhs-box-card);
+    background: var(--color-vhs-box-card-background);
     rotate: -2deg;
   }
   .vhs-barcode {
@@ -434,11 +442,11 @@
     height: calc(var(--d) * 1.1);
     background: repeating-linear-gradient(
       0deg,
-      var(--color-vhs-box-ink) 0 1px,
+      var(--color-vhs-box-content) 0 1px,
       transparent 1px 2px,
-      var(--color-vhs-box-ink) 2px 4px,
+      var(--color-vhs-box-content) 2px 4px,
       transparent 4px 5px,
-      var(--color-vhs-box-ink) 5px 6px,
+      var(--color-vhs-box-content) 5px 6px,
       transparent 6px 8px
     );
   }
@@ -451,8 +459,12 @@
     height: 100%;
     transform-origin: right center;
     transform: translateZ(calc(var(--d) * -1)) rotateY(90deg);
-    background: color-mix(in srgb, var(--color-vhs-box-light) 5%, var(--color-vhs-box-shell));
-    box-shadow: inset 0 0 calc(var(--d) * 0.15) var(--color-vhs-box-shell);
+    background: color-mix(
+      in srgb,
+      var(--color-vhs-box-light-content) 5%,
+      var(--color-vhs-box-shell-background)
+    );
+    box-shadow: inset 0 0 calc(var(--d) * 0.15) var(--color-vhs-box-shell-background);
   }
   /* The cassette's label sticker: the genre print color with the title in dark ink. Laid out as
      a normal horizontal label (86% of the box's height long, half its depth wide), centered,
@@ -469,7 +481,7 @@
     translate: -50% -50%;
     rotate: 90deg;
     background: var(--print);
-    color: var(--color-vhs-box-ink);
+    color: var(--color-vhs-box-content);
     font-size: calc(var(--d) * 0.3);
     line-height: calc(var(--d) * 0.52);
     text-align: center;
@@ -486,13 +498,21 @@
     top: 0;
     transform-origin: center top;
     transform: translateZ(calc(var(--d) * -1)) rotateX(90deg);
-    background: color-mix(in srgb, var(--color-vhs-box-card) 45%, var(--color-vhs-box-shell));
+    background: color-mix(
+      in srgb,
+      var(--color-vhs-box-card-background) 45%,
+      var(--color-vhs-box-shell-background)
+    );
   }
   .vhs-bottom {
     bottom: 0;
     transform-origin: center bottom;
     transform: translateZ(calc(var(--d) * -1)) rotateX(-90deg);
-    background: color-mix(in srgb, var(--color-vhs-box-card) 22%, var(--color-vhs-box-shell));
+    background: color-mix(
+      in srgb,
+      var(--color-vhs-box-card-background) 22%,
+      var(--color-vhs-box-shell-background)
+    );
   }
 }
 

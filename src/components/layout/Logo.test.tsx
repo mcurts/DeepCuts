@@ -1,7 +1,7 @@
 // Tests for the logo: one accessible image named "Deep Cuts", or nothing for assistive tech when
 // it's decorative (a link around it carries the name), in every seasonal costume; and the
 // Halloween costume appears in October only; the tagline comes with any costume when asked for;
-// and no costume uses a `style` attribute, which the CSP blocks in the pre-rendered HTML (ADR-0057).
+// and no costume uses a `style` attribute, which the CSP blocks in the pre-rendered HTML.
 import { render, screen } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
@@ -64,7 +64,7 @@ describe('Logo', () => {
     expect(tagline).toHaveClass('logo-tagline', 'hidden', 'md:block')
   })
 
-  // The header's logo is in the pre-rendered landing page (ADR-0057), in whichever costume is in
+  // The header's logo is in the pre-rendered landing page, in whichever costume is in
   // season when the build runs, so every costume must work without inline styles.
   it.each([
     ['standard', JULY],

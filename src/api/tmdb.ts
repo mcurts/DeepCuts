@@ -1,8 +1,8 @@
-// TMDB client (ADR-0002): the only code that fetches movie data.
+// TMDB client: the only code that fetches movie data.
 //
 // The browser never talks to TMDB directly: it calls our own `/api/tmdb/...` proxy, which adds
 // the secret API token on the server (server/tmdb/proxy.ts). Every response is checked with a
-// Zod schema before the app uses it (ADR-0008, ADR-0015), so unexpected data fails safely here
+// Zod schema before the app uses it, so unexpected data fails safely here
 // instead of breaking a screen. Schemas only keep the fields the app actually uses.
 import { z } from 'zod'
 
@@ -14,7 +14,7 @@ const imagePath = z
   .nullable()
   .catch(null)
 
-// Signals the recommendation scorer uses (ADR-0026). Lenient: missing or odd values become neutral.
+// Signals the recommendation scorer uses. Lenient: missing or odd values become neutral.
 const signals = {
   popularity: z.number().nonnegative().catch(0).default(0),
   vote_average: z.number().min(0).max(10).catch(0).default(0),
@@ -42,7 +42,7 @@ export const searchResultsSchema = z.object({
   results: z.array(movieSummary),
 })
 
-/** A film series and its films, in TMDB's order (ADR-0032). */
+/** A film series and its films, in TMDB's order. */
 export const collectionSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
@@ -62,24 +62,24 @@ export const movieDetailSchema = z.object({
   genres: z.array(z.object({ id: z.number().int(), name: z.string() })).default([]),
   ...signals,
   // The series the film belongs to, if any ("Friday the 13th Collection"). Its films become
-  // scorer candidates when you like this one (ADR-0032). Lenient: odd data means no series.
+  // scorer candidates when you like this one. Lenient: odd data means no series.
   belongs_to_collection: z
     .object({ id: z.number().int().positive(), name: z.string() })
     .nullable()
     .optional()
     .catch(null),
-  // Appended to the same call: the film's recommendations, the scorer's candidates (ADR-0026).
+  // Appended to the same call: the film's recommendations, the scorer's candidates.
   recommendations: z
     .object({ results: z.array(movieSummary) })
     .optional()
     .catch(undefined),
   // Appended to the same call: films TMDB finds similar by genre and keywords. More candidates
-  // that aren't from the same series, at no extra request (ADR-0037).
+  // that aren't from the same series, at no extra request.
   similar: z
     .object({ results: z.array(movieSummary) })
     .optional()
     .catch(undefined),
-  // Appended to the same call for the scorer's keyword and director parts (ADR-0028). Lenient:
+  // Appended to the same call for the scorer's keyword and director parts. Lenient:
   // a malformed block just means no keywords or directors for this film.
   keywords: z
     .object({ keywords: z.array(z.object({ id: z.number().int(), name: z.string() })) })
@@ -94,13 +94,13 @@ export const movieDetailSchema = z.object({
     })
     .optional()
     .catch(undefined),
-  // The companies that made it, for the scorer's studio part (ADR-0038). Lenient: odd data means
+  // The companies that made it, for the scorer's studio part. Lenient: odd data means
   // no companies.
   production_companies: z
     .array(z.object({ id: z.number().int(), name: z.string() }))
     .default([])
     .catch([]),
-  // Appended to the same call for the content rating (ADR-0024).
+  // Appended to the same call for the content rating.
   release_dates: z
     .object({
       results: z.array(
@@ -166,7 +166,7 @@ function retryAfterOf(res: Response) {
 //
 // A 200 that isn't the JSON we expect is treated as an upstream error (502) too. On Cloudflare,
 // once the daily Function quota runs out, Pages skips the proxy ("fail open") and answers
-// `/api/tmdb/*` with the app's index.html and a 200 (ADR-0029, Stage 4 H8). The screens then show
+// `/api/tmdb/*` with the app's index.html and a 200 (Stage 4 H8). The screens then show
 // their usual "can't reach movie data" state instead of crashing.
 async function get<T>(
   path: string,
@@ -190,8 +190,7 @@ export const tmdb = {
     get('search/movie', searchResultsSchema, { query, page: String(page) }, signal),
   /**
    * One film's details, plus in the same call: content ratings, recommended and similar films,
-   * keywords and directors (one request serves Detail and the recommendation scorer,
-   * ADR-0024/0026/0028/0037).
+   * keywords and directors (one request serves Detail and the recommendation scorer).
    */
   movie: (id: number, signal?: AbortSignal) =>
     get(
@@ -200,7 +199,7 @@ export const tmdb = {
       { append_to_response: 'release_dates,recommendations,similar,keywords,credits' },
       signal,
     ),
-  /** Popular, well-voted films (no genre filter: ADR-0032 dropped favourite genres). */
+  /** Popular, well-voted films (no genre filter: the app doesn't ask for favourite genres). */
   discover: (signal?: AbortSignal) =>
     get(
       'discover/movie',
@@ -214,7 +213,7 @@ export const tmdb = {
     ),
   /**
    * Acclaimed, lesser-known, older films: Discovery's starter shelf before you've liked anything
-   * (ADR-0042). `page` picks one slice of the ~120 pages; `today` is only for tests.
+   *. `page` picks one slice of the ~120 pages; `today` is only for tests.
    */
   deepCuts: (page: number, signal?: AbortSignal, today = new Date()) =>
     get(
@@ -238,7 +237,7 @@ export const tmdb = {
     ),
   /**
    * Well-rated films tagged with one keyword ("slasher"), for the scorer's keyword candidates
-   * (ADR-0038). Needs 100 votes, so the barely-rated don't rank by a lucky 10/10.
+   *. Needs 100 votes, so the barely-rated don't rank by a lucky 10/10.
    */
   byKeyword: (keywordId: number, signal?: AbortSignal) =>
     get(
@@ -251,7 +250,7 @@ export const tmdb = {
       },
       signal,
     ),
-  /** A film series and its films (ADR-0032). */
+  /** A film series and its films. */
   collection: (id: number, signal?: AbortSignal) =>
     get(`collection/${id}`, collectionSchema, undefined, signal),
   /** Where a film can be streamed, rented or bought. */
@@ -306,7 +305,7 @@ export interface CrewMember {
 /**
  * A film's directors and writers from its appended credits, each person once, in TMDB's order.
  * Writers are the "Screenplay" and "Writer" credits; a film with neither falls back to "Story".
- * Used by the Discover cards (names) and the scorer (ids, ADR-0032).
+ * Used by the Discover cards (names) and the scorer (ids).
  */
 export function crewOf(movie: MovieDetail): { directors: CrewMember[]; writers: CrewMember[] } {
   const crew = movie.credits?.crew ?? []

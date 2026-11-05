@@ -1,5 +1,5 @@
-// The minimal layout for the account pages outside the main shell: Sign in (ADR-0025) and
-// Create an account (ADR-0031). A Back button, the logo and one narrow column; no search,
+// The minimal layout for the account pages outside the main shell: Sign in and
+// Create an account. A Back button, the logo and one narrow column; no search,
 // so nothing competes with the form.
 import { useRef, type ReactNode } from 'react'
 import { Button } from 'react-aria-components'
@@ -32,7 +32,7 @@ export function AuthLayout({ title, children }: { title: string; children: React
         {/* Back to the previous page; a page opened directly (no history) goes home. */}
         <Button
           onPress={() => (location.key === 'default' ? navigate(HOME.path) : navigate(-1))}
-          className="-ml-2 flex min-h-11 items-center gap-1 px-2 text-sm text-accent"
+          className="-ml-2 flex min-h-11 items-center gap-1 px-2 text-sm text-content-accent"
         >
           <Icon name="back" /> Back
         </Button>

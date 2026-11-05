@@ -1,4 +1,4 @@
-// A stand-in for Cloudflare D1 in unit tests (ADR-0031, Stage 6 A6), built on Node's own SQLite
+// A stand-in for Cloudflare D1 in unit tests (Stage 6 A6), built on Node's own SQLite
 // (`node:sqlite`). It runs the real migrations from migrations/, so tests exercise the actual
 // schema, constraints and foreign keys, not a mock of them.
 //

@@ -1,0 +1,55 @@
+{
+  "$description": "Tier 2: motion roles. All motion is switched off under prefers-reduced-motion (src/index.css).",
+  "theme": {
+    "motion": {
+      "transition": {
+        "duration": {
+          "$type": "duration",
+          "$value": "{duration.150}",
+          "$description": "Default for hover, focus and state changes, and for popovers and controls that appear on a press"
+        },
+        "easing": {
+          "$type": "cubicBezier",
+          "$value": "{easing.in-out}",
+          "$description": "Hover, focus and state changes."
+        }
+      },
+      "enter": {
+        "duration": {
+          "$type": "duration",
+          "$value": "{duration.400}",
+          "$description": "Content fading in as it arrives: onboarding steps, Home's film tiles, posters"
+        },
+        "easing": {
+          "$type": "cubicBezier",
+          "$value": "{easing.ease}",
+          "$description": "Content fading in as it arrives."
+        }
+      },
+      "glow": {
+        "duration": {
+          "$type": "duration",
+          "$value": "{duration.500}",
+          "$description": "A decoration slowly lighting up on hover: the Halloween logo"
+        },
+        "easing": {
+          "$type": "cubicBezier",
+          "$value": "{easing.ease}",
+          "$description": "A decoration lighting up on hover."
+        }
+      },
+      "turn": {
+        "duration": {
+          "$type": "duration",
+          "$value": "{duration.450}",
+          "$description": "A VHS box turning to a pose (keyboard focus) and settling back to rest"
+        },
+        "easing": {
+          "$type": "cubicBezier",
+          "$value": "{easing.out}",
+          "$description": "A VHS box turning to a pose and settling back."
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// The shared implementation of TopTenRepository over a simple synchronous store (ADR-0036).
+// The shared implementation of TopTenRepository over a simple synchronous store.
 //
 // The browser adapter (LocalTopTenRepository.ts) and the test fake of the accounts API both use
 // this, so they behave identically; the shared contract tests (topTenRepository.contract.ts) prove

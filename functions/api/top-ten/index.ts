@@ -1,5 +1,5 @@
-// GET /api/top-ten lists the user's Top Ten; PUT adds a film; DELETE removes one (ADR-0036);
-// PATCH saves a new order (ADR-0041).
+// GET /api/top-ten lists the user's Top Ten; PUT adds a film; DELETE removes one;
+// PATCH saves a new order.
 // The logic lives in server/accounts/topTen.ts; this file only routes methods to it. The rate
 // limit and the Origin check run first, in functions/api/_middleware.ts.
 import { changeTopTen, listTopTen, saveTopTenOrder } from '../../../server/accounts/topTen.ts'

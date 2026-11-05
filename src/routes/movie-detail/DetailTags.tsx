@@ -1,10 +1,10 @@
 // The tag panel on the Detail page: the three tag toggles, then Save and Cancel.
 //
-// Changes are staged: tapping a tag only changes what's shown (following the ADR-0050 rule
+// Changes are staged: tapping a tag only changes what's shown (following the tag rule
 // through `applyTag`: one tag per film, so picking one clears the others), and Save and Cancel appear as soon as anything differs from what's saved.
 // Save writes the changes, confirms them in a toast ("Saved. The Thing: Like.") and
 // closes Detail; the toast stays up on the page underneath. Cancel discards the draft and closes Detail.
-// Search keeps one-tap tagging that saves at once (owner's choice, 2026-10-07).
+// Search keeps one-tap tagging that saves at once.
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Button } from 'react-aria-components'
@@ -112,7 +112,7 @@ export function DetailTags({
       </div>
       {/* Reserve the complete 44px action row from first paint, so showing or hiding the buttons
           never moves the status line or streaming section. When dirty, the next Tab from a tag
-          reaches Save; actions stay right-aligned (owner, 2026-10-07/09). */}
+          reaches Save; actions stay right-aligned. */}
       <div data-detail-actions="" className="mt-5 flex min-h-11 justify-end gap-2">
         {dirty && (
           <>
@@ -122,14 +122,14 @@ export function DetailTags({
               // element that fails axe, and disabling the button would drop keyboard focus. A second
               // press while saving is ignored in `save` instead.
               aria-disabled={saving}
-              className="flex min-h-11 animate-pop-in items-center justify-center gap-2 rounded-button bg-button-primary-bg px-5 font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover aria-disabled:opacity-70"
+              className="flex min-h-11 animate-pop-in items-center justify-center gap-2 rounded-button bg-button-primary-background px-5 font-display text-base tracking-widest text-button-primary-content case-display hover:bg-button-primary-background-hover aria-disabled:opacity-70"
             >
               {saving ? 'Saving…' : 'Save'}
             </Button>
             <Button
               onPress={cancel}
               isDisabled={saving}
-              className="flex min-h-11 animate-pop-in items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-5 font-display text-base tracking-widest text-button-secondary-fg case-display hover:border-accent"
+              className="flex min-h-11 animate-pop-in items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-background px-5 font-display text-base tracking-widest text-button-secondary-content case-display hover:border-border-accent"
             >
               Cancel
             </Button>

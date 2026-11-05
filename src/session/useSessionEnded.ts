@@ -1,4 +1,4 @@
-// Notices when the server has ended a passkey session (issue #18, ADR-0031), so the screen stops
+// Notices when the server has ended a passkey session (issue #18), so the screen stops
 // looking signed in. Used by AppSessionProvider, which does the signing out; the route guards
 // (RequireAccount, IndexRoute) then send the person to Sign in, and back here afterwards.
 import { useEffect } from 'react'

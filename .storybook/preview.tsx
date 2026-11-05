@@ -1,7 +1,7 @@
 // Wraps every story in what the app's components expect: the global stylesheet (fonts, tokens,
 // base styles), a data cache, a session and a router. Stories pick a session with
 // `parameters.session`, e.g. a signed-in account. The toolbar's Theme menu shows any story in
-// any theme (ADR-0056); the axe gate runs every story in every theme.
+// any theme; the axe gate runs every story in every theme.
 import type { Preview } from '@storybook/react-vite'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router'
@@ -40,7 +40,7 @@ const preview: Preview = {
         <AppSessionProvider initialSession={(parameters.session as Session) ?? SIGNED_OUT}>
           <MemoryRouter>
             {/* Page-like padding on the theme's page surface. */}
-            <div className="min-h-dvh bg-surface p-6 text-fg">
+            <div className="min-h-dvh bg-background p-6 text-content">
               <Story />
             </div>
           </MemoryRouter>

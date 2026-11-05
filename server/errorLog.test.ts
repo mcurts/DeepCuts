@@ -1,5 +1,5 @@
 // @vitest-environment node
-// Tests for the error log (ADR-0058, server/errorLog.ts). The privacy guard is the first test: a
+// Tests for the error log (server/errorLog.ts). The privacy guard is the first test: a
 // line built from a request full of personal data must contain none of it.
 import { readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'

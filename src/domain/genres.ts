@@ -1,8 +1,8 @@
 // Film genres: names and color tones for TMDB's genre ids.
 //
 // TMDB's movie genre ids are stable, so names and tones come from this map instead of an extra
-// API call (ADR-0024, zero cost). Each slug has a matching `genre-*` color token (ADR-0023,
-// tokens/themes/<theme>/color.json), used as a decorative accent on cards and posters.
+// API call (zero cost). Each slug has a matching `genre-*` color token
+// (theme.signal.genre.* in tokens/src/themes/<theme>/color.json), used as a decorative accent on cards and posters.
 
 /**
  * One genre. `slug` names its color token, `name` is shown in text, and `label` is the short

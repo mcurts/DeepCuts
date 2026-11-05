@@ -1,4 +1,4 @@
-// Reads the release facts from git for `npm run deploy` and `npm run version:next` (ADR-0049), in
+// Reads the release facts from git for `npm run deploy` and `npm run version:next`, in
 // the shapes scripts/releasePlan.ts expects. Callers fetch tags first, so these see GitHub's.
 import { execFileSync } from 'node:child_process'
 

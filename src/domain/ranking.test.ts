@@ -1,4 +1,4 @@
-// Tests for the shared ranking rules (ADR-0041); the Top Ten's own cases are in topTen.test.ts.
+// Tests for the shared ranking rules; the Top Ten's own cases are in topTen.test.ts.
 import { describe, expect, it } from 'vitest'
 import { applySavedOrder, ListChangedError, moveInList, reorderList } from './ranking'
 

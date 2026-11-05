@@ -1,5 +1,4 @@
-// Stories for FeaturePanel, one feature on the landing page's "Tonight's program" (ADR-0035,
-// ADR-0040): each of the three as the landing page shows it, and the row of three.
+// Stories for FeaturePanel, one feature on the landing page's "Tonight's program": each of the three as the landing page shows it, and the row of three.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { FeaturePanel } from './FeaturePanel'
 import { PanelArt } from './PanelArt'
@@ -17,7 +16,7 @@ function Explainer({ id, feature }: { id: PanelId; feature: number }) {
   return (
     <FeaturePanel panel={PANELS[id]} feature={feature}>
       <PanelArt id={id} />
-      <p className="mt-5 text-base text-fg-soft">{COPY[id]}</p>
+      <p className="mt-5 text-base text-content-soft">{COPY[id]}</p>
     </FeaturePanel>
   )
 }

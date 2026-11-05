@@ -1,6 +1,6 @@
-// Top Ten rules (ADR-0036): the single source of truth for what a Top Ten list may hold.
+// Top Ten rules: the single source of truth for what a Top Ten list may hold.
 //
-// A Top Ten is a person's ten favourite films, in their own order (ADR-0033). It is a separate
+// A Top Ten is a person's ten favourite films, in their own order. It is a separate
 // list from the three tags: adding a film here never changes its tags, and the other way round.
 // Every place that changes a Top Ten (this browser's store, the server, the test fakes) goes
 // through these functions, so the rules can't drift between storage adapters.
@@ -10,8 +10,8 @@
 // - The order is the person's ranking: position 1 first. Adding a film puts it at the end.
 // - Removing a film closes the gap: everything below it moves up one place.
 // - A full list refuses new films. Choosing a film to replace ("Are you sure this is a Top
-//   Ten?") is part of the later management screen (ADR-0033), not these rules.
-// - Reordering (ADR-0041, shared with the watchlist in ranking.ts) only changes the order: the same films, each once. A new order that
+//   Ten?") is part of the later management screen, not these rules.
+// - Reordering (shared with the watchlist in ranking.ts) only changes the order: the same films, each once. A new order that
 //   adds, drops or repeats a film is refused, because it means the list changed somewhere else
 //   (another tab or device) since the person started moving films.
 
@@ -35,7 +35,7 @@ export class TopTenFullError extends Error {
 }
 
 /**
- * Thrown when a new order doesn't hold exactly the stored films (ADR-0041): the list changed
+ * Thrown when a new order doesn't hold exactly the stored films: the list changed
  * elsewhere, so the order the person chose was for a list that no longer exists.
  */
 export class TopTenChangedError extends ListChangedError {
@@ -66,7 +66,7 @@ export function removeFromTopTen(list: TopTenList, tmdbId: number): TopTenList {
 
 /**
  * Returns the list with `tmdbId` moved to `toIndex` (0 is #1); the films in between shift by one
- * place to make room (ADR-0041). Clamped; a missing film or no move returns the same list.
+ * place to make room. Clamped; a missing film or no move returns the same list.
  */
 export const moveInTopTen = (list: TopTenList, tmdbId: number, toIndex: number): TopTenList =>
   moveInList(list, tmdbId, toIndex)

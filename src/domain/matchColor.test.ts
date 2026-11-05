@@ -1,5 +1,5 @@
 // The match sticker's steps: each match falls in the right one of the five token steps. (Their
-// contrast is checked with every other token pair, in scripts/contrast-pairs.json.)
+// contrast is checked by the token build: each match-*-content token declares its fill.)
 import { describe, expect, it } from 'vitest'
 import { MATCH_CLASSES, matchStep } from './matchColor'
 
@@ -21,7 +21,10 @@ describe('match sticker steps', () => {
 
   it('names a fill and a text class for every step', () => {
     for (const [step, classes] of Object.entries(MATCH_CLASSES)) {
-      expect(classes).toEqual({ fill: `fill-match-${step}`, text: `text-match-${step}-fg` })
+      expect(classes).toEqual({
+        fill: `fill-match-${step}-background`,
+        text: `text-match-${step}-content`,
+      })
     }
   })
 })

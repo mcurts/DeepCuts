@@ -1,4 +1,4 @@
-// Stories for Ticker, the mustard band of live facts under the header (ADR-0040). Rest the mouse
+// Stories for Ticker, the mustard band of live facts under the header. Rest the mouse
 // on it for a second to see it scroll.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Ticker } from './Ticker'

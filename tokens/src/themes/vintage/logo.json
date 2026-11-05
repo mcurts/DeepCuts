@@ -1,0 +1,50 @@
+{
+  "$description": "Vintage's wordmark (the Triple Feature design) and favicon colors. Named by job so every theme can fill them. Used only by the logo and the app icon.",
+  "theme": {
+    "logo": {
+      "primary": {
+        "$type": "color",
+        "$value": "#c8261b",
+        "$description": "The first block (DEEP) and the favicon's left half"
+      },
+      "primary-content": {
+        "$type": "color",
+        "$value": "#efe4cf",
+        "$description": "Lettering on the first block",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.logo.primary"],
+            "min": 3
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "#efe4cf",
+        "$description": "The second block (CUTS)"
+      },
+      "secondary-content": {
+        "$type": "color",
+        "$value": "#120d0a",
+        "$description": "Lettering on the second block",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.logo.secondary"],
+            "min": 3
+          }
+        }
+      },
+      "tagline": {
+        "$type": "color",
+        "$value": "#efe4cf",
+        "$description": "The tagline under the wordmark (text: 4.5:1 on the page)",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.color.background.default"],
+            "min": 4.5
+          }
+        }
+      }
+    }
+  }
+}

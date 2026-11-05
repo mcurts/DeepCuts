@@ -1,4 +1,4 @@
-// End-to-end test of real accounts (ADR-0031, Stage 6 A6), run by `npm run e2e:cf` against
+// End-to-end test of real accounts (Stage 6 A6), run by `npm run e2e:cf` against
 // `wrangler pages dev` with a local D1 database and the rate-limit Worker. Chromium's virtual
 // authenticator (Chrome DevTools Protocol, `WebAuthn.addVirtualAuthenticator`) stands in for a
 // phone or laptop: it creates and uses real passkeys, with user verification.
@@ -94,7 +94,7 @@ test('invite → register → reload → session ends → sign in with the passk
   const saved = await (await page.request.get('/api/tags')).json()
   expect(saved.records).toEqual([expect.objectContaining({ tmdbId: 1091, tag: 'liked' })])
 
-  // Reorders persist in D1 (ADR-0041): the watchlist's saved order and the Top Ten's ranks.
+  // Reorders persist in D1: the watchlist's saved order and the Top Ten's ranks.
   const api = (method: string, path: string, body: unknown) =>
     page.evaluate(
       ([m, p, b]) =>
@@ -150,9 +150,7 @@ test.describe('account settings', () => {
   // CF-Connecting-IP, which `wrangler pages dev` passes through; on Cloudflare a client can't set
   // it. 203.0.113.0/24 is the documentation-only range.
   test.use({ extraHTTPHeaders: { 'CF-Connecting-IP': '203.0.113.7' } })
-  test('a passkey account can change its name and delete itself (ADR-0031 A2b)', async ({
-    page,
-  }) => {
+  test('a passkey account can change its name and delete itself', async ({ page }) => {
     await addAuthenticator(page)
     await page.goto(newInvitePath())
     await page.getByRole('textbox', { name: 'Name' }).fill('Grace Hopper')

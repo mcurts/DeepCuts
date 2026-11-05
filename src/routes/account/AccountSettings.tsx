@@ -1,4 +1,4 @@
-// Account settings for passkey accounts (ADR-0031 A2b, owner decision 2026-10-07): change the
+// Account settings for passkey accounts: change the
 // account's name, and delete the account. Shown on the Account page only when the session provider
 // supports them (real accounts); the demo and practice accounts don't get these.
 //
@@ -14,13 +14,13 @@ import { useSession } from '@/session/SessionContext'
 
 // Same field styles as the registration form.
 const fieldBox =
-  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg rounded-field focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
+  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-background rounded-field focus-within:border-field-border-focus group-data-invalid:border-field-border-invalid'
 const inputClass =
-  'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-fg outline-none placeholder:text-fg-placeholder'
+  'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-content outline-none placeholder:text-content-placeholder'
 const cardClass =
-  'grid content-start gap-2.5 border-2 border-card-border bg-card-bg rounded-card p-4'
+  'grid content-start gap-2.5 border-2 border-card-border bg-card-background rounded-card p-4'
 const secondaryButton =
-  'flex h-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-bg rounded-button px-3.5 font-display text-base tracking-widest case-display text-button-secondary-fg data-pending:opacity-70'
+  'flex h-11 items-center justify-center border-2 border-button-secondary-border bg-button-secondary-background rounded-button px-3.5 font-display text-base tracking-widest case-display text-button-secondary-content data-pending:opacity-70'
 
 /** "Change name" and "Delete account" cards for a passkey account. */
 export function AccountSettings({ name }: { name: string }) {
@@ -81,7 +81,7 @@ function ChangeName({ name, rename }: { name: string; rename: (name: string) => 
           <div className={fieldBox}>
             <Input className={inputClass} />
           </div>
-          <FieldError className="text-sm text-fg-danger" />
+          <FieldError className="text-sm text-content-danger" />
         </TextField>
         <Button type="submit" isPending={pending} className={`${secondaryButton} w-36`}>
           Save name
@@ -118,7 +118,7 @@ function DeleteAccount({ deleteAccount }: { deleteAccount: () => Promise<void> }
       <h2 id="delete-heading" className="font-display text-2xl tracking-wide case-display">
         Delete account
       </h2>
-      <p className="text-sm text-fg-muted">
+      <p className="text-sm text-content-muted">
         Deletes your account and every list in it. This can’t be undone. Your passkey stays in your
         password manager; you can remove it there.
       </p>
@@ -138,7 +138,7 @@ function DeleteAccount({ deleteAccount }: { deleteAccount: () => Promise<void> }
               // Return focus to "Delete account" once it's back on screen (next frame).
               requestAnimationFrame(() => askRef.current?.focus())
             }}
-            className="flex h-11 items-center px-2 text-sm font-bold text-accent"
+            className="flex h-11 items-center px-2 text-sm font-bold text-content-accent"
           >
             Cancel
           </Button>

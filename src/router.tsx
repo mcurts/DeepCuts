@@ -11,7 +11,7 @@ import { RequireAccount } from './routes/RequireAccount'
 
 // Each loader imports one page module and hands React Router its component.
 const search = async () => ({ Component: (await import('./routes/search/SearchPage')).SearchPage })
-// `/`: the landing page signed out, Home signed in (ADR-0035).
+// `/`: the landing page signed out, Home signed in.
 const index = async () => ({ Component: (await import('./routes/IndexRoute')).IndexRoute })
 const lists = async () => ({ Component: (await import('./routes/lists/ListsPage')).ListsPage })
 const account = async () => ({
@@ -40,10 +40,9 @@ const LAB_ROUTES: RouteObject[] = import.meta.env.DEV
   : []
 
 /**
- * Builds the route table. `/` is the landing page signed out and Home signed in (ADR-0033,
- * ADR-0035). Every other page except Sign in and Register needs an account (ADR-0034): it sits
+ * Builds the route table. `/` is the landing page signed out and Home signed in. Every other page except Sign in and Register needs an account: it sits
  * under RequireAccount, which sends signed-out visitors to Sign in and back afterwards.
- * Onboarding (/tune) is optional (ADR-0019 amendment) and behind a feature flag; while a page's
+ * Onboarding (/tune) is optional and behind a feature flag; while a page's
  * flag is off, its URL redirects home. Tests pass their own `features` to check both states.
  */
 export function createRoutes(features: Features = FEATURES): RouteObject[] {
@@ -56,9 +55,9 @@ export function createRoutes(features: Features = FEATURES): RouteObject[] {
       errorElement: <RouteError />,
       children: [
         { index: true, lazy: index },
-        // Bookmarked Discover links have one safe destination after ADR-0033: Home.
+        // Bookmarked Discover links have one safe destination after Home.
         { path: 'discover', element: <Navigate to={homePath} replace /> },
-        // The weights lab's old address (it was live until 2026-10-09): to the lab on the dev
+        // The weights lab's old address, still in bookmarks: to the lab on the dev
         // server, to Home everywhere else.
         {
           path: 'discover/weights',
@@ -83,9 +82,9 @@ export function createRoutes(features: Features = FEATURES): RouteObject[] {
         { path: '*', element: <RouteError /> },
       ],
     },
-    // Sign-in has its own minimal layout: back, logo and the methods (ADR-0025).
+    // Sign-in has its own minimal layout: back, logo and the methods.
     { path: '/sign-in', lazy: signIn, errorElement: <RouteError /> },
-    // Registration shares that layout (AuthLayout, ADR-0031).
+    // Registration shares that layout (AuthLayout).
     { path: '/register', lazy: register, errorElement: <RouteError /> },
     // Detail has its own full-bleed layout (design v2). Signed in only.
     {
@@ -93,7 +92,7 @@ export function createRoutes(features: Features = FEATURES): RouteObject[] {
       errorElement: <RouteError />,
       children: [{ path: '/movie/:id', lazy: detail }],
     },
-    // Optional onboarding, also outside the tab-bar shell (ADR-0019 amendment). Signed in only.
+    // Optional onboarding, also outside the tab-bar shell. Signed in only.
     features.onboarding
       ? {
           element: <RequireAccount />,

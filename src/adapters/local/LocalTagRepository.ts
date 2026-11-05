@@ -1,8 +1,8 @@
-// Tags saved in this browser (ADR-0013), for the demo and practice accounts.
+// Tags saved in this browser, for the demo and practice accounts.
 //
 // Each account gets its own key (`account-<id>-tags`), so signing out and in again never mixes
-// lists (ADR-0025). Passkey accounts keep their lists on the server instead (ADR-0031). The
-// watchlist's saved order (ADR-0041) sits beside the tags, under `account-<id>-watchlist-order`.
+// lists. Passkey accounts keep their lists on the server instead. The
+// watchlist's saved order sits beside the tags, under `account-<id>-watchlist-order`.
 import { createTagRepository, oneTagPerFilm } from '../createTagRepository'
 import { savedOrderSchema, storedRecordsSchema, type TagRepository } from '../TagRepository'
 import { versionedStore } from './versionedStore'
@@ -20,7 +20,7 @@ export function createLocalTagRepository(
 ): TagRepository {
   const store = versionedStore({
     key,
-    // Lists saved before ADR-0050 lose their "Seen it" records and keep one tag per film; the
+    // Lists saved by older versions lose their "Seen it" records and keep one tag per film; the
     // rest loads as before. The cleaned list is saved back on the next change.
     schema: storedRecordsSchema.transform(oneTagPerFilm),
     fallback: [],

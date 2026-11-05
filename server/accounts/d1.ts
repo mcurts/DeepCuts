@@ -1,4 +1,4 @@
-// The part of Cloudflare D1's API the accounts code uses (ADR-0031), written as plain types so the
+// The part of Cloudflare D1's API the accounts code uses, written as plain types so the
 // code type-checks in Node too. Cloudflare's real `D1Database` fits it, and so does the test
 // stand-in over Node's built-in SQLite (server/testing/fakeD1.ts), which runs the real migrations.
 

@@ -1,18 +1,17 @@
-// Recommendation scorer v4 (ADR-0026, ADR-0028, ADR-0032, ADR-0037, ADR-0038, ADR-0043,
-// ADR-0044): turns a person's tags and Top Ten into ranked film picks.
+// Recommendation scorer v4: turns a person's tags and Top Ten into ranked film picks.
 //
 // How it works, in four steps:
 // 1. Candidates: every film TMDB recommends for any film you liked, the well-voted films in a
 //    shared genre that TMDB lists as similar to it, and the next film you haven't tagged in its
 //    series ("Friday the 13th" brings in Part 2). Plus well-rated films tagged with the keywords
-//    your likes share most ("slasher"), found by a keyword search (ADR-0038). A film suggested by
+//    your likes share most ("slasher"), found by a keyword search. A film suggested by
 //    several of your likes, or searches, is a stronger candidate.
 // 2. Taste profile: a weight per genre and per keyword, built from your tags (liked +1, Want to
 //    see +0.5, disliked −1), plus the decades, languages, directors, writers, actors, studios and
-//    series of the films you liked. Your Top Ten films count as likes that weigh TOP_TEN_WEIGHT
-//    (ADR-0043), so a favourite pulls a little harder than an ordinary like.
+//    series of the films you liked. Your Top Ten films count as likes that weigh TOP_TEN_WEIGHT,
+//    so a favourite pulls a little harder than an ordinary like.
 // 3. Score: each candidate gets twelve part scores between 0 and 1 (see DEFAULT_WEIGHTS), which
-//    are combined with the weights into one score. v4 (ADR-0044) makes each part tell candidates
+//    are combined with the weights into one score. v4 makes each part tell candidates
 //    apart instead of giving them all the same middling value: support on a square-root scale,
 //    rating ranked among the candidates, decade and language measured as how much more your likes
 //    lean that way than the candidates do, and genre by the best-matching genre. A film that shares
@@ -20,21 +19,20 @@
 //    DISLIKE_PENALTY. "% match" stretches the scores across MATCH_FLOOR–MATCH_CEILING, so the
 //    best candidate reads high and a weak one reads low.
 //    Keywords, credits and studios need one extra details call per candidate, so the caller
-//    fetches them only for the top candidates (`TasteInput.details`) and scores again: a re-rank
-//    (ADR-0028). Candidates without details score 0 on those parts. A film in the series of one
+//    fetches them only for the top candidates (`TasteInput.details`) and scores again: a re-rank.
+//    Candidates without details score 0 on those parts. A film in the series of one
 //    you liked is credited for that once, by the series part: its keyword, director, writer,
-//    cast and studio parts only count what it shares with liked films outside that series
-//    (ADR-0037).
+//    cast and studio parts only count what it shares with liked films outside that series.
 // 4. Rank: highest score first, spread out so one genre, series or director never clumps, with a
 //    few "explore" slots for genres your likes haven't covered, so no genre is shut out. At most
-//    one film per series, and a few in all from the series you liked (ADR-0037).
+//    one film per series, and a few in all from the series you liked.
 //
 // Pure and deterministic: no network, no randomness, so the same tags always give the same
 // picks, every pick can say why it was chosen ("because you liked …"), and it is fully testable.
 
 /**
- * Which version of the scoring math this is (ADR-0044: v4). Saved with every quick-action press
- * (ADR-0045), so weights are only learned from parts computed the same way. Bump it whenever a
+ * Which version of the scoring math this is. Saved with every quick-action press
+ *, so weights are only learned from parts computed the same way. Bump it whenever a
  * part's formula changes.
  */
 export const SCORER_VERSION = 4
@@ -55,9 +53,9 @@ export interface ScorerFilm {
   directors?: readonly Person[]
   /** The film's writers, when its details are loaded. */
   writers?: readonly Person[]
-  /** Its top-billed actors, when its details are loaded (ADR-0038). */
+  /** Its top-billed actors, when its details are loaded. */
   cast?: readonly Person[]
-  /** The companies that made it, when its details are loaded (ADR-0038). */
+  /** The companies that made it, when its details are loaded. */
   companies?: readonly Person[]
   /** The TMDB series (collection) it belongs to, when known. */
   seriesId?: number | null
@@ -69,7 +67,7 @@ export interface Person {
   name: string
 }
 
-/** Details for a candidate, loaded only for the top candidates (ADR-0028). */
+/** Details for a candidate, loaded only for the top candidates. */
 export interface FilmDetails {
   keywordIds: readonly number[]
   directors: readonly Person[]
@@ -79,14 +77,14 @@ export interface FilmDetails {
   seriesId?: number | null
 }
 
-/** Just the tags of a taste: enough to choose the keywords to search (ADR-0038). */
+/** Just the tags of a taste: enough to choose the keywords to search. */
 export interface TasteTags {
   liked: TasteInput['liked']
   wanted: TasteInput['wanted']
   disliked: TasteInput['disliked']
 }
 
-/** Films found by searching one keyword your likes share (ADR-0038). */
+/** Films found by searching one keyword your likes share. */
 export interface KeywordSearch {
   keywordId: number
   films: readonly ScorerFilm[]
@@ -96,8 +94,8 @@ export interface KeywordSearch {
 export interface TasteInput {
   /**
    * Liked films (most recent first) with the films TMDB recommends for each, the films TMDB lists
-   * as similar, and the films in its series, if it belongs to one (ADR-0032). Only the earliest
-   * series film you haven't tagged becomes a candidate (ADR-0037).
+   * as similar, and the films in its series, if it belongs to one. Only the earliest
+   * series film you haven't tagged becomes a candidate.
    */
   liked: readonly {
     film: ScorerFilm
@@ -106,7 +104,7 @@ export interface TasteInput {
     series?: readonly ScorerFilm[]
     /**
      * How much this like counts: 1 for a liked tag (the default), TOP_TEN_WEIGHT for a Top Ten
-     * film (ADR-0043). Scales its genres, keywords, suggestions, decade and language.
+     * film. Scales its genres, keywords, suggestions, decade and language.
      */
     weight?: number
   }[]
@@ -116,7 +114,7 @@ export interface TasteInput {
   disliked: readonly ScorerFilm[]
   /** Every film the person has tagged or put in their Top Ten. None of them is ever recommended. */
   excluded: ReadonlySet<number>
-  /** The results of searching `keywordsToSearch(input)`, one entry per keyword (ADR-0038). */
+  /** The results of searching `keywordsToSearch(input)`, one entry per keyword. */
   keywordSearches?: readonly KeywordSearch[]
   /** Keywords, credits, studios and series for some candidates, by film id (the re-rank). */
   details?: ReadonlyMap<number, FilmDetails>
@@ -143,9 +141,9 @@ export type ScorePart = (typeof SCORE_PARTS)[number]
 export type Weights = Record<ScorePart, number>
 
 /**
- * Weights v3 (ADR-0037), tuned by the owner in the weights lab on 2026-10-12. Support and keywords
+ * Weights v3, tuned in the weights lab. Support and keywords
  * drop and quality, genre, decade and language rise, so one strong signal can't carry a film.
- * Cast and studio (ADR-0038) start at 0, so the owner's tuned mix applies exactly; raise them in
+ * Cast and studio start at 0, so the tuned mix applies exactly; raise them in
  * the lab. They add up to 1.02, so they're normalized to sum to exactly 1.
  */
 export const DEFAULT_WEIGHTS: Weights = normalizeWeights({
@@ -164,30 +162,30 @@ export const DEFAULT_WEIGHTS: Weights = normalizeWeights({
 })
 
 /**
- * Each earlier pick with the same primary genre lowers a candidate's rank by this much (tuned to
- * 0.03 on 2026-10-12, ADR-0037; was 0.05).
+ * Each earlier pick with the same primary genre lowers a candidate's rank by this much (tuned in the
+ * weights lab).
  */
 export const DIVERSITY_PENALTY = 0.03
 
 /**
  * TMDB's similar films include barely-rated ones (1 vote, 0 votes) that the deep-cut part would
  * lift. A similar film needs this many votes, and a genre in common with the liked film, to be a
- * candidate (ADR-0037).
+ * candidate.
  */
 export const SIMILAR_MIN_VOTES = 50
 
 /**
- * How much a Top Ten film counts compared with an ordinary like (ADR-0043, owner 2026-10-15).
+ * How much a Top Ten film counts compared with an ordinary like.
  * A Top Ten is "the ten films you'd defend", so it says a bit more about taste than one liked
  * tag, but not so much that ten favourites drown out twenty likes.
  */
 export const TOP_TEN_WEIGHT = 1.25
 
-/** How many of your likes' shared keywords are searched for candidates (ADR-0038). */
+/** How many of your likes' shared keywords are searched for candidates. */
 export const KEYWORD_SEARCHES = 3
 
 /**
- * Keywords too general to say anything about taste, so they're never searched (ADR-0038):
+ * Keywords too general to say anything about taste, so they're never searched:
  * based on novel or book, based on true story, based on comic, sequel, remake, murder, woman
  * director, and the during- and after-credits stingers.
  */
@@ -197,7 +195,7 @@ export const GENERIC_KEYWORDS: ReadonlySet<number> = new Set([
 
 /**
  * The major studios and distributors: sharing one says little about taste, so the studio part
- * ignores them (ADR-0038). Studios with a clear identity (New Line, Miramax, Blumhouse, Hammer…)
+ * ignores them. Studios with a clear identity (New Line, Miramax, Blumhouse, Hammer…)
  * still count. Disney, Paramount, Columbia, DreamWorks, MGM, 20th Century Fox and Studios,
  * Universal, Sony, United Artists, Village Roadshow, Warner Bros., Summit, TriStar, StudioCanal,
  * Legendary, Lions Gate and Lionsgate, Relativity.
@@ -206,27 +204,27 @@ export const MAJOR_STUDIOS: ReadonlySet<number> = new Set([
   2, 4, 5, 7, 21, 25, 127928, 33, 34, 60, 79, 174, 491, 559, 694, 923, 35, 1632, 7295,
 ])
 
-/** At most this many picks by one director (ADR-0032). */
+/** At most this many picks by one director. */
 export const SPREAD_CAP = 2
 
-/** At most this many picks from one series (ADR-0037; was 2 in ADR-0032). */
+/** At most this many picks from one series. */
 export const SERIES_CAP = 1
 
 /**
  * At most this many picks in all from the series of films you liked, so sequels can't fill the
- * feed (ADR-0037).
+ * feed.
  */
 export const SERIES_PICKS = 3
 
 /**
  * Picks at these positions (0-based) go to a genre your likes haven't covered, when one is
- * available: 6th, 11th and 16th, so Discover's grid gets three, spaced out (ADR-0032).
+ * available: 6th, 11th and 16th, so Discover's grid gets three, spaced out.
  */
 export const EXPLORE_SLOTS: readonly number[] = [5, 10, 15]
 
 /**
  * A disliked genre lowers the genre part to this at the lowest (not 0), so a genre is never
- * shut out (ADR-0032). Neutral is 0.5; a fully liked genre is 1.
+ * shut out. Neutral is 0.5; a fully liked genre is 1.
  */
 const GENRE_FLOOR = 0.25
 
@@ -239,7 +237,7 @@ export function normalizeWeights(weights: Weights): Weights {
 }
 
 /**
- * The most a film loses for looking like the films you disliked (ADR-0044): taken off its
+ * The most a film loses for looking like the films you disliked: taken off its
  * weighted score when it reaches PENALTY_HITS overlaps, proportionally for fewer. 0.15 is about
  * what a shared director and writer add together, so a Nope can cancel a credit match but not
  * bury a film that's strong on everything else.
@@ -247,7 +245,7 @@ export function normalizeWeights(weights: Weights): Weights {
 export const DISLIKE_PENALTY = 0.15
 
 /**
- * Overlaps with disliked films for the full penalty (ADR-0044). Each counts once: a director,
+ * Overlaps with disliked films for the full penalty. Each counts once: a director,
  * writer, top-billed actor, non-major studio or series of a disliked film, or sharing at least
  * PENALTY_KEYWORDS keywords with one. Two, so one shared actor alone costs only half.
  */
@@ -258,7 +256,7 @@ export const PENALTY_KEYWORDS = 2
 
 /**
  * "% match" runs from MATCH_FLOOR (the weakest candidate) to MATCH_CEILING (the best), a straight
- * line between them (ADR-0044). Raw scores bunch up (a weighted average of many middling parts),
+ * line between them. Raw scores bunch up (a weighted average of many middling parts),
  * which made every pick read alike; the stretch keeps the order and makes the gaps visible. The ceiling
  * stays below 100 because no pick is a sure thing.
  */
@@ -292,7 +290,7 @@ export interface Pick {
   score: number
   /**
    * Whole-number percentage shown to the user: the score stretched across MATCH_FLOOR to
-   * MATCH_CEILING among all the candidates (ADR-0044), so it ranks the same as `score`.
+   * MATCH_CEILING among all the candidates, so it ranks the same as `score`.
    */
   match: number
   /** Titles of liked (or Top Ten) films that recommended it, at most two. */
@@ -303,21 +301,21 @@ export interface Pick {
   sameWriter?: { writer: string; liked: string }
   /** Set when it's in the same series as a film you liked: the liked film's title. */
   sameSeries?: { liked: string }
-  /** Set when a top-billed actor was also in a film you liked (ADR-0038). */
+  /** Set when a top-billed actor was also in a film you liked. */
   sameCast?: { actor: string; liked: string }
-  /** Set when a studio (not a major) also made a film you liked (ADR-0038). */
+  /** Set when a studio (not a major) also made a film you liked. */
   sameStudio?: { studio: string; liked: string }
   /**
    * Set when it shares keywords you favour with a film you liked: the liked film sharing the most,
    * and those keyword ids, strongest in your profile first (at most SHOWN_KEYWORDS).
    */
   sameKeywords?: { keywordIds: number[]; liked: string }
-  /** True when it filled an explore slot: a genre your likes haven't covered (ADR-0032). */
+  /** True when it filled an explore slot: a genre your likes haven't covered. */
   explore?: true
   /** The twelve part scores (0–1), shown in the weights lab. */
   parts: Record<ScorePart, number>
   /**
-   * How much it looks like the films you disliked, 0–1 (ADR-0044): overlaps ÷ PENALTY_HITS,
+   * How much it looks like the films you disliked, 0–1: overlaps ÷ PENALTY_HITS,
    * capped at 1. The score loses `penalty × DISLIKE_PENALTY`.
    */
   penalty: number
@@ -332,7 +330,7 @@ interface Candidate {
   because: string[]
 }
 
-// How much one liked entry counts (ADR-0043): 1 unless it says otherwise.
+// How much one liked entry counts: 1 unless it says otherwise.
 const weightOf = (l: TasteInput['liked'][number]) => l.weight ?? 1
 
 // Keeps a number between 0 and 1.
@@ -353,7 +351,7 @@ function nextInSeries(
 }
 
 /**
- * The keywords to search for candidates (ADR-0038): the ones in your taste profile that weigh at
+ * The keywords to search for candidates: the ones in your taste profile that weigh at
  * least 2 (two likes, say, or three likes and a dislike), strongest first, leaving out
  * GENERIC_KEYWORDS. Ties go by id, so the same tags always search the same keywords.
  */
@@ -369,13 +367,13 @@ export function keywordsToSearch(input: TasteTags): number[] {
 // series, counting how many likes suggest each. A film a liked film suggests in more than one way
 // counts once for it. Films you've already tagged, and a liked film suggesting itself, are skipped.
 // Then each keyword search counts as one more suggestion for its films, "because" of the liked
-// films with that keyword (ADR-0038). Only films whose main genre one of your likes has: a
+// films with that keyword. Only films whose main genre one of your likes has: a
 // keyword crosses genres ("halloween" finds Scooby-Doo, filed under Family first), and the
 // explore slots would lift those.
 function collectCandidates(input: TasteInput): Map<number, Candidate> {
   const candidates = new Map<number, Candidate>()
   // `weight` is how much the suggestion counts: a Top Ten film's suggestions count TOP_TEN_WEIGHT
-  // (ADR-0043), every other suggestion 1.
+  //, every other suggestion 1.
   const suggest = (film: ScorerFilm, because: readonly string[], weight = 1) => {
     const c = candidates.get(film.id) ?? { film, support: 0, because: [] }
     c.support += weight
@@ -430,7 +428,7 @@ function genreProfile(input: TasteInput): Map<number, number> {
 /**
  * Keyword weights, unscaled: liked +1 (a Top Ten film +TOP_TEN_WEIGHT), Want to see +0.5,
  * disliked −1, from loaded keywords. `keep` leaves films out, so a sequel isn't matched against
- * its own series (ADR-0037).
+ * its own series.
  */
 function keywordProfile(input: TasteTags, keep: (f: ScorerFilm) => boolean): Map<number, number> {
   const weights = new Map<number, number>()
@@ -446,7 +444,7 @@ function keywordProfile(input: TasteTags, keep: (f: ScorerFilm) => boolean): Map
 
 /**
  * The weighted share of `values` equal to `value`: a Top Ten film's decade or language counts
- * TOP_TEN_WEIGHT, a like's 1 (ADR-0043). Only called with likes present (no likes, no candidates).
+ * TOP_TEN_WEIGHT, a like's 1. Only called with likes present (no likes, no candidates).
  */
 function shareOf<T>(values: readonly { value: T; weight: number }[], value: T): number {
   const total = values.reduce((sum, v) => sum + v.weight, 0)
@@ -473,7 +471,7 @@ function rankAmong(sorted: readonly number[], value: number): number {
 
 /**
  * How much more your likes lean to `value` (a decade or language) than the candidates do, as
- * 0–1 (ADR-0044). The lift is your likes' share ÷ the candidates' share: 1 when they match (no
+ * 0–1. The lift is your likes' share ÷ the candidates' share: 1 when they match (no
  * evidence either way, 0.5), above 1 when you seek it out, 0 when none of your likes have it.
  * `lift / (1 + lift)` maps it into 0–1: a lift of 3 is 0.75. `candidates` always includes the
  * film being scored, so its share is never 0.
@@ -488,7 +486,7 @@ function lean<T>(
 }
 
 // The people, studios, series and keywords of the films you disliked, each with a disliked
-// film's title, for the dislike penalty (ADR-0044). Disliked films come with their details (the
+// film's title, for the dislike penalty. Disliked films come with their details (the
 // caller loads every tagged film's), so this costs no extra calls.
 function dislikeProfile(disliked: readonly ScorerFilm[]) {
   const series = new Map<number, string>()
@@ -507,7 +505,7 @@ function dislikeProfile(disliked: readonly ScorerFilm[]) {
 }
 
 /**
- * Each way a candidate looks like a film you disliked (ADR-0044), at most one per kind: a shared
+ * Each way a candidate looks like a film you disliked, at most one per kind: a shared
  * director, writer, top-billed actor, non-major studio or series, or PENALTY_KEYWORDS keywords
  * in common with one disliked film. Credits and keywords need the candidate's details, so only
  * the re-ranked top candidates can lose points for them; a series is known for more.
@@ -596,7 +594,7 @@ export function recommend(input: TasteInput, options: RecommendOptions = {}): Pi
 /**
  * Every candidate with its score and parts, best score first and not yet spread out by the
  * ranking rules (steps 1–3). The weights lab uses it to show how spread out the scores are
- * across all candidates, not just the top 20 (ADR-0044). Empty when there are no likes.
+ * across all candidates, not just the top 20. Empty when there are no likes.
  */
 export function scoreCandidates(
   input: TasteInput,
@@ -620,7 +618,7 @@ export function scoreCandidates(
   const candidateLanguages = candidates.map((c) => ({ value: c.film.language, weight: 1 }))
   // Every candidate's vote-weighted rating, sorted, for ranking each one among the rest.
   const ratings = candidates.map((c) => ratingOf(c.film)).sort((a, b) => a - b)
-  // What your dislikes look like, for the penalty (ADR-0044).
+  // What your dislikes look like, for the penalty.
   const dislikes = dislikeProfile(input.disliked)
   const maxPopularity = Math.max(...candidates.map((c) => c.film.popularity))
   // The series of the films you liked, each with the liked film's title.
@@ -634,7 +632,7 @@ export function scoreCandidates(
   }
   // What a candidate is compared with: your keyword profile and the directors and writers of
   // your likes. A film in a liked series is compared only with films outside that series, so
-  // the series part is the one place it gets credit for being a sequel (ADR-0037). One profile
+  // the series part is the one place it gets credit for being a sequel. One profile
   // per series (null: everything), built once.
   const profiles = new Map<number | null, ReturnType<typeof profileFor>>()
   function profileFor(series: number | null) {
@@ -672,7 +670,7 @@ export function scoreCandidates(
   const scored = candidates.map((c): Pick => {
     const f = c.film
     const details = input.details?.get(f.id)
-    // Genre fit (ADR-0044): the film's best genre in your profile (−1…1), less its worst if
+    // Genre fit: the film's best genre in your profile (−1…1), less its worst if
     // that's one you dislike. The average used before let an untagged second genre halve a
     // horror-comedy's fit for a horror fan; a disliked genre still pulls it down.
     const genres = f.genreIds.map((g) => profile.get(g) ?? 0)
@@ -689,19 +687,19 @@ export function scoreCandidates(
     const overlaps = dislikedOverlaps(f, details, dislikes)
     const parts: Record<ScorePart, number> = {
       // Relative to the best-supported candidate, so the top one always scores 1. On a square-root
-      // scale (ADR-0044): one hugely-suggested film used to push everything else near 0, so 2
-      // suggestions and 3 looked the same; now they don't.
+      // scale, so one hugely-suggested film doesn't push everything else near 0 (on a linear
+      // scale, 2 suggestions and 3 would look the same).
       support: Math.sqrt(c.support / maxSupport),
       // Liked genres lift a film from neutral (0.5) up to 1. Disliked genres lower it only to
-      // GENRE_FLOOR, so a genre can lose ground but is never ruled out (ADR-0032).
+      // GENRE_FLOOR, so a genre can lose ground but is never ruled out.
       genre: genreFit >= 0 ? (1 + genreFit) / 2 : 0.5 + (0.5 - GENRE_FLOOR) * genreFit,
-      // Its rating's place among the candidates' (ADR-0044): the best-rated candidate scores 1,
+      // Its rating's place among the candidates': the best-rated candidate scores 1,
       // the worst 0. TMDB ratings cluster around 6–7.5, which a fixed 5–9 scale left in the middle.
       quality: rankAmong(ratings, ratingOf(f)),
       // Lesser-known films score higher; log scale so one blockbuster doesn't flatten the rest.
       deepCut: maxPopularity > 0 ? 1 - Math.log1p(f.popularity) / Math.log1p(maxPopularity) : 0.5,
       // How much more your likes lean to its decade, and its original language, than the
-      // candidates do (ADR-0044). When nearly all candidates are English-language, an English film
+      // candidates do. When nearly all candidates are English-language, an English film
       // is no evidence of anything, so it's neutral; a decade you like more than the candidates
       // are scores high. Unknown, or none of your likes: 0.
       decade: decade === null ? 0 : lean(likedDecades, candidateDecades, decade),
@@ -739,7 +737,7 @@ export function scoreCandidates(
     }
   })
 
-  // "% match" (ADR-0044): each score's place between the weakest and the best candidate,
+  // "% match": each score's place between the weakest and the best candidate,
   // stretched across MATCH_FLOOR–MATCH_CEILING. With one candidate (or all tied) there's nothing
   // to stretch against, so it's the score in percent.
   const scores = scored.map((p) => p.score)

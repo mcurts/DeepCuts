@@ -1,4 +1,4 @@
-// Calls the accounts API in unit tests the way Cloudflare Pages would (ADR-0031, Stage 6 A6): the
+// Calls the accounts API in unit tests the way Cloudflare Pages would (Stage 6 A6): the
 // shared `/api` guard first (rate limit, Origin check), then the handler the matching file under
 // functions/api/ routes to. A cookie jar makes each client behave like one browser.
 //

@@ -1,5 +1,5 @@
 // Vite inlines every VITE_* value into public JS, so secret-looking VITE_ names are banned; and local
-// secret files (.env*, .dev.vars) must never be tracked by git. ADR-0001, ADR-0008, ADR-0029.
+// secret files (.env*, .dev.vars) must never be tracked by git.
 import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
@@ -13,7 +13,7 @@ const walk = (dir) =>
 
 const files = [
   ...walk('src'),
-  // `.dev.vars` is wrangler's local env file (ADR-0029); the same rule applies to it.
+  // `.dev.vars` is wrangler's local env file; the same rule applies to it.
   ...readdirSync('.').filter((f) => f.startsWith('.env') || f.startsWith('.dev.vars')),
   'vite.config.ts',
   'index.html',

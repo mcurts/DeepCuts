@@ -1,0 +1,22 @@
+{
+  "$description": "Tier 3: a panel resting on the page (lists, account panels, empty states). Square, flat, outlined.",
+  "component": {
+    "card": {
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.background.raised}",
+        "$description": "Card surface."
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{theme.color.border.default}",
+        "$description": "Card outline."
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{theme.border.container.radius}",
+        "$description": "Card corners."
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// The per-client rate limit in front of every `/api/*` request (ADR-0029 Stage 4 H4, ADR-0031).
+// The per-client rate limit in front of every `/api/*` request.
 // functions/api/_middleware.ts asks the rate-limit Worker (workers/rate-limit/) over a service
 // binding; over the limit, the client gets a short 429 and the request goes no further.
 import type { ReportError } from './errorLog.ts'
@@ -34,8 +34,8 @@ const RETRY_AFTER_SECONDS = 60
  *
  * **Fails open.** If the limiter is missing or errors, the request is allowed. A limiter outage
  * shouldn't take the app down, and cost is already capped elsewhere: on Workers Free, requests
- * past the daily quota are refused, never billed (ADR-0024, ADR-0029). A limiter error is
- * reported, so an unchecked API shows up in the error log (ADR-0058).
+ * past the daily quota are refused, never billed. A limiter error is
+ * reported, so an unchecked API shows up in the error log.
  */
 export async function rateLimit(
   request: Request,

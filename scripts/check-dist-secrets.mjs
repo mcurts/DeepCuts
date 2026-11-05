@@ -1,4 +1,4 @@
-// Fails if the built bundle contains a TMDB token (JWT-shaped, or the literal env value). ADR-0013.
+// Fails if the built bundle contains a TMDB token (JWT-shaped, or the literal env value).
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 

@@ -1,12 +1,11 @@
 // The TMDB proxy's request handling, written once on the Fetch API (`Request` → `Response`) so it
-// runs unchanged in two places (ADR-0029):
+// runs unchanged in two places:
 // - locally, inside `vite dev` / `vite preview`, through the thin adapter in proxy.ts;
 // - on Cloudflare Pages, as the Function in functions/api/tmdb/[[path]].ts.
 //
 // The browser calls `/api/tmdb/<path>`; this checks the request against the allowlist
 // (allowlist.ts), adds the secret read token, calls TMDB and returns the JSON. Errors are
-// reduced to a short code, so TMDB's own messages (or the token) never reach the browser
-// (ADR-0008, ADR-0013).
+// reduced to a short code, so TMDB's own messages (or the token) never reach the browser.
 import { ignoreErrors, type ReportError } from '../errorLog.ts'
 import { json } from '../http.ts'
 import { resolveTmdbRequest } from './allowlist.ts'
@@ -17,18 +16,18 @@ const UPSTREAM = 'https://api.themoviedb.org/3/'
 const HOUR = 60 * 60
 
 /**
- * The crew jobs the app shows or scores: the director (ADR-0028) and the writers credited on
+ * The crew jobs the app shows or scores: the director and the writers credited on
  * Discover tiles. TMDB files writers under several jobs; "Story" is the fallback when a film has
  * no screenplay or writer credit.
  */
 export const KEPT_CREW_JOBS = ['Director', 'Screenplay', 'Writer', 'Story'] as const
 
-/** How many top-billed actors the scorer's cast part compares (ADR-0038). */
+/** How many top-billed actors the scorer's cast part compares. */
 export const KEPT_CAST = 5
 
 /**
  * Shrinks a film's appended credits to its directors, writers and top-billed actors before they
- * reach the browser (ADR-0028, ADR-0038). Full credits list the whole cast and crew (often
+ * reach the browser. Full credits list the whole cast and crew (often
  * 50–150 kB); the app only uses these few. Anything that isn't a film-details body with credits
  * passes through unchanged.
  */
@@ -82,7 +81,7 @@ export type TmdbOptions = {
    */
   cache?: Cache
   /**
-   * Hears why TMDB failed, for the error log (ADR-0058). A 404 isn't a failure: it's how TMDB
+   * Hears why TMDB failed, for the error log. A 404 isn't a failure: it's how TMDB
    * answers a film id that doesn't exist, which anyone can ask for.
    */
   report?: ReportError

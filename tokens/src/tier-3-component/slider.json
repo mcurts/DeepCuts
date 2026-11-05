@@ -1,0 +1,45 @@
+{
+  "$description": "Tier 3: sliders (the weights lab).",
+  "component": {
+    "slider": {
+      "track": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.border.control}",
+          "$description": "Slider track.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default"],
+              "min": 3
+            }
+          }
+        }
+      },
+      "fill": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.accent.background}",
+          "$description": "Slider track up to the thumb."
+        }
+      },
+      "thumb": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.accent.background}",
+          "$description": "Slider thumb.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default"],
+              "min": 3
+            }
+          }
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{theme.color.background.default}",
+          "$description": "Slider thumb outline, against the fill."
+        }
+      }
+    }
+  }
+}

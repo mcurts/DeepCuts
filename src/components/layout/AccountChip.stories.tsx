@@ -11,7 +11,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const SignedOut: Story = {}
-/** Avatar initial + first name (ADR-0025). */
+/** Avatar initial + first name. */
 const demo = {
   session: { kind: 'account', account: { id: 'demo', name: 'Mike Curts', method: 'demo' } },
 }
@@ -28,7 +28,7 @@ export const MenuOpen: Story = {
   parameters: demo,
   play: openMenu,
 }
-/** A passkey account's menu also links Account settings (ADR-0031 A2b). */
+/** A passkey account's menu also links Account settings. */
 export const PasskeyMenuOpen: Story = {
   parameters: {
     session: { kind: 'account', account: { id: 'p', name: 'Pat Key', method: 'passkey' } },

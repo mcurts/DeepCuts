@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { renderRoute } from '@/test/renderRoute'
 
 describe('navigation', () => {
-  it('goes Home from the logo, with no tab bar (ADR-0040)', async () => {
+  it('goes Home from the logo, with no tab bar', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/lists')
     await screen.findByRole('heading', { level: 1, name: 'My Lists' })
@@ -47,7 +47,7 @@ describe('account menu', () => {
     const menu = await screen.findByRole('menu', { name: 'Account menu for Mike' })
     expect(within(menu).getByText('Signed in with the demo account')).toBeInTheDocument()
     expect(await within(menu).findByText(/films? tagged/)).toBeInTheDocument()
-    // The demo account has no settings, so no settings item (ADR-0031 A2b).
+    // The demo account has no settings, so no settings item.
     expect(
       within(menu)
         .getAllByRole('menuitem')

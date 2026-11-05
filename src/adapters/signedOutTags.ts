@@ -1,4 +1,4 @@
-// The tag store and Top Ten store while signed out (ADR-0034, ADR-0036): empty, and they refuse
+// The tag store and Top Ten store while signed out: empty, and they refuse
 // every write.
 //
 // Signed out, only the landing page and the account pages render, and none of them tag films or

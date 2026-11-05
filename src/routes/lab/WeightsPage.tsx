@@ -1,8 +1,8 @@
 // The weights lab (/lab/weights, dev server only): sliders for the recommendation scorer's
 // weights. Like every lab it never ships: the route only exists under `npm run dev` (router.tsx).
-// Scorer v4 (ADR-0044) adds the dislike penalty slider, an "Avoid" column and the "Score spread"
+// Scorer v4 adds the dislike penalty slider, an "Avoid" column and the "Score spread"
 // panel, which shows which parts actually tell your candidates apart. "Learn from your presses"
-// (ADR-0045) suggests weights fitted to your Want / Like / Nope presses on Home's Discovery picks.
+// suggests weights fitted to your Want / Like / Nope presses on Home's Discovery picks.
 import { useMemo, useState } from 'react'
 import { withToast } from '@/notify'
 import {
@@ -34,7 +34,7 @@ import {
 import { useFeedbackLog } from '@/session/useFeedbackLog'
 import { useTaste, type Recommendation } from '@/session/useRecommendations'
 
-// The weights lab (ADR-0026 follow-up): the owner tunes the scorer against their own tags and
+// The weights lab: the owner tunes the scorer against their own tags and
 // sees the picks re-rank live. Settings live in the URL (whole numbers, so links stay readable):
 // a tuning can be bookmarked or shared, and nothing is stored.
 
@@ -44,7 +44,7 @@ const LIMIT = 20
 const toPercent = (n: number) => Math.round(n * 100)
 // The URL key for the genre-variety slider (the scorer's diversity penalty).
 const DIVERSITY_KEY = 'diversity'
-// The URL key for the dislike penalty slider (ADR-0044).
+// The URL key for the dislike penalty slider.
 const PENALTY_KEY = 'penalty'
 
 // Plain-language names for the score parts: slider label, short table header, and hint.
@@ -161,7 +161,7 @@ export function WeightsPage() {
         <EmptyState>
           Mark a few films “More like this” first. The weights rank films your likes recommend, so
           there’s nothing to tune yet.{' '}
-          <Link to={HOME.path} className="text-accent underline">
+          <Link to={HOME.path} className="text-content-accent underline">
             Find films to like
           </Link>
           .
@@ -208,7 +208,7 @@ export function WeightsPage() {
             <h2 id="picks" className="text-lg font-bold">
               Your top {LIMIT}
             </h2>
-            <p className="mb-2.5 text-sm text-fg-muted">
+            <p className="mb-2.5 text-sm text-content-muted">
               Change is the move from the default weights. Part scores run 0–100.
             </p>
             {allZero && (
@@ -233,12 +233,12 @@ export function WeightsPage() {
               </>
             )}
             {dropped.length > 0 && (
-              <p className="mt-3 text-sm text-fg-muted">
+              <p className="mt-3 text-sm text-content-muted">
                 Left your top {LIMIT}:{' '}
                 {dropped.map((r, i) => (
                   <span key={r.movie.id}>
                     {i > 0 && ', '}
-                    <cite className="text-fg not-italic">{r.movie.title}</cite>
+                    <cite className="text-content not-italic">{r.movie.title}</cite>
                   </span>
                 ))}
               </p>
@@ -278,7 +278,7 @@ function WeightSlider({
       className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3"
     >
       <Label className="text-sm font-bold">{label}</Label>
-      <SliderOutput className="text-sm text-fg-muted tabular-nums">
+      <SliderOutput className="text-sm text-content-muted tabular-nums">
         {({ state }) =>
           share === undefined ? state.getThumbValue(0) : `${state.getThumbValue(0)} · ${share}%`
         }
@@ -286,19 +286,19 @@ function WeightSlider({
       <SliderTrack className="relative col-span-2 h-11">
         {({ state }) => (
           <>
-            <span className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 bg-slider-track" />
+            <span className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 bg-slider-track-background" />
             <span
-              className="absolute top-1/2 h-1.5 -translate-y-1/2 bg-slider-fill"
+              className="absolute top-1/2 h-1.5 -translate-y-1/2 bg-slider-fill-background"
               style={{ width: `${state.getThumbPercent(0) * 100}%` }}
             />
             <SliderThumb
               aria-describedby={hintId}
-              className="focus-ring-within top-1/2 size-6 border-2 border-slider-thumb-border bg-slider-thumb data-dragging:scale-110"
+              className="focus-ring-within top-1/2 size-6 border-2 border-slider-thumb-border bg-slider-thumb-background data-dragging:scale-110"
             />
           </>
         )}
       </SliderTrack>
-      <p id={hintId} className="col-span-2 -mt-1 text-sm text-fg-muted">
+      <p id={hintId} className="col-span-2 -mt-1 text-sm text-content-muted">
         {hint}
       </p>
     </Slider>
@@ -329,15 +329,15 @@ function Summary({
   }
 
   return (
-    <div className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4">
+    <div className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-background p-4">
       <h3 className="text-sm font-bold">These settings</h3>
-      <pre className="overflow-x-auto text-sm text-fg-muted tabular-nums">
+      <pre className="overflow-x-auto text-sm text-content-muted tabular-nums">
         <code>{text}</code>
       </pre>
       <div className="flex flex-wrap gap-2.5">
         <Button
           onPress={copy}
-          className="min-h-11 border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-accent"
+          className="min-h-11 border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-border-accent"
         >
           Copy settings
         </Button>
@@ -345,12 +345,12 @@ function Summary({
           to="/lab/weights"
           replace
           preventScrollReset
-          className="inline-flex min-h-11 items-center px-3.5 text-sm font-bold text-accent"
+          className="inline-flex min-h-11 items-center px-3.5 text-sm font-bold text-content-accent"
         >
           Reset to defaults
         </Link>
       </div>
-      <p className="text-sm text-fg-muted">
+      <p className="text-sm text-content-muted">
         The page link keeps these settings, so you can bookmark or share it.
       </p>
     </div>
@@ -368,7 +368,7 @@ function PicksTable({
   return (
     <div className="overflow-x-auto border-2 border-card-border">
       <table className="w-full text-left text-sm tabular-nums">
-        <thead className="bg-surface-raised text-fg-muted">
+        <thead className="bg-background-raised text-content-muted">
           <tr>
             <th scope="col" className="px-3 py-2 font-bold">
               #
@@ -402,25 +402,25 @@ function PicksTable({
         <tbody>
           {picks.map((r, i) => (
             <tr key={r.movie.id} className="border-t border-border">
-              <td className="px-3 py-2 text-fg-muted">{i + 1}</td>
+              <td className="px-3 py-2 text-content-muted">{i + 1}</td>
               <th scope="row" className="min-w-40 px-3 py-2 font-bold">
-                <Link to={`/movie/${r.movie.id}`} className="text-accent underline">
+                <Link to={`/movie/${r.movie.id}`} className="text-content-accent underline">
                   {r.movie.title}
                 </Link>{' '}
-                <span className="font-normal text-fg-muted">
+                <span className="font-normal text-content-muted">
                   {releaseYear(r.movie.release_date)}
                 </span>
               </th>
               <td className="px-3 py-2 whitespace-nowrap">
                 <Change from={baselineRank.get(r.movie.id)} to={i} />
               </td>
-              <td className="px-3 py-2 font-bold text-accent">{r.match}%</td>
+              <td className="px-3 py-2 font-bold text-content-accent">{r.match}%</td>
               {SCORE_PARTS.map((p) => (
-                <td key={p} className="px-3 py-2 text-fg-muted">
+                <td key={p} className="px-3 py-2 text-content-muted">
                   {toPercent(r.parts[p])}
                 </td>
               ))}
-              <td className="px-3 py-2 text-fg-muted">
+              <td className="px-3 py-2 text-content-muted">
                 {r.nearDisliked ? (
                   <span title={`${r.nearDisliked.overlap}, like ${r.nearDisliked.disliked}`}>
                     {toPercent(r.penalty)}
@@ -442,11 +442,11 @@ function PicksTable({
 
 /** Rank change against the default weights, as words for screen readers and arrows on screen. */
 function Change({ from, to }: { from: number | undefined; to: number }) {
-  if (from === undefined) return <span className="font-bold text-accent">New</span>
+  if (from === undefined) return <span className="font-bold text-content-accent">New</span>
   const moved = from - to
-  if (moved === 0) return <span className="text-fg-muted">–</span>
+  if (moved === 0) return <span className="text-content-muted">–</span>
   return (
-    <span className={moved > 0 ? 'text-accent' : 'text-fg-muted'}>
+    <span className={moved > 0 ? 'text-content-accent' : 'text-content-muted'}>
       <span aria-hidden="true">
         {moved > 0 ? '↑' : '↓'}
         {Math.abs(moved)}
@@ -459,7 +459,7 @@ function Change({ from, to }: { from: number | undefined; to: number }) {
 }
 
 /**
- * How spread out the scores are (ADR-0044): the match range of the top picks, and each part's
+ * How spread out the scores are: the match range of the top picks, and each part's
  * spread across every candidate. A part that barely varies only lifts every score equally, so it
  * can't change the order: lowering its weight changes nothing but the raw scores.
  */
@@ -478,7 +478,7 @@ function SpreadPanel({
         Score spread
       </h2>
       {range && (
-        <p className="mb-2.5 text-sm text-fg-muted">
+        <p className="mb-2.5 text-sm text-content-muted">
           Your top {picks.length} run from {range.low}% to {range.high}% match (middle{' '}
           {range.median}%). Below, each part across all {candidates.length} candidates: one that
           barely varies can’t change the order. Keywords and credits only count for the top 20
@@ -487,7 +487,7 @@ function SpreadPanel({
       )}
       <div className="overflow-x-auto border-2 border-card-border">
         <table className="w-full text-left text-sm tabular-nums">
-          <thead className="bg-surface-raised text-fg-muted">
+          <thead className="bg-background-raised text-content-muted">
             <tr>
               <th scope="col" className="px-3 py-2 font-bold">
                 Part
@@ -509,11 +509,11 @@ function SpreadPanel({
                 <th scope="row" className="px-3 py-2 font-bold">
                   {SPREAD_LABELS[s.part]}
                 </th>
-                <td className="px-3 py-2 text-fg-muted">{toPercent(s.low)}</td>
-                <td className="px-3 py-2 text-fg-muted">{toPercent(s.high)}</td>
+                <td className="px-3 py-2 text-content-muted">{toPercent(s.low)}</td>
+                <td className="px-3 py-2 text-content-muted">{toPercent(s.high)}</td>
                 <td className="px-3 py-2">
                   {toPercent(s.spread)}
-                  {s.flat && <span className="ml-2 text-fg-muted">barely varies</span>}
+                  {s.flat && <span className="ml-2 text-content-muted">barely varies</span>}
                 </td>
               </tr>
             ))}
@@ -525,7 +525,7 @@ function SpreadPanel({
 }
 
 /**
- * "Learn from your presses" (ADR-0045): weights fitted to the Want / Like / Nope presses on Home's
+ * "Learn from your presses": weights fitted to the Want / Like / Nope presses on Home's
  * Discovery picks, with how well they fit and a link that puts them on the sliders. The presses
  * are read once when the lab opens; the fit runs once for them, not on every slider move.
  */
@@ -533,7 +533,7 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
   const feedback = useFeedbackLog()
   const [entries] = useState(() => feedback?.list() ?? [])
   const { counts, learned } = useMemo(() => learnWeights(entries, SCORER_VERSION), [entries])
-  // Want and Like are both a yes (ADR-0050).
+  // Want and Like are both a yes.
   const yes = counts.want + counts.like
   const presses = yes + counts.nope
   const enough = presses >= MIN_PRESSES && yes >= MIN_EACH && counts.nope >= MIN_EACH
@@ -548,12 +548,12 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
   return (
     <section
       aria-labelledby="learned"
-      className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4"
+      className="grid gap-2.5 rounded-card border-2 border-card-border bg-card-background p-4"
     >
       <h3 id="learned" className="text-sm font-bold">
         Learn from your presses
       </h3>
-      <p className="text-sm text-fg-muted">
+      <p className="text-sm text-content-muted">
         Want {counts.want} · More {counts.like} · Less {counts.nope}. Want and More both count as a
         yes.
         {counts.older > 0 &&
@@ -574,15 +574,15 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
             {SCORE_PARTS.map((p) => (
               <li key={p} className="flex justify-between gap-3">
                 <span>{PARTS[p].label}</span>
-                <span className="text-fg-muted">{toPercent(learned.weights[p])}%</span>
+                <span className="text-content-muted">{toPercent(learned.weights[p])}%</span>
               </li>
             ))}
             <li className="flex justify-between gap-3">
               <span>Dislike penalty</span>
-              <span className="text-fg-muted">{toPercent(learned.dislikePenalty)}</span>
+              <span className="text-content-muted">{toPercent(learned.dislikePenalty)}</span>
             </li>
           </ul>
-          <p className="text-sm text-fg-muted">
+          <p className="text-sm text-content-muted">
             These call {toPercent(learned.accuracy)}% of your presses right; always guessing the
             more common one would get {toPercent(learned.baseline)}%. It learned from the same
             presses, so treat it as a starting point.
@@ -591,7 +591,7 @@ function LearnedPanel({ params }: { params: URLSearchParams }) {
             to={`/lab/weights?${apply.toString()}`}
             replace
             preventScrollReset
-            className="inline-flex min-h-11 w-fit items-center border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-accent"
+            className="inline-flex min-h-11 w-fit items-center border-2 border-button-secondary-border px-3.5 font-display text-base tracking-widest case-display hover:border-border-accent"
           >
             Use these weights
           </Link>

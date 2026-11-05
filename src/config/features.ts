@@ -3,11 +3,11 @@
 
 /** Every feature flag and what it controls. */
 export type Features = {
-  /** "Tune my picks" onboarding (/tune and the header heart). Off until the flow is reworked (2026-10-06). */
+  /** "Tune my picks" onboarding (/tune and the header heart). Off until the flow is reworked. */
   onboarding: boolean
   /**
    * The design and tuning labs (/lab/vhs, /lab/weights) and Discover's "Tune the weights" link.
-   * Dev server only, never on the live site (owner, 2026-10-09). It's `import.meta.env.DEV`, so
+   * Dev server only, never on the live site. It's `import.meta.env.DEV`, so
    * a production build leaves the labs' code out entirely (see router.tsx). Tests can turn it off.
    */
   labs: boolean

@@ -1,4 +1,4 @@
-// The footer's theme chooser (ADR-0056): a native select listing every theme in tokens/themes/
+// The footer's theme chooser: a native select listing every theme in tokens/src/themes/
 // (generated into src/styles/themes.ts), so a new theme appears here without code changes.
 // Native rather than React Aria's Select: it ships no extra code with every page, and the
 // browser's own picker is accessible on every platform and follows the theme's color scheme.
@@ -25,7 +25,7 @@ export function ThemePicker({ className = '' }: { className?: string }) {
           setTheme(e.target.value)
           void switchTheme(e.target.value)
         }}
-        className="rounded-field border-2 border-field-border bg-field-bg px-2 py-1 font-label text-sm text-fg hover:border-field-border-focus"
+        className="rounded-field border-2 border-field-border bg-field-background px-2 py-1 font-label text-sm text-content hover:border-field-border-focus"
       >
         {THEMES.map((t) => (
           <option key={t.id} value={t.id}>

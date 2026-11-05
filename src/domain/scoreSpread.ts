@@ -1,4 +1,4 @@
-// How spread out the scorer's numbers are (ADR-0044), for the weights lab's "Score spread" panel.
+// How spread out the scorer's numbers are, for the weights lab's "Score spread" panel.
 //
 // A part that gives every candidate nearly the same value can't change the order. It only lifts
 // every score equally, which is what made every "% match" read alike before scorer v4. This
@@ -22,7 +22,7 @@ export const FLAT_SPREAD = 0.05
 
 /** One part's spread across the candidates. Everything is 0–1, like the parts themselves. */
 export interface PartSpread {
-  /** A score part, or `'penalty'` for the dislike penalty (ADR-0044). */
+  /** A score part, or `'penalty'` for the dislike penalty. */
   part: ScorePart | 'penalty'
   low: number
   high: number

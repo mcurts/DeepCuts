@@ -1,4 +1,4 @@
-// Passkey sign-up and sign-in (ADR-0031, Stage 6 A2), built on @simplewebauthn/server.
+// Passkey sign-up and sign-in (Stage 6 A2), built on @simplewebauthn/server.
 //
 // Each flow is two requests:
 // 1. `…/options`: the server stores a single-use challenge (5 minutes) and returns the options the
@@ -157,7 +157,7 @@ export async function registerOptions(request: Request, env: AccountsEnv, now = 
     })),
     // A discoverable credential, so sign-in needs no username. User verification (fingerprint,
     // face or PIN) is only preferred: devices that can will still ask, but it isn't enforced,
-    // because accounts are test-only invites (owner decision, 2026-10-07).
+    // because accounts are test-only invites.
     authenticatorSelection: { residentKey: 'required', userVerification: 'preferred' },
   })
 
@@ -182,7 +182,7 @@ const verifySchema = z.object({
 /**
  * `POST /api/auth/register/verify` `{ challengeId, response }`: verifies the new passkey, then in
  * one D1 batch creates the user (unless recovering), claims the invite, stores the passkey and
- * starts a session. A failed batch is reported to the error log (ADR-0058): it usually means D1
+ * starts a session. A failed batch is reported to the error log: it usually means D1
  * failed, though it's also how a lost race for one invite ends.
  */
 export async function registerVerify(

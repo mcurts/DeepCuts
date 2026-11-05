@@ -1,4 +1,4 @@
-// The ticker band under the header on Home and the landing page (ADR-0040): a mustard strip of
+// The ticker band under the header on Home and the landing page: a mustard strip of
 // live, real information (counts, the top pick, what each feature does), never filler.
 //
 // It is still by default. It only scrolls once a mouse pointer has rested on it for a second
@@ -60,7 +60,7 @@ export function Ticker({ items, loading = false }: { items: string[]; loading?: 
   }
 
   const band =
-    'mx-[calc(50%-50vw)] -mt-5 mb-8 overflow-hidden border-y-3 border-surface bg-accent py-2 font-display text-lg tracking-widest whitespace-nowrap text-fg-on-accent case-display md:-mt-6'
+    'mx-[calc(50%-50vw)] -mt-5 mb-8 overflow-hidden border-y-3 border-background bg-accent-background py-2 font-display text-lg tracking-widest whitespace-nowrap text-accent-content case-display md:-mt-6'
   if (items.length === 0) {
     // The empty band: one line's height (a no-break space), nothing to read.
     return loading ? (

@@ -1,4 +1,4 @@
-// The checks `npm run deploy` (scripts/deploy.mjs) makes before it uploads anything (ADR-0029).
+// The checks `npm run deploy` (scripts/deploy.mjs) makes before it uploads anything.
 // Pure functions over plain facts (git state, the config text), so they're unit-tested here and the
 // script only gathers the facts and acts on the answer.
 //
@@ -13,7 +13,7 @@ export const PLACEHOLDER_DATABASE_ID = '00000000-0000-0000-0000-000000000000'
 
 /**
  * Pages secrets the production API needs. CANONICAL_HOST is the site address for the host pin,
- * kept out of the public repo (ADR-0047); without it every /api/* request gets a 500.
+ * kept out of the public repo; without it every /api/* request gets a 500.
  */
 export const REQUIRED_SECRETS = ['CANONICAL_HOST'] as const
 

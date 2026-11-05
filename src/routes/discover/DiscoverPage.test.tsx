@@ -1,7 +1,7 @@
-// Tests for Home (signed in): its three shelves in order (ADR-0040), the Top Ten in its ranked
-// order with the next open slot (ADR-0036) and its reorder mode (ADR-0041), the ticker, and the
-// Discovery panel: the deep-cuts starter shelf without likes (ADR-0042), scored picks with a match and the reason with
-// likes or a Top Ten (ADR-0043), and the quick actions on each pick (issue #76).
+// Tests for Home (signed in): its three shelves in order, the Top Ten in its ranked
+// order with the next open slot and its reorder mode, the ticker, and the
+// Discovery panel: the deep-cuts starter shelf without likes, scored picks with a match and the reason with
+// likes or a Top Ten, and the quick actions on each pick (issue #76).
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react'
@@ -59,7 +59,7 @@ describe('home', () => {
     expect(router.state.location.pathname).toBe('/')
   })
 
-  it('starts a new account on acclaimed, lesser-known older films, not popular ones (ADR-0042)', async () => {
+  it('starts a new account on acclaimed, lesser-known older films, not popular ones', async () => {
     let url: URL | undefined
     server.use(
       http.get('/api/tmdb/discover/movie', ({ request }) => {
@@ -119,7 +119,7 @@ describe('home', () => {
       await screen.findByRole('heading', { level: 1, name: 'Your movies, close at hand' }),
     ).toBeInTheDocument()
     expect(await firstPick()).toHaveAccessibleName(/^The Thing/)
-    // The big featured card is gone (owner, 2026-10-09): the top pick is the first cassette.
+    // The big featured card is gone: the top pick is the first cassette.
     expect(screen.queryByText(/featured deep cut/i)).not.toBeInTheDocument()
     const panel = screen.getByRole('region', { name: 'Discover Some Deep Cuts' })
     const alien = within(panel).getByRole('link', { name: /Alien.*1979 · Horror/ })
@@ -167,7 +167,7 @@ describe('home', () => {
     expect(links[0]?.querySelector('[aria-hidden="true"]')).toHaveTextContent('#1')
   })
 
-  describe('reordering the Top Ten (ADR-0041)', () => {
+  describe('reordering the Top Ten', () => {
     /** Seeds the demo account's Top Ten: Alien, The Thing, then a third film (790). */
     async function seed() {
       const topTen = createLocalTopTenRepository('account-demo-top-ten')
@@ -321,7 +321,7 @@ describe('home', () => {
     )
   })
 
-  it('shows the watchlist in the order you chose on My Lists (ADR-0041)', async () => {
+  it('shows the watchlist in the order you chose on My Lists', async () => {
     const tags = createLocalTagRepository(undefined, undefined, 'account-demo-tags')
     for (const id of [348, 1091]) await tags.setTag(id, 'watchlist', true)
     // Newest first would be The Thing, then Alien; the saved order puts Alien first.
@@ -336,7 +336,7 @@ describe('home', () => {
     expect(films).toEqual(['/movie/348', '/movie/1091'])
   })
 
-  it('leaves disliked films out of the feed (ADR-0017)', async () => {
+  it('leaves disliked films out of the feed', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/movie/1091')
     const group = await screen.findByRole('group', { name: 'Your tags' })
@@ -417,7 +417,7 @@ describe('home', () => {
       expect(await tags.getTags(348)).toEqual(new Set(['disliked']))
     })
 
-    it('saves a press on a tuned pick with its scores, and Undo takes it back (ADR-0045)', async () => {
+    it('saves a press on a tuned pick with its scores, and Undo takes it back', async () => {
       const user = userEvent.setup()
       const tags = createLocalTagRepository(undefined, undefined, 'account-demo-tags')
       await tags.setTag(1091, 'liked', true)
@@ -482,7 +482,7 @@ describe('home', () => {
   })
 
   it.each(['?genres=27,53', '?genres=27;DROP', '?genres='])(
-    'ignores %s: favourite genres are gone (ADR-0032)',
+    'ignores %s: favourite genres are gone',
     async (qs) => {
       renderRoute(`/${qs}`)
       expect(
@@ -492,7 +492,7 @@ describe('home', () => {
   )
 })
 
-describe('home with likes (ADR-0026)', () => {
+describe('home with likes', () => {
   it('ranks films recommended by your likes, with a real match and the reason', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/movie/1091')
@@ -521,7 +521,7 @@ describe('home with likes (ADR-0026)', () => {
     )
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
-    // The re-rank loaded the top candidates' directors (ADR-0028): The Fog shares John Carpenter
+    // The re-rank loaded the top candidates' directors: The Fog shares John Carpenter
     // with The Thing, which lifts it to the top spot.
     expect(feature).toHaveTextContent('The Fog')
     // Picks only appear once both passes are in, so the top pick never changes under you.
@@ -538,7 +538,7 @@ describe('home with likes (ADR-0026)', () => {
     expect(screen.queryByRole('link', { name: /^The Thing/ })).not.toBeInTheDocument()
   })
 
-  it('sums the lists up in the ticker: real counts and the top pick, no zeros (ADR-0040)', async () => {
+  it('sums the lists up in the ticker: real counts and the top pick, no zeros', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/movie/1091')
     const group = await screen.findByRole('group', { name: 'Your tags' })
@@ -561,7 +561,7 @@ describe('home with likes (ADR-0026)', () => {
   })
 })
 
-describe('home with a Top Ten (ADR-0043)', () => {
+describe('home with a Top Ten', () => {
   it('tunes the picks from your Top Ten alone, and never suggests a Top Ten film', async () => {
     // The Thing is in the Top Ten but has no tags at all.
     await createLocalTopTenRepository('account-demo-top-ten').add(1091)
@@ -593,7 +593,7 @@ describe('home with a Top Ten (ADR-0043)', () => {
   })
 })
 
-describe('home with a liked film in a series (ADR-0032, ADR-0037)', () => {
+describe('home with a liked film in a series', () => {
   it('suggests the next released film in the series, not later ones or an announced one', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/movie/4488')
@@ -622,7 +622,7 @@ describe('home with a liked film in a series (ADR-0032, ADR-0037)', () => {
   })
 })
 
-describe('home over the rate limit (ADR-0029)', () => {
+describe('home over the rate limit', () => {
   it('asks for a film the limiter refused once more at most, not on every re-render', async () => {
     // The Thing is in the Top Ten; every film it recommends is refused with a 429, as when a
     // reload goes over the per-client limit.

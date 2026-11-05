@@ -1,8 +1,8 @@
 // The heading block at the top of every main page: an optional label, the poster-style headline
-// and a lede (ADR-0040).
+// and a lede.
 import { Eyebrow } from './Eyebrow'
 
-// Headline sizes from the dossier's scale (ADR-0040 §3) on Tailwind's: the landing page's poster
+// Headline sizes from the dossier's scale on Tailwind's: the landing page's poster
 // headline (about 64-124px there), Home's (48-88px) and every other page's.
 const SIZES = {
   poster: 'text-6xl md:text-8xl lg:text-9xl',
@@ -42,16 +42,18 @@ export function PageHeading({
         {highlight && (
           <>
             {' '}
-            <span className={`text-highlight text-shadow-hard ${size === 'poster' ? 'block' : ''}`}>
+            <span
+              className={`text-content-highlight text-shadow-hard ${size === 'poster' ? 'block' : ''}`}
+            >
               {highlight}
             </span>
           </>
         )}
       </h1>
-      {/* As wide as the headline and the content below it (owner, 2026-10-26): a narrower measure
+      {/* As wide as the headline and the content below it: a narrower measure
           left Home's one-line lede wrapping before its last word. text-pretty keeps a lone last
           word off its own line where it does wrap. */}
-      {lede && <p className="mt-4 text-lg text-pretty text-fg-soft">{lede}</p>}
+      {lede && <p className="mt-4 text-lg text-pretty text-content-soft">{lede}</p>}
     </div>
   )
 }

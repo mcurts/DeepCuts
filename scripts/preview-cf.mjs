@@ -1,9 +1,8 @@
-// `npm run preview:cf`: runs the built app on Cloudflare's real runtime, locally (ADR-0029,
-// Stage 4 H9). Nothing is deployed and no Cloudflare account is needed.
+// `npm run preview:cf`: runs the built app on Cloudflare's real runtime, locally. Nothing is deployed and no Cloudflare account is needed.
 //
 // Starts three local processes and stops them together:
 // 1. the rate-limit Worker (workers/rate-limit/) with `wrangler dev`, on port 8790;
-// 2. the error-log Worker (workers/error-log/, ADR-0058), on port 8791, which prints error lines
+// 2. the error-log Worker (workers/error-log/), on port 8791, which prints error lines
 //    here;
 // 3. the Pages project (`dist/` + `functions/`) with `wrangler pages dev`, on port 8788. Its
 //    RATE_LIMITER and ERROR_LOG service bindings find the Workers through Wrangler's local dev
@@ -15,7 +14,7 @@
 // - PREVIEW_CF_PORT changes the Pages port (default 8788).
 //
 // The API's site address (CANONICAL_HOST) is a Pages secret in production and isn't in
-// wrangler.toml (ADR-0047), so this sets a stand-in, `deep-cuts.example`. That keeps the host pin
+// wrangler.toml, so this sets a stand-in, `deep-cuts.example`. That keeps the host pin
 // on locally (the API refuses to run without one), and e2e/hosting.spec.ts tests it with that host.
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'

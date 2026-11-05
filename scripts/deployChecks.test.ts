@@ -45,7 +45,7 @@ describe('deployProblems', () => {
     expect(deployProblems(clean, toml, secrets)[0]).toMatch(/placeholder D1 database_id/)
   })
 
-  it('refuses a missing CANONICAL_HOST secret (ADR-0047)', () => {
+  it('refuses a missing CANONICAL_HOST secret', () => {
     expect(deployProblems(clean, config, ['TMDB_READ_TOKEN'])[0]).toMatch(
       /secret put CANONICAL_HOST/,
     )

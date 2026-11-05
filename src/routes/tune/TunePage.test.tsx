@@ -1,5 +1,5 @@
 // Tests for the optional "Tune my picks" onboarding: hidden while its feature flag is off, and
-// (with the flag turned on) each of the two steps. No genre step since ADR-0032.
+// (with the flag turned on) each of the two steps. There's no genre step.
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react'

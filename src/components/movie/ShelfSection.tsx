@@ -1,4 +1,4 @@
-// One of Home's three full-width shelves (ADR-0040 §6b): the section-header pattern (a "Feature
+// One of Home's three full-width shelves: the section-header pattern (a "Feature
 // Nº n" label over the heading, a mustard dashed rule, and something on the right), then the
 // films in a grid that fills the row with VHS boxes and wraps as the list grows.
 import type { ReactNode, RefObject } from 'react'
@@ -17,7 +17,7 @@ export const SHELF_GRID =
  * A shelf on Home: a labelled `<section>` with the header pattern, then its content.
  * @param feature - Its number on the bill, shown as "Feature Nº 1".
  * @param to - Where the heading leads, when the shelf previews a longer list (the watchlist):
- *   the heading itself is the link (owner, 2026-10-13), not a separate "See all".
+ *   the heading itself is the link, not a separate "See all".
  * @param ref - The `<section>`, e.g. so a reorder mode can listen for Escape inside it.
  * @param icon - A decorative icon before the heading that ties the shelf to its tag elsewhere in
  *   the app: the watchlist's bookmark, the Top Ten's star.
@@ -55,7 +55,10 @@ export function ShelfSection({
           >
             {icon}
             {to ? (
-              <Link to={to} className="underline-offset-8 hover:text-accent hover:underline">
+              <Link
+                to={to}
+                className="underline-offset-8 hover:text-content-accent hover:underline"
+              >
                 {title}
               </Link>
             ) : (

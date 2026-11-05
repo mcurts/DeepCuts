@@ -131,7 +131,7 @@ describe('certification', () => {
 })
 
 describe('discover', () => {
-  it('asks the allowlisted endpoint for popular films, with no genre filter (ADR-0032)', async () => {
+  it('asks the allowlisted endpoint for popular films, with no genre filter', async () => {
     let url: URL | undefined
     server.use(
       http.get('/api/tmdb/discover/movie', ({ request }) => {
@@ -145,7 +145,7 @@ describe('discover', () => {
   })
 })
 
-describe('deep cuts (ADR-0042)', () => {
+describe('deep cuts', () => {
   it('asks for well-rated films with a modest vote count, released over ten years ago', async () => {
     let url: URL | undefined
     server.use(
@@ -166,7 +166,7 @@ describe('deep cuts (ADR-0042)', () => {
   })
 })
 
-describe('collections (ADR-0032)', () => {
+describe('collections', () => {
   it('reads a series and its films', async () => {
     const series = await tmdb.collection(9735)
     expect(series.name).toBe('Friday the 13th Collection')

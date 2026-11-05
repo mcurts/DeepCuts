@@ -1,4 +1,4 @@
-// The error a failed accounts API call throws (ADR-0031). In its own module so screens can check
+// The error a failed accounts API call throws. In its own module so screens can check
 // for it (e.g. a refused invite) without loading the passkey library with it.
 
 /** A failed accounts API call. `code` is the server's short error code (e.g. `invalid_invite`). */

@@ -1,10 +1,10 @@
-// Tag rules (ADR-0050, which replaced ADR-0017's rules): the single source of truth for how the
-// three tags interact (ADR-0013). Every place that changes tags (the local store and the accounts
+// Tag rules: the single source of truth for how the
+// three tags interact. Every place that changes tags (the local store and the accounts
 // API) goes through `applyTag`, so the rules can't drift between storage adapters.
 //
 // The rule, in plain words: a film carries at most one tag. Want to see, Like and Dislike are three
 // answers to "what do you think of this film?", so picking one clears the other two. Taking a tag
-// off leaves the film with none. ("Seen it" was retired by ADR-0050.)
+// off leaves the film with none.
 
 /** The three tags a person can put on a film, in display order. */
 export const SYSTEM_TAGS = ['watchlist', 'liked', 'disliked'] as const
@@ -35,7 +35,7 @@ export function isInFeeds(tags: TagSet): boolean {
 
 /**
  * Whether a film shows on a given list in My Lists. A disliked film appears only on the
- * Disliked list, even if it somehow carries another tag (e.g. data saved before ADR-0050).
+ * Disliked list, even if it somehow carries another tag (e.g. data saved by an older version).
  */
 export function isOnList(tags: TagSet, list: SystemTag): boolean {
   return tags.has(list) && (list === 'disliked' || isInFeeds(tags))

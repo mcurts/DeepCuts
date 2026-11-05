@@ -1,9 +1,9 @@
-// Session context (ADR-0016): makes the current session, and the tag and Top Ten stores that
+// Session context: makes the current session, and the tag and Top Ten stores that
 // belong to it, available to every screen through `useSession()`.
 //
 // Screens never pick a store themselves: a demo or practice account gets its own localStorage
-// store, a passkey account gets its lists on the server (ADR-0031), and signed out gets an empty
-// store that refuses writes (ADR-0034). AppSessionProvider fills this context.
+// store, a passkey account gets its lists on the server, and signed out gets an empty
+// store that refuses writes. AppSessionProvider fills this context.
 import { createContext, useContext } from 'react'
 import type {
   Registration,
@@ -24,7 +24,7 @@ export interface SessionValue {
   sessionEnded: boolean
   /** Demo or practice: localStorage. Passkey account: the server. Signed out: empty, read-only. */
   tags: TagRepository
-  /** The Top Ten (ADR-0036), stored in the same place as `tags`. Signed out: empty, read-only. */
+  /** The Top Ten, stored in the same place as `tags`. Signed out: empty, read-only. */
   topTen: TopTenRepository
   /** The sign-in options to show on the sign-in page. */
   signInMethods: readonly SignInMethod[]

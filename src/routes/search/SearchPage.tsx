@@ -1,7 +1,7 @@
 // The Search page (/search, the landing page): results for the header search, with quick add.
 //
 // The header search field writes `?q=` into the URL; this page reads it and lists every match,
-// so a search can be bookmarked or shared (ADR-0014).
+// so a search can be bookmarked or shared.
 import { useQuery } from '@tanstack/react-query'
 import { ToggleButton } from 'react-aria-components'
 import { useSearchParams } from 'react-router'
@@ -16,7 +16,7 @@ import { genreTone, primaryGenreName } from '@/domain/genres'
 import { notify, notifyTagged, TAG_ERROR } from '@/notify'
 import { useSetTag, useTagQueries } from '@/session/tagQueries'
 
-// ?q= is untrusted input: trimmed and capped before use (ADR-0014). The header search writes it.
+// ?q= is untrusted input: trimmed and capped before use. The header search writes it.
 const searchParamsSchema = z.object({ q: z.string().max(100).catch('').default('') })
 
 /** The Search page. */
@@ -36,7 +36,7 @@ export function SearchPage() {
         lede="Open a film for details, or add it straight to Want to see."
       />
       {/* One status line, announced to screen readers as it changes. */}
-      <p role="status" className="mb-3 text-sm text-fg-muted">
+      <p role="status" className="mb-3 text-sm text-content-muted">
         {isError
           ? 'Search is unavailable right now. Try again in a moment.'
           : isFetching
@@ -68,7 +68,7 @@ function ResultRow({ movie }: { movie: MovieSummary }) {
   return (
     <li
       style={genreTone(movie.genre_ids)}
-      className="grid min-w-0 gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-4 md:p-4"
+      className="grid min-w-0 gap-2.5 rounded-card border-2 border-card-border bg-card-background p-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-4 md:p-4"
     >
       <MovieLink movie={movie} meta={meta} disliked={tags?.has('disliked') ?? false} />
       <ToggleButton
@@ -83,7 +83,7 @@ function ResultRow({ movie }: { movie: MovieSummary }) {
           )
         }
         aria-label={`Want to see ${movie.title}`}
-        className="inline-flex h-11 w-36 shrink-0 items-center justify-center gap-2 justify-self-end rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 font-display text-base tracking-widest whitespace-nowrap text-button-secondary-fg case-display hover:border-accent data-selected:border-accent data-selected:bg-accent data-selected:text-fg-on-accent"
+        className="inline-flex h-11 w-36 shrink-0 items-center justify-center gap-2 justify-self-end rounded-button border-2 border-button-secondary-border bg-button-secondary-background px-3.5 font-display text-base tracking-widest whitespace-nowrap text-button-secondary-content case-display hover:border-border-accent data-selected:border-border-accent data-selected:bg-accent-background data-selected:text-accent-content"
       >
         <Icon name={wanted ? 'check' : 'bookmark'} />
         {wanted ? 'Added' : 'Add to list'}
