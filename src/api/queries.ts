@@ -1,4 +1,4 @@
-// TMDB reads through TanStack Query (ADR-0015): caching, de-duplication and cancellation.
+// TMDB reads through TanStack Query: caching, de-duplication and cancellation.
 //
 // Each entry pairs a cache key with the call that fills it. Screens use them as
 // `useQuery(movieQueries.detail(id))`; two screens asking for the same film share one request.
@@ -6,11 +6,11 @@ import { queryOptions } from '@tanstack/react-query'
 import { tmdb } from './tmdb'
 
 const HOUR = 60 * 60 * 1000
-// The starter shelf picks from TMDB's first ten pages of deep cuts (ADR-0042): about 200 films,
+// The starter shelf picks from TMDB's first ten pages of deep cuts: about 200 films,
 // the better-known end of the ~120 pages, so newcomers meet films they may recognise.
 const DEEP_CUT_PAGES = 10
 
-// Movie metadata rarely changes, so TMDB queries stay fresh for a long time (ADR-0015).
+// Movie metadata rarely changes, so TMDB queries stay fresh for a long time.
 export const movieQueries = {
   /** Title search. Waits for at least two characters, so a single letter doesn't search. */
   search: (query: string) =>
@@ -28,7 +28,7 @@ export const movieQueries = {
       staleTime: HOUR,
     }),
   /**
-   * Discovery's starter shelf before any likes (ADR-0042): one random page of the first ten, so
+   * Discovery's starter shelf before any likes: one random page of the first ten, so
    * new visits see different films. The page is picked when the query runs, so the shelf holds
    * still for the hour the result stays fresh.
    */
@@ -39,21 +39,21 @@ export const movieQueries = {
         tmdb.deepCuts(1 + Math.floor(Math.random() * DEEP_CUT_PAGES), signal),
       staleTime: HOUR,
     }),
-  /** Well-rated films with one keyword, for the scorer's keyword candidates (ADR-0038). */
+  /** Well-rated films with one keyword, for the scorer's keyword candidates. */
   byKeyword: (keywordId: number) =>
     queryOptions({
       queryKey: ['tmdb', 'keyword', keywordId],
       queryFn: ({ signal }) => tmdb.byKeyword(keywordId, signal),
       staleTime: 24 * HOUR,
     }),
-  /** A film series' films, for the scorer's series candidates (ADR-0032). */
+  /** A film series' films, for the scorer's series candidates. */
   collection: (id: number) =>
     queryOptions({
       queryKey: ['tmdb', 'collection', id],
       queryFn: ({ signal }) => tmdb.collection(id, signal),
       staleTime: 24 * HOUR,
     }),
-  /** One film's details (also feeds the recommendation scorer, ADR-0026). */
+  /** One film's details (also feeds the recommendation scorer). */
   detail: (id: number) =>
     queryOptions({
       queryKey: ['tmdb', 'movie', id],

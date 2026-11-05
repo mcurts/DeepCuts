@@ -1,4 +1,4 @@
-// End-to-end checks for the pre-rendered landing page (ADR-0057): the built index.html shows the
+// End-to-end checks for the pre-rendered landing page: the built index.html shows the
 // signed-out landing page before any JavaScript runs, hides it wherever the visit will show
 // something else, and the app takes over from it without moving anything on screen.
 import { expect, test } from './fixtures'

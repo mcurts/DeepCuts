@@ -1,7 +1,7 @@
-// Provides the session to the whole app (ADR-0016, ADR-0025, ADR-0034).
+// Provides the session to the whole app.
 //
 // It owns two things: the session provider (who is signed in) and the current session. From the
-// session it picks the tag store and the Top Ten store (ADR-0036), which always live together: a passkey account's lists live on the server (ADR-0031), the
+// session it picks the tag store and the Top Ten store, which always live together: a passkey account's lists live on the server, the
 // demo and practice accounts' lists in this browser, and signed out there is an empty store that
 // refuses writes. Nothing moves between stores: there is no guest or device profile to move from.
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,7 +27,7 @@ interface Props {
   provider?: SessionProvider
   /** Opens a demo or practice account's tag store in this browser, under `key`. */
   createLocalTags?: (key: string) => TagRepository
-  /** Opens a passkey account's tag store on the server (ADR-0031); tests inject a fake. */
+  /** Opens a passkey account's tag store on the server; tests inject a fake. */
   createRemoteTags?: () => TagRepository
   /** Opens a demo or practice account's Top Ten in this browser, under `key`. */
   createLocalTopTen?: (key: string) => TopTenRepository
@@ -63,7 +63,7 @@ export function AppSessionProvider({
     setSession(SIGNED_OUT)
   }, [])
   useSessionEnded(session, endSession)
-  // Tells the next visit's boot script whether to hide the pre-rendered landing page (ADR-0057).
+  // Tells the next visit's boot script whether to hide the pre-rendered landing page.
   // Every route to a session change (sign-in, sign-out, the server ending it) passes through here.
   const signedIn = session.kind === 'account'
   useEffect(() => saveSignedInHint(signedIn), [signedIn])

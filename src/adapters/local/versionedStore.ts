@@ -1,4 +1,4 @@
-// Safe localStorage access (ADR-0013): one value per key, versioned and validated.
+// Safe localStorage access: one value per key, versioned and validated.
 //
 // Everything this app keeps in the browser goes through here. Keys carry a version prefix
 // (`deepcuts:v1:`) so a future data shape can live beside the old one and be migrated. Stored

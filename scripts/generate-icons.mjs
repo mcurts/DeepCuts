@@ -1,4 +1,4 @@
-// Generates the app icons in public/ from the brand tokens (ADR-0040; artwork:
+// Generates the app icons in public/ from the brand tokens (artwork:
 // docs repo: design/triple-feature/deep-cuts-favicon.svg). Run `npm run icons` after changing either.
 //
 // The icon is the "DC" monogram on a split tile: a blood-red left half with a bone D, and a bone
@@ -16,20 +16,21 @@
 import { chromium } from '@playwright/test'
 import { readFileSync, writeFileSync } from 'node:fs'
 
-const tokens = JSON.parse(readFileSync('build/tokens/tokens.json', 'utf8'))
+// The default theme's resolved values, written by the token build (npm run tokens).
+const tokens = JSON.parse(readFileSync('tokens/dist/json/deep-cuts.json', 'utf8')).default
 const color = {
-  // The default theme's logo roles (ADR-0056): first block, its letters, second block, its letters.
-  red: tokens['brand-logo-primary'],
-  bone: tokens['brand-logo-on-primary'],
-  boneBlock: tokens['brand-logo-secondary'],
-  ink: tokens['brand-logo-on-secondary'],
+  // The default theme's logo roles: first block, its letters, second block, its letters.
+  red: tokens['theme-logo-primary'],
+  bone: tokens['theme-logo-primary-content'],
+  boneBlock: tokens['theme-logo-secondary'],
+  ink: tokens['theme-logo-secondary-content'],
   // The Halloween icon (October; src/components/layout/seasonalLogos.ts) wears the lit Halloween
   // wordmark's colors: purple and orange blocks, an orange D.
-  litDeep: tokens['brand-halloween-lit-deep'],
-  litCuts: tokens['brand-halloween-lit-cuts'],
-  litLetters: tokens['brand-halloween-lit-letters'],
+  litDeep: tokens['theme-logo-halloween-lit-deep'],
+  litCuts: tokens['theme-logo-halloween-lit-cuts'],
+  litLetters: tokens['theme-logo-halloween-lit-letters'],
   // The app's page color, for the home-screen splash and browser UI.
-  surface: tokens['color-surface-default'],
+  surface: tokens['theme-color-background-default'],
 }
 
 // The two letters on the wordmark's 50×100 grid, scaled to 48% and leaned 8° like the wordmark.

@@ -1,4 +1,4 @@
-// `npm run invite`: creates a sign-up invite and prints its link (ADR-0031, Stage 6 A5).
+// `npm run invite`: creates a sign-up invite and prints its link (Stage 6 A5).
 //
 //   npm run invite                         a 7-day invite in the LOCAL database (wrangler pages dev)
 //   npm run invite -- --days 3             a different lifetime (1–30 days)
@@ -33,7 +33,7 @@ if (!base) {
 }
 
 if (remote) {
-  // Writing to the live database is deliberate and owner-only (ADR-0024, ADR-0031).
+  // Writing to the live database is deliberate and owner-only.
   console.warn(
     '\n⚠  --remote writes an invite to the LIVE Cloudflare D1 database (deep-cuts).\n' +
       '   It needs your own `wrangler login`. Anyone with the link can create an account.\n',

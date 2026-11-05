@@ -1,5 +1,5 @@
 // Tests for the VHS genre sticker: it shows the first known genre's short label, stays hidden from
-// screen readers, is 54px at the same −10° slant on every film (ADR-0040), gives each film its
+// screen readers, is 54px at the same −10° slant on every film, gives each film its
 // own wear filter, and renders nothing without a known genre. Its shadow falls downward, a little
 // differently for each genre.
 import { render } from '@testing-library/react'

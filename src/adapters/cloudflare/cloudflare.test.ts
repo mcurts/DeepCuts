@@ -1,4 +1,4 @@
-// Tests for the Cloudflare adapters (ADR-0031, Stage 6 A4): both pass the shared contract suites
+// Tests for the Cloudflare adapters (Stage 6 A4): both pass the shared contract suites
 // against a fake accounts API (MSW), and handle what's specific to them: the passkey prompt being
 // cancelled, server errors, the demo staying on the device, rename/delete, the 30-second reuse
 // of fetched tags, and the "session ended" signal on a 401 (issue #18). The browser's passkey
@@ -44,7 +44,7 @@ describe('TagRepository contract: CloudflareTagRepository', () => {
 })
 
 describe('CloudflareSessionProvider', () => {
-  it('offers the passkey first and keeps the demo account (ADR-0025)', () => {
+  it('offers the passkey first and keeps the demo account', () => {
     expect(
       createCloudflareSessionProvider()
         .signInMethods()
@@ -194,7 +194,7 @@ describe('CloudflareTagRepository', () => {
     )
   })
 
-  it('ADR-0050: skips "Seen it" rows the server still holds instead of failing', async () => {
+  it('skips "Seen it" rows the server still holds instead of failing', async () => {
     const at = '2026-10-01T12:00:00.000Z'
     server.use(
       http.get('/api/tags', () =>

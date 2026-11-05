@@ -1,18 +1,18 @@
 // The VHS genre sticker: a small round, sun-faded, shelf-worn genre label in the top-right corner
 // of a poster, like the price-gun dots video rental stores stuck on tape boxes.
-// Design approved 2026-10-07 (option C, "shelf-worn", without the peeled corner or printed ring).
+// The "shelf-worn" look, without a peeled corner or a printed ring.
 //
 // Colors come from tokens: the film's genre tone (`--tone`, set by genreTone() on a parent) and
-// the sticker's paper and ink (tokens/component/sticker.json). The look of the face is the
+// the sticker's paper and ink (tokens/src/tier-3-component/sticker.json). The look of the face is the
 // `sticker-face` utility in index.css. Purely decorative: the genre is always written under the
 // poster too, so the sticker is hidden from screen readers.
 import { useId } from 'react'
 import { primaryGenre } from '@/domain/genres'
 import { stickerShadow } from './stickerShadow'
 
-// Diameter in pixels (ADR-0040).
+// Diameter in pixels.
 const SIZE = 54
-// Stuck on at the same slant on every box, like a price gun's dots (ADR-0040).
+// Stuck on at the same slant on every box, like a price gun's dots.
 const TILT = -10
 // The printed label: the display face at 11px at most, smaller for long genre names.
 const MAX_FONT = 11
@@ -79,7 +79,7 @@ export function GenreSticker({
         style={{ filter: `url(#${filterId})` }}
       />
       <span
-        className="relative col-start-1 row-start-1 font-display leading-none tracking-wider whitespace-nowrap text-sticker-ink/80 case-display mix-blend-multiply"
+        className="relative col-start-1 row-start-1 font-display leading-none tracking-wider whitespace-nowrap text-sticker-content/80 case-display mix-blend-multiply"
         style={{ fontSize }}
       >
         {genre.label}

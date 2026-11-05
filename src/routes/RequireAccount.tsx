@@ -1,4 +1,4 @@
-// The route guard for every signed-in page (ADR-0034).
+// The route guard for every signed-in page.
 //
 // Signed out, the app is the landing page plus Sign in and Register. Any other page sends the
 // visitor to Sign in, carrying where they were going in history state (`from`, read back by

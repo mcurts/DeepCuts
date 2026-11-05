@@ -1,6 +1,6 @@
-// Local TMDB proxy for `vite dev` and `vite preview` (ADR-0013). A thin adapter: it turns Node's
+// Local TMDB proxy for `vite dev` and `vite preview`. A thin adapter: it turns Node's
 // request into a Fetch `Request`, lets the shared core (core.ts) answer it, and writes the
-// `Response` back. The same core runs on Cloudflare Pages as a Function (ADR-0029), so local and
+// `Response` back. The same core runs on Cloudflare Pages as a Function, so local and
 // hosted behave the same.
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { Connect, Plugin } from 'vite'

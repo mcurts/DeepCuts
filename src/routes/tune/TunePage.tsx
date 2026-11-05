@@ -1,5 +1,5 @@
 // "Tune my picks" (/tune): optional onboarding in two steps (a favorite film → rate a few
-// films). It used to start by asking for favourite genres; ADR-0032 removed that, so taste comes
+// films). It doesn't ask for favourite genres, so taste comes
 // only from tagged films. Hidden behind the `onboarding` feature flag until the flow is reworked.
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
@@ -16,7 +16,7 @@ import { FavoriteStep } from './FavoriteStep'
 import { RateStep } from './RateStep'
 import { useTuneState } from './useTuneState'
 
-/** "Tune my picks": optional two-step onboarding outside the tab-bar shell (ADR-0019). */
+/** "Tune my picks": optional two-step onboarding outside the tab-bar shell. */
 export function TunePage() {
   useRouteFocus()
   const [state, update] = useTuneState()
@@ -58,8 +58,8 @@ export function TunePage() {
       <div
         className={`absolute inset-0 ${
           state.step === 2
-            ? 'bg-surface/80 backdrop-blur-sm'
-            : 'bg-linear-to-b from-surface/10 via-surface/70 via-55% to-surface to-90% md:bg-radial md:from-surface/50 md:via-surface/80 md:to-surface'
+            ? 'bg-background/80 backdrop-blur-sm'
+            : 'bg-linear-to-b from-background/10 via-background/70 via-55% to-background to-90% md:bg-radial md:from-background/50 md:via-background/80 md:to-background'
         }`}
       />
       <header
@@ -87,7 +87,9 @@ export function TunePage() {
           state.step === 2 ? 'md:w-full' : 'md:w-full md:max-w-2xl'
         }`}
       >
-        <p className="mb-3 text-sm font-bold tracking-wide text-fg-muted">Step {state.step} of 2</p>
+        <p className="mb-3 text-sm font-bold tracking-wide text-content-muted">
+          Step {state.step} of 2
+        </p>
         {/* Only the current step renders. */}
         {state.step === 1 && <FavoriteStep state={state} update={update} />}
         {state.step === 2 && <RateStep state={state} update={update} />}

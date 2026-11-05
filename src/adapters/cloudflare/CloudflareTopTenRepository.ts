@@ -1,4 +1,4 @@
-// The Top Ten store for passkey accounts (ADR-0036): the account's list on the server, through
+// The Top Ten store for passkey accounts: the account's list on the server, through
 // `/api/top-ten`. It implements the same TopTenRepository contract as the browser store, so no
 // screen changes; topTenRepository.contract.ts proves the behaviors match.
 //
@@ -46,7 +46,7 @@ async function call(
     // A 401 means the session ended on the server (issue #18): the app signs out.
     reportStatus(res.status)
     // Two 409s are expected outcomes, not failures: `top_ten_full` (the screen shows "full") and
-    // `top_ten_changed` (a reorder for a list that changed elsewhere, ADR-0041).
+    // `top_ten_changed` (a reorder for a list that changed elsewhere).
     const code = res.status === 409 ? errorSchema.safeParse(body).data?.error : undefined
     if (code === 'top_ten_full') throw new TopTenFullError()
     if (code === 'top_ten_changed') throw new TopTenChangedError()

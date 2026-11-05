@@ -43,7 +43,7 @@ export const movieFixture = {
   vote_average: 8.1,
   vote_count: 7200,
   original_language: 'en',
-  // Appended recommendations: the scorer's candidates (ADR-0026).
+  // Appended recommendations: the scorer's candidates.
   recommendations: {
     results: [
       {
@@ -87,7 +87,7 @@ export const movieFixture = {
       },
     ],
   },
-  // Keywords and credits as the proxy returns them (credits trimmed to directors, ADR-0028).
+  // Keywords and credits as the proxy returns them (credits trimmed to directors).
   keywords: {
     keywords: [
       { id: 1599, name: 'antarctica' },
@@ -117,7 +117,7 @@ const WRITERS: Record<number, { id: number; name: string; job: string }[]> = {
     { id: 9, name: 'Debra Hill', job: 'Writer' },
   ],
 }
-// Details for the films The Thing recommends, so the scorer's re-rank (ADR-0028) has keywords
+// Details for the films The Thing recommends, so the scorer's re-rank has keywords
 // and directors to work with: The Fog and Halloween share John Carpenter with The Thing; Alien
 // doesn't. Two Carpenter films put the director reason on a grid tile as well as the feature.
 const DIRECTORS: Record<number, { id: number; name: string; job: string }> = {
@@ -137,7 +137,7 @@ export const candidateDetailFixtures = Object.fromEntries(
   ]),
 )
 
-// A liked film in a series, and the series itself (ADR-0032): liking Friday the 13th brings in its
+// A liked film in a series, and the series itself: liking Friday the 13th brings in its
 // released sequels as candidates. TMDB recommends nothing for it here, so any pick must come from
 // the series. The undated entry is an announced film and must stay out.
 const f13Summary = (id: number, title: string, release_date: string) => ({

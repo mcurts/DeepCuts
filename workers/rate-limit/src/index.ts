@@ -1,4 +1,4 @@
-// The rate-limit Worker (ADR-0029 Stage 4 H4, ADR-0031 Stage 6). Pages Functions can't use
+// The rate-limit Worker. Pages Functions can't use
 // Cloudflare's rate-limit binding directly, so this tiny Worker holds it and the Pages Functions
 // ask it, over a service binding, whether a client may make another request.
 //

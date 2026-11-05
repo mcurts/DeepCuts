@@ -1,0 +1,28 @@
+{
+  "$description": "Tier 3: the VHS rental-store genre sticker on posters (design approved 2026-10-07, option C without the peel). Its color is the film's genre tone, bleached toward the paper.",
+  "component": {
+    "sticker": {
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.print.background}",
+        "$description": "Sticker paper."
+      },
+      "content": {
+        "$type": "color",
+        "$value": "{theme.color.print.content}",
+        "$description": "Ink printed on the sticker.",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["component.sticker.background"],
+            "min": 4.5
+          }
+        }
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{theme.shadow.stamp}",
+        "$description": "Sticker shadow."
+      }
+    }
+  }
+}

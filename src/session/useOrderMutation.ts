@@ -1,4 +1,4 @@
-// Saving a new order for a ranked list (ADR-0041), shared by the Top Ten and the watchlist.
+// Saving a new order for a ranked list, shared by the Top Ten and the watchlist.
 //
 // Optimistic: the cached list becomes the new order at once, so a film moves the moment it's
 // pressed, and is put back if the save fails, with a toast saying so. If the list changed

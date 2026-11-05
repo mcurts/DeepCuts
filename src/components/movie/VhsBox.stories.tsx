@@ -1,4 +1,4 @@
-// Stories for VhsBox, a film as a 3D cardboard VHS sleeve (design approved 2026-10-09).
+// Stories for VhsBox, a film as a 3D cardboard VHS sleeve.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { searchResultsSchema } from '@/api/tmdb'
 import { genreTone } from '@/domain/genres'

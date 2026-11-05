@@ -1,0 +1,143 @@
+{
+  "$description": "Exact colors of the Halloween logo (docs repo: design/halloween/). Used ONLY by the Halloween logo, shown every October (src/components/layout/HalloweenLogo.tsx). At rest the wordmark keeps the standard logo colors (logo.json); these are the decorations and the lit-up hover state.",
+  "theme": {
+    "logo": {
+      "halloween": {
+        "lit": {
+          "deep": {
+            "$type": "color",
+            "$value": "#3b1e54",
+            "$description": "The DEEP block when lit (hover or focus)"
+          },
+          "cuts": {
+            "$type": "color",
+            "$value": "#ee7a1e",
+            "$description": "The CUTS block when lit"
+          },
+          "letters": {
+            "$type": "color",
+            "$value": "#f28c28",
+            "$description": "DEEP lettering when lit"
+          }
+        },
+        "pumpkin": {
+          "rust": {
+            "skin": {
+              "$type": "color",
+              "$value": "#a8441a",
+              "$description": "Rust pumpkins: the outer lobes"
+            },
+            "rib": {
+              "$type": "color",
+              "$value": "#bc5422",
+              "$description": "Rust pumpkins: the middle lobe"
+            },
+            "outline": {
+              "$type": "color",
+              "$value": "#5e2008",
+              "$description": "Rust pumpkins: the lobe outlines"
+            }
+          },
+          "gourd": {
+            "skin": {
+              "$type": "color",
+              "$value": "#9a5a22",
+              "$description": "Gourd-brown pumpkins: the outer lobes"
+            },
+            "rib": {
+              "$type": "color",
+              "$value": "#ae6a2a",
+              "$description": "Gourd-brown pumpkins: the middle lobe"
+            },
+            "outline": {
+              "$type": "color",
+              "$value": "#4f2a0c",
+              "$description": "Gourd-brown pumpkins: the lobe outlines"
+            }
+          },
+          "orange": {
+            "skin": {
+              "$type": "color",
+              "$value": "#d2661e",
+              "$description": "Bright orange pumpkins: the outer lobes"
+            },
+            "rib": {
+              "$type": "color",
+              "$value": "#e27a2a",
+              "$description": "Bright orange pumpkins: the middle lobe"
+            },
+            "outline": {
+              "$type": "color",
+              "$value": "#843409",
+              "$description": "Bright orange pumpkins: the lobe outlines"
+            }
+          },
+          "ember": {
+            "skin": {
+              "$type": "color",
+              "$value": "#c4561a",
+              "$description": "The two big pumpkins: the outer lobes"
+            },
+            "rib": {
+              "$type": "color",
+              "$value": "#d86a24",
+              "$description": "The two big pumpkins: the middle lobe"
+            },
+            "outline": {
+              "$type": "color",
+              "$value": "#7a2e08",
+              "$description": "The two big pumpkins: the lobe outlines"
+            }
+          },
+          "stem": {
+            "$type": "color",
+            "$value": "#3b3a1c",
+            "$description": "Every pumpkin's stem"
+          },
+          "face": {
+            "$type": "color",
+            "$value": "#1a0904",
+            "$description": "Carved faces, unlit"
+          }
+        },
+        "flame": {
+          "bright": {
+            "$type": "color",
+            "$value": "#ffda74",
+            "$description": "Flickering faces: the brightest frame"
+          },
+          "yellow": {
+            "$type": "color",
+            "$value": "#ffc84a",
+            "$description": "Flickering faces: yellow frame"
+          },
+          "amber": {
+            "$type": "color",
+            "$value": "#ffa42c",
+            "$description": "Flickering faces: amber frame"
+          },
+          "ember": {
+            "$type": "color",
+            "$value": "#f06a12",
+            "$description": "Flickering faces: the dimmest frame"
+          },
+          "glow": {
+            "$type": "color",
+            "$value": "#ff5a10",
+            "$description": "The blurred glow behind lit faces"
+          }
+        },
+        "moon": {
+          "$type": "color",
+          "$value": "#e9ddb8",
+          "$description": "The crescent moon at rest"
+        },
+        "moon-lit": {
+          "$type": "color",
+          "$value": "#fff1c4",
+          "$description": "The crescent moon when lit"
+        }
+      }
+    }
+  }
+}

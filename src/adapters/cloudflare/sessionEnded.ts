@@ -1,4 +1,4 @@
-// Tells the app when the server has ended the passkey session (issue #18, ADR-0031).
+// Tells the app when the server has ended the passkey session (issue #18).
 //
 // A session ends on the server without this tab knowing: after 30 idle days, or when the person
 // signs out or deletes the account on another device. The next accounts API call then answers

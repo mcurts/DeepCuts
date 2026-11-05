@@ -1,12 +1,12 @@
-// The SemVer rules `npm run deploy` versions each deploy with (ADR-0048, ADR-0049). Pure functions
+// The SemVer rules `npm run deploy` versions each deploy with. Pure functions
 // over plain facts (the last tag, the commits since it), so they're unit-tested here and the scripts
 // only gather the facts and act on the answer.
 //
-// Each deploy is a release (ADR-0049): the deploy works out the version from the commits since the
+// Each deploy is a release: the deploy works out the version from the commits since the
 // last `vX.Y.Z` tag, builds it into the footer, tags the commit it shipped, and posts these notes as
 // a GitHub Release. No version commits or release PRs, so the tag is the only marker.
 //
-// What each bump means for a website (ADR-0048):
+// What each bump means for a website:
 // - major: a returning user loses something or must redo it (`type!:` or a `BREAKING CHANGE:` footer)
 // - minor: something new a user can see or do (`feat`)
 // - patch: fixes and refinements (`fix`, `perf`, `design`, `style`, `copy`)
@@ -14,7 +14,7 @@
 //   the next bump; a release made of only these is a patch, because something still ships.
 
 /**
- * The first tag's version. 1.0.0 and 1.0.1 were recorded under ADR-0048's release PRs but never
+ * The first tag's version. 1.0.0 and 1.0.1 were recorded by the first release PRs but never
  * deployed, so tagging continues from the last of them instead of going backwards.
  */
 export const FIRST_VERSION = '1.0.1'
@@ -89,7 +89,7 @@ export function releaseNotes(commits: Commit[], first = false): string {
   if (first)
     // The history before versioning is hundreds of commits; the log already has it.
     return (
-      'First tagged release (ADR-0048, ADR-0049). The site has been live since 2026-10-08; ' +
+      'First tagged release. The site has been live since 2026-10-08; ' +
       'everything before this is in the commit history.\n'
     )
   const lines: string[] = []

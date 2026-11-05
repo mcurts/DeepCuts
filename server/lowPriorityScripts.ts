@@ -1,5 +1,5 @@
 // Build plugin: asks the browser to fetch the app's scripts after the stylesheet and fonts
-// (ADR-0057). index.html carries the landing page as HTML, so the first paint needs only the CSS
+//. index.html carries the landing page as HTML, so the first paint needs only the CSS
 // and the fonts; the scripts (about 260 kB) would otherwise share the connection with them at the
 // same High priority and hold that paint back on a slow phone. `fetchpriority="low"` on the entry
 // script and its `modulepreload` links leaves them downloading in parallel, just behind.

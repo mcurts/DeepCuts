@@ -1,4 +1,4 @@
-// Keeps the retired session kinds out of the app (ADR-0034): there is no guest and no device
+// Keeps the retired session kinds out of the app: there is no guest and no device
 // profile ("Save my picks") any more, only signed in or signed out. TypeScript already rejects
 // them in src/, but .storybook/ isn't type-checked, and a string in a story slipped through once.
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -30,4 +30,4 @@ for (const file of [...walk('src'), ...walk('.storybook')].filter((f) => /\.[tj]
     })
 }
 if (problems) process.exit(1)
-console.log('✓ no retired session kinds (ADR-0034)')
+console.log('✓ no retired session kinds')

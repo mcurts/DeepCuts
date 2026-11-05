@@ -5,7 +5,7 @@ import { z } from 'zod'
 /** How many rating cards step 3 shows before finishing on Discover. */
 export const PICKS = 3
 
-// Onboarding state lives in the URL, so Detail → back restores it (ADR-0019 amendment).
+// Onboarding state lives in the URL, so Detail → back restores it.
 const paramsSchema = z.object({
   step: z.coerce.number().int().min(1).max(2).catch(1).default(1),
   favorite: z.coerce.number().int().positive().max(99_999_999).optional().catch(undefined),

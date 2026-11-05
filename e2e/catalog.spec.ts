@@ -39,7 +39,7 @@ for (const path of ['/', '/movie/1091', '/lists', '/account']) {
   })
 }
 
-test.describe('signed out (ADR-0034)', () => {
+test.describe('signed out', () => {
   test.use({ signedIn: false })
 
   for (const path of ['/', '/sign-in', '/register']) {
@@ -51,9 +51,7 @@ test.describe('signed out (ADR-0034)', () => {
     })
   }
 
-  test('the landing page bills the three features as tonight’s program (ADR-0040)', async ({
-    page,
-  }) => {
+  test('the landing page bills the three features as tonight’s program', async ({ page }) => {
     await page.goto('/')
     const program = page.getByRole('region', { name: 'Tonight’s program' })
     await expect(program.getByRole('heading', { level: 3 })).toHaveText([
@@ -153,7 +151,7 @@ async function openMyLists(page: Page) {
   await page.getByRole('menuitem', { name: 'My Lists' }).click()
 }
 
-test('the account menu is the way to My Lists at every width (ADR-0040)', async ({ page }) => {
+test('the account menu is the way to My Lists at every width', async ({ page }) => {
   await page.goto('/')
   // No tab bar; the account menu opens by keyboard and passes axe while open.
   await expect(page.getByRole('navigation', { name: 'Main' })).toHaveCount(0)
@@ -212,7 +210,7 @@ test('detail tags toggle and save by keyboard, all at 44px or more', async ({ pa
   await expectNoA11yViolations(page)
 })
 
-test.describe('reordering the Top Ten (ADR-0041)', () => {
+test.describe('reordering the Top Ten', () => {
   // Signed in to the demo account with a Top Ten of three, seeded the way e2e/fixtures.ts signs
   // in: through the new browser context's storage.
   test.use({
@@ -312,7 +310,7 @@ test.describe('reordering the Top Ten (ADR-0041)', () => {
   })
 })
 
-test.describe('reordering the watchlist on My Lists (ADR-0041)', () => {
+test.describe('reordering the watchlist on My Lists', () => {
   // Signed in to the demo account with three films on the watchlist (Alpha oldest, Charlie
   // newest), seeded through the new browser context's storage like e2e/fixtures.ts.
   test.use({
@@ -415,7 +413,7 @@ test.describe('signing in and registering', () => {
   // Both start signed out.
   test.use({ signedIn: false })
 
-  test('sign in with the demo account, keyboard only; survives a reload; sign out (ADR-0025)', async ({
+  test('sign in with the demo account, keyboard only; survives a reload; sign out', async ({
     page,
   }) => {
     await page.goto('/')
@@ -472,7 +470,7 @@ test.describe('signing in and registering', () => {
     await expect(toasts(page).getByText('Account created. Signed in as Ada.')).toBeVisible()
   })
 
-  test('register from an invite link with the keyboard; errors pass axe; the practice account survives a reload (ADR-0031)', async ({
+  test('register from an invite link with the keyboard; errors pass axe; the practice account survives a reload', async ({
     page,
   }) => {
     // Submitting with no invite shows the errors and puts the cursor in the first field.
@@ -503,7 +501,7 @@ test.describe('signing in and registering', () => {
   })
 })
 
-test('liking a film tunes Home’s recommendations, with a match and the reason (ADR-0026)', async ({
+test('liking a film tunes Home’s recommendations, with a match and the reason', async ({
   page,
 }) => {
   await page.goto('/movie/1091')
@@ -537,9 +535,7 @@ test('liking a film tunes Home’s recommendations, with a match and the reason 
   await expect(page.getByRole('link', { name: 'Tune the weights' })).toHaveCount(0)
 })
 
-test('tag and genre colors reach the page (runtime CSS variables, ADR-0020/0027)', async ({
-  page,
-}) => {
+test('tag and genre colors reach the page (runtime CSS variables)', async ({ page }) => {
   await page.goto('/movie/1091')
   // tagColor() and genreTone() build `var(--color-…)` at runtime, which Tailwind can't see in
   // the source; the generated theme must still emit every one.

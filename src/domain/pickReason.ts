@@ -1,4 +1,4 @@
-// The one sentence under a Discovery pick that says why it was picked (ADR-0040 §8, ADR-0026).
+// The one sentence under a Discovery pick that says why it was picked.
 //
 // "Because you liked The Thing" said the same thing on every film one favourite suggested, so the
 // sentence now leads with the most specific fact the scorer found, combining facts that point at
@@ -6,13 +6,13 @@
 //   series      "Next in the series after Friday the 13th"
 //   credits     "Same director as The Thing" / "Same director and writer as Alien"
 //               (by the liked film, not the name: the tile's credit lines already name them,
-//               the owner's call when "Directed by X, like Y" was dropped)
+//               so "Directed by X, like Y" would repeat them)
 //   keywords    "Slasher and final girl, like Halloween"
 //   cast/studio "With Kurt Russell, from The Thing" / "From Hammer, who made Dracula"
 //   explore     "Something new for you: Western"
 //   fallback    "Because you liked Alien: an '80s film"
 // Only facts whose score part has a weight above 0 are named, so the sentence never credits
-// something that didn't count (cast and studio start at 0, ADR-0038). Across a shelf, each pick
+// something that didn't count (cast and studio start at 0). Across a shelf, each pick
 // takes its best sentence that an earlier pick hasn't used, so no two tiles read the same.
 // Pure: no React, no TMDB; keyword names come in as a lookup.
 import { primaryGenreName } from './genres'
@@ -38,7 +38,7 @@ export type KeywordName = (id: number) => string | undefined
 
 // A part counts as a "trait" worth naming above these values (parts run 0–1). deepCut 0.7 is
 // roughly the least-known third of candidates; quality 0.8 the best-rated fifth; decade 0.6 is a
-// lift of 1.5, a decade your likes favour half again as much as the candidates do (ADR-0044).
+// lift of 1.5, a decade your likes favour half again as much as the candidates do.
 const LESSER_KNOWN = 0.7
 const WELL_RATED = 0.8
 const FAVOURED_DECADE = 0.6

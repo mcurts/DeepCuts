@@ -1,4 +1,4 @@
-// The TMDB proxy as a Cloudflare Pages Function (ADR-0029, Stage 4 H2). It answers every
+// The TMDB proxy as a Cloudflare Pages Function (Stage 4 H2). It answers every
 // `/api/tmdb/*` request with the same core the local Vite proxy uses (server/tmdb/core.ts), plus
 // Cloudflare's edge cache. The rate limit runs first, in functions/api/_middleware.ts.
 //
@@ -15,7 +15,7 @@ export type Env = {
 
 /**
  * Every method lands here; the core answers anything but GET with 405. TMDB failures are reported
- * to the `/api` middleware's error log (ADR-0058).
+ * to the `/api` middleware's error log.
  */
 export const onRequest: PagesFunction<Env> = async ({ request, env, data }) =>
   handleTmdb(request, env.TMDB_READ_TOKEN, { cache: caches.default, report: reporterFrom(data) })

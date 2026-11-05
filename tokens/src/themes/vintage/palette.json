@@ -1,0 +1,102 @@
+{
+  "$description": "Tier 1 for Vintage, the Triple Feature identity: the brand's raw palette. Warm ink, bone and dust, with mustard and blood as the two accents. Free-form: other themes name their own. The genre ramps are shared (tokens/primitive/hues.json).",
+  "palette": {
+    "ink": {
+      "default": {
+        "$type": "color",
+        "$value": "#120d0a",
+        "$description": "Warm near-black: the page"
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "#1c1511",
+        "$description": "Raised surfaces: inputs, panels, menus"
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": "#2a201a",
+        "$description": "Hovered and focused rows on raised surfaces. Not in the design's swatches: the step between ink-raised and line that keeps the genre strips at 3:1"
+      }
+    },
+    "line": {
+      "default": {
+        "$type": "color",
+        "$value": "#3e2f24",
+        "$description": "Borders, dividers, the dashed footer rule (decorative)"
+      },
+      "strong": {
+        "$type": "color",
+        "$value": "#5a4636",
+        "$description": "Empty-slot dashed outlines (decorative)"
+      }
+    },
+    "bone": {
+      "default": {
+        "$type": "color",
+        "$value": "#efe4cf",
+        "$description": "Primary text, outlines, light fills, sticker paper"
+      },
+      "soft": {
+        "$type": "color",
+        "$value": "#d9cdb6",
+        "$description": "Body and lede text"
+      }
+    },
+    "dust": {
+      "$type": "color",
+      "$value": "#b3a68e",
+      "$description": "Secondary text, metadata, the footer"
+    },
+    "mustard": {
+      "default": {
+        "$type": "color",
+        "$value": "#e8b23a",
+        "$description": "Accent 1: labels, the ticker band, rank tabs, links, utility buttons"
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "#f5cf72",
+        "$description": "Link and button hover"
+      }
+    },
+    "blood": {
+      "$type": "color",
+      "$value": "#c2241a",
+      "$description": "Accent 2: large headline text, CTA fills, the match stamp. Darkened from the design's #C8261B so bone text on it passes 4.5:1 (owner, 2026-10-13). About 3.3:1 on ink, so never small text"
+    },
+    "black": {
+      "$type": "color",
+      "$value": "#000000",
+      "$description": "Hard offset shadows"
+    },
+    "red": {
+      "300": {
+        "$type": "color",
+        "$value": "#f27c81",
+        "$description": "Dislike only: the one red that is readable as small text on ink. The hue ramps skip red for this reason"
+      }
+    },
+    "heat": {
+      "20": {
+        "$type": "color",
+        "$value": "#ef6c05",
+        "$description": "Orange: 20–39%"
+      },
+      "40": {
+        "$type": "color",
+        "$value": "#f7a307",
+        "$description": "Amber: 40–59%"
+      },
+      "60": {
+        "$type": "color",
+        "$value": "#c6e101",
+        "$description": "Lime: 60–79%"
+      },
+      "80": {
+        "$type": "color",
+        "$value": "#39ff14",
+        "$description": "Neon green: 80–100%"
+      }
+    }
+  }
+}

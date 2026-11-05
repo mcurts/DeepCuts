@@ -1,0 +1,45 @@
+{
+  "$description": "Midnight Rental's wordmark colors: the same Deep Cuts wordmark in this brand's colors.",
+  "theme": {
+    "logo": {
+      "primary": {
+        "$type": "color",
+        "$value": "#ff5fae"
+      },
+      "primary-content": {
+        "$type": "color",
+        "$value": "#0e0b1f",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.logo.primary"],
+            "min": 3
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "#3fe0ff"
+      },
+      "secondary-content": {
+        "$type": "color",
+        "$value": "#0e0b1f",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.logo.secondary"],
+            "min": 3
+          }
+        }
+      },
+      "tagline": {
+        "$type": "color",
+        "$value": "#d9d3f5",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.color.background.default"],
+            "min": 4.5
+          }
+        }
+      }
+    }
+  }
+}

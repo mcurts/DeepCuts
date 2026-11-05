@@ -1,10 +1,10 @@
-// The signed-out landing page at `/` (ADR-0034, ADR-0035, ADR-0040 §6a).
+// The signed-out landing page at `/`.
 //
 // The ticker, a one-column hero (label, the poster headline, the lede and two calls to action:
 // "Get your ticket" to sign in, "See the program" down to the features), then "Tonight's
 // program": the app's three ideas as three panels, in the same order as Home's shelves. Each has
 // a small illustration and a line of copy. The sign-in page also offers the demo account for
-// visitors without an invite (ADR-0025).
+// visitors without an invite.
 import { Link } from 'react-router'
 import { TAGLINE } from '@/config/brand'
 import { FeaturePanel } from './FeaturePanel'
@@ -13,7 +13,7 @@ import { PANELS, type PanelId } from '@/config/panels'
 import { PageHeading } from '@/components/ui/PageHeading'
 import { Ticker } from '@/components/ui/Ticker'
 
-// The ticker's lines (ADR-0040): one real sentence per feature, nothing invented.
+// The ticker's lines: one real sentence per feature, nothing invented.
 const TICKER = [
   'Top Ten: rank the ten films you’d defend',
   'Watchlist: save a film the moment you hear about it',
@@ -50,13 +50,13 @@ export function LandingPage() {
         <Link
           to="/sign-in"
           state={{ from: '/' }}
-          className={`${cta} rounded-button bg-button-cta-bg text-button-cta-fg shadow-button-cta hover:bg-button-cta-bg/90`}
+          className={`${cta} rounded-button bg-button-cta-background text-button-cta-content shadow-button-cta hover:bg-button-cta-background/90`}
         >
           Get your ticket
         </Link>
         <a
           href="#program"
-          className={`${cta} border-2 border-button-secondary-border text-button-secondary-fg hover:border-accent hover:text-accent`}
+          className={`${cta} border-2 border-button-secondary-border text-button-secondary-content hover:border-border-accent hover:text-content-accent`}
         >
           See the program
         </a>
@@ -78,7 +78,7 @@ export function LandingPage() {
             <li key={id}>
               <FeaturePanel panel={PANELS[id]} feature={i + 1}>
                 <PanelArt id={id} />
-                <p className="mt-5 text-base text-fg-soft">{COPY[id]}</p>
+                <p className="mt-5 text-base text-content-soft">{COPY[id]}</p>
               </FeaturePanel>
             </li>
           ))}

@@ -1,8 +1,8 @@
-// Bans raw color values and arbitrary Tailwind color classes in src/. Use semantic tokens. ADR-0006.
+// Bans raw color values and arbitrary Tailwind color classes in src/: colors come from tokens.
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
-// Generated from tokens/ by sd.config.mjs, where raw values belong (tier 1).
+// Generated from tokens/ by scripts/theme-files.mjs; raw values belong in tokens/ (Tier 1).
 const GENERATED = 'src/styles/'
 const RULES = [
   [/#[0-9a-fA-F]{3,8}\b/, 'raw hex color'],

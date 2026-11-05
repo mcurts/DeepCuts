@@ -1,5 +1,5 @@
-// The Sign-in page (/sign-in, ADR-0025): lists every sign-in method the session provider offers
-// (today only the demo account), links to registration (ADR-0031), then returns to the page
+// The Sign-in page (/sign-in): lists every sign-in method the session provider offers
+// (today only the demo account), links to registration, then returns to the page
 // sign-in started from.
 import { useState } from 'react'
 import { Button } from 'react-aria-components'
@@ -13,7 +13,7 @@ import { notify, notifySignedIn } from '@/notify'
 import { useSession } from '@/session/SessionContext'
 import { AuthLayout } from './AuthLayout'
 
-/** The sign-in page (ADR-0025, approved design): every method the session adapter offers. */
+/** The sign-in page (approved design): every method the session adapter offers. */
 export function SignInPage() {
   useRouteFocus()
   const { session, signInMethods, signIn } = useSession()
@@ -46,7 +46,7 @@ export function SignInPage() {
         <h1 className="font-display text-4xl leading-none tracking-wide case-display">
           Sign in to Deep Cuts
         </h1>
-        <p className="mt-2 text-sm text-fg-muted">
+        <p className="mt-2 text-sm text-content-muted">
           Keep your lists in your account instead of a single browser.
         </p>
       </div>
@@ -58,26 +58,28 @@ export function SignInPage() {
             <Button
               onPress={() => start(m.id)}
               isPending={pending !== null}
-              className="flex min-h-13 w-full items-center gap-3 rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 text-left text-sm font-bold hover:border-accent data-pending:opacity-70"
+              className="flex min-h-13 w-full items-center gap-3 rounded-button border-2 border-button-secondary-border bg-button-secondary-background px-3.5 text-left text-sm font-bold hover:border-border-accent data-pending:opacity-70"
             >
-              <span className="grid size-8 shrink-0 place-items-center bg-surface-overlay text-accent">
+              <span className="grid size-8 shrink-0 place-items-center bg-background-overlay text-content-accent">
                 <Icon name="user" className="size-4.5" />
               </span>
               <span>
                 {m.label}
-                <small className="block text-sm font-normal text-fg-muted">{m.description}</small>
+                <small className="block text-sm font-normal text-content-muted">
+                  {m.description}
+                </small>
               </span>
             </Button>
           </li>
         ))}
       </ul>
-      <p role="status" className="text-sm text-fg-muted empty:hidden">
+      <p role="status" className="text-sm text-content-muted empty:hidden">
         {pending ? 'Signing you in…' : ''}
       </p>
 
-      <p className="text-sm text-fg-muted">
+      <p className="text-sm text-content-muted">
         New here? {/* Passes `from` along, so registering also returns where sign-in started. */}
-        <Link to="/register" state={{ from }} className="text-accent underline">
+        <Link to="/register" state={{ from }} className="text-content-accent underline">
           Create an account
         </Link>
       </p>

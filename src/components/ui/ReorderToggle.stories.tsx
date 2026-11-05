@@ -1,4 +1,4 @@
-// Stories for ReorderToggle, the "Reorder"/"Done" button of a ranked shelf (ADR-0041).
+// Stories for ReorderToggle, the "Reorder"/"Done" button of a ranked shelf.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
 import { ReorderToggle } from './ReorderToggle'

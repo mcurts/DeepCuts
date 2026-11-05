@@ -1,6 +1,6 @@
 // @vitest-environment node
 // Tests for the proxy allowlist: which TMDB paths and query parameters may pass, and that
-// everything else is refused (ADR-0008).
+// everything else is refused.
 import { describe, expect, it } from 'vitest'
 import { resolveTmdbRequest } from './allowlist'
 
@@ -31,17 +31,17 @@ describe('resolveTmdbRequest', () => {
     ['search/movie', 'query=a&page=501'],
     ['search/movie', 'query=a&query=b'],
     ['search/movie', 'query=a&api_key=leak'],
-    // Genre filters were removed with favourite genres (ADR-0032).
+    // Genre filters were removed with favourite genres.
     ['discover/movie', 'with_genres=27'],
     ['discover/movie', 'without_genres=27'],
-    // One keyword id only: no lists, no names, no negatives (ADR-0038).
+    // One keyword id only: no lists, no names, no negatives.
     ['discover/movie', 'with_keywords=12339|9715'],
     ['discover/movie', 'with_keywords=12339,9715'],
     ['discover/movie', 'with_keywords=slasher'],
     ['discover/movie', 'with_keywords=-1'],
     ['collection/9735', 'page=1'],
     ['discover/movie', 'sort_by=revenue.desc'],
-    // The starter shelf's bounds (ADR-0042): counts, ratings and real dates only.
+    // The starter shelf's bounds: counts, ratings and real dates only.
     ['discover/movie', 'vote_count.lte=-1'],
     ['discover/movie', 'vote_count.lte=100001'],
     ['discover/movie', 'vote_average.gte=11'],
@@ -88,7 +88,7 @@ describe('resolveTmdbRequest', () => {
     expect(r.ok && r.request.params.get('include_adult')).toBe('false')
   })
 
-  it('allows discover by one keyword (ADR-0038)', () => {
+  it('allows discover by one keyword', () => {
     const r = resolveTmdbRequest(
       'discover/movie',
       q('with_keywords=12339&sort_by=vote_average.desc&vote_count.gte=100'),
@@ -96,7 +96,7 @@ describe('resolveTmdbRequest', () => {
     expect(r.ok && r.request.params.get('with_keywords')).toBe('12339')
   })
 
-  it('allows the deep-cuts starter query (ADR-0042)', () => {
+  it('allows the deep-cuts starter query', () => {
     const r = resolveTmdbRequest(
       'discover/movie',
       q(
@@ -127,7 +127,7 @@ describe('movie detail extras', () => {
     'release_dates,recommendations',
     'release_dates,recommendations,keywords,credits',
     'release_dates,recommendations,similar,keywords,credits',
-  ])('allows appending %s (ADR-0024, ADR-0026, ADR-0028, ADR-0037)', (value) => {
+  ])('allows appending %s', (value) => {
     const r = resolveTmdbRequest('movie/603', new URLSearchParams(`append_to_response=${value}`))
     expect(r.ok && r.request.params.get('append_to_response')).toBe(value)
   })

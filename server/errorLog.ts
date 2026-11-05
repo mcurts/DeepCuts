@@ -1,4 +1,4 @@
-// The production error log (ADR-0058): one safe line per `/api` request that failed on the server's
+// The production error log: one safe line per `/api` request that failed on the server's
 // side, so a broken deploy, a revoked TMDB token or a failing D1 batch shows up before a user
 // reports it.
 //
@@ -71,7 +71,7 @@ export const errorLineSchema = z
     method: z.enum(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'OTHER']),
     /** What the client got. */
     status,
-    /** The short error code the client got (ADR-0008), or null when the answer had none. */
+    /** The short error code the client got, or null when the answer had none. */
     code: z
       .string()
       .regex(/^[a-z_]{1,40}$/)
@@ -84,7 +84,7 @@ export const errorLineSchema = z
       .nullable(),
     /** TMDB's status, when it answered (a 401 means the token was revoked). */
     upstreamStatus: status.nullable(),
-    /** The deployed version (ADR-0049), `dev` for local builds, or `unknown`. */
+    /** The deployed version, `dev` for local builds, or `unknown`. */
     version: z.string().regex(/^(\d{1,4}\.\d{1,4}\.\d{1,4}|dev|unknown)$/),
   })
   .strict()

@@ -1,0 +1,700 @@
+{
+  "$description": "Tier 2 color roles for Midnight Rental: the same names as every theme, this brand's values.",
+  "theme": {
+    "color": {
+      "background": {
+        "default": {
+          "$type": "color",
+          "$value": "{palette.night}",
+          "$description": "Page background."
+        },
+        "raised": {
+          "$type": "color",
+          "$value": "{palette.night-raised}",
+          "$description": "Cards, fields and popovers above the page."
+        },
+        "overlay": {
+          "$type": "color",
+          "$value": "{palette.night-overlay}"
+        }
+      },
+      "content": {
+        "default": {
+          "$type": "color",
+          "$value": "{palette.haze}",
+          "$description": "Body text and icons.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 4.5
+            }
+          }
+        },
+        "soft": {
+          "$type": "color",
+          "$value": "{palette.haze-soft}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 4.5
+            }
+          }
+        },
+        "muted": {
+          "$type": "color",
+          "$value": "{palette.lilac}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 4.5
+            }
+          }
+        },
+        "placeholder": {
+          "$type": "color",
+          "$value": "{palette.lilac}",
+          "$description": "Placeholder text in fields.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.raised"],
+              "min": 4.5
+            }
+          }
+        },
+        "danger": {
+          "$type": "color",
+          "$value": "{palette.red-soft}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 4.5
+            }
+          }
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "{palette.pink}",
+          "$description": "Accent-colored text and icons on the page: links, active tabs, the selected count.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 4.5
+            }
+          }
+        },
+        "highlight": {
+          "$type": "color",
+          "$value": "{palette.cyan}",
+          "$description": "Highlight-colored marks and large headline words. Large text and marks only (3:1).",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default"],
+              "min": 3
+            }
+          }
+        }
+      },
+      "accent": {
+        "content": {
+          "$type": "color",
+          "$value": "{palette.night}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.accent.background",
+                "theme.color.accent.background-hover",
+                "component.button.primary.background-hover",
+                "theme.signal.tag.watchlist",
+                "theme.signal.tag.liked",
+                "theme.signal.tag.disliked"
+              ],
+              "min": 4.5
+            }
+          }
+        },
+        "background": {
+          "$type": "color",
+          "$value": "{palette.pink}"
+        },
+        "background-hover": {
+          "$type": "color",
+          "$value": "{palette.pink-bright}",
+          "$description": "Accent fills on hover and press.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "highlight": {
+        "content": {
+          "$type": "color",
+          "$value": "{palette.night}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.highlight.background"],
+              "min": 4.5
+            }
+          }
+        },
+        "background": {
+          "$type": "color",
+          "$value": "{palette.cyan}"
+        }
+      },
+      "border": {
+        "accent": {
+          "$type": "color",
+          "$value": "{palette.pink}",
+          "$description": "Accent outlines: selected cards, active fields, the shelf rule."
+        },
+        "danger": {
+          "$type": "color",
+          "$value": "{palette.red}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default"],
+              "min": 3
+            }
+          }
+        },
+        "default": {
+          "$type": "color",
+          "$value": "{palette.grid}"
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{palette.grid-strong}"
+        },
+        "control": {
+          "$type": "color",
+          "$value": "{palette.wire}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 3
+            }
+          }
+        },
+        "emphasis": {
+          "$type": "color",
+          "$value": "{palette.haze}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 3
+            }
+          }
+        }
+      },
+      "focus": {
+        "border": {
+          "$type": "color",
+          "$value": "{palette.yellow}",
+          "$description": "Focus rings (3:1 on every surface).",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.default", "theme.color.background.raised"],
+              "min": 3
+            }
+          }
+        }
+      },
+      "match-0": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.coral}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.highlight.content}",
+          "$description": "Text on the match sticker for a 0–19% match.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.match-0.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "match-20": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.orange}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Text on the match sticker for a 20–39% match.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.match-20.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "match-40": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.amber}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Text on the match sticker for a 40–59% match.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.match-40.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "match-60": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.lime}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Text on the match sticker for a 60–79% match.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.match-60.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "match-80": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.mint}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Text on the match sticker for a 80–100% match.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.match-80.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "shadow": {
+        "decorative": {
+          "$type": "color",
+          "$value": "{palette.black}"
+        }
+      },
+      "print": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.haze}"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{palette.night}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.print-spot.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "print-spot": {
+        "background": {
+          "$type": "color",
+          "$value": "{palette.yellow}"
+        }
+      }
+    },
+    "signal": {
+      "contextual": {
+        "$type": "color",
+        "$value": "{theme.color.accent.background}",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": [
+              "theme.color.background.default",
+              "theme.color.background.raised",
+              "theme.color.background.overlay"
+            ],
+            "min": 4.5
+          }
+        }
+      },
+      "favourite": {
+        "$type": "color",
+        "$value": "{palette.yellow}",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["component.card.background"],
+            "min": 4.5
+          }
+        }
+      },
+      "tag": {
+        "watchlist": {
+          "$type": "color",
+          "$value": "{palette.sky}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 4.5
+            }
+          }
+        },
+        "liked": {
+          "$type": "color",
+          "$value": "{palette.haze}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 4.5
+            }
+          }
+        },
+        "disliked": {
+          "$type": "color",
+          "$value": "{palette.red-soft}",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "genre": {
+        "default": {
+          "$type": "color",
+          "$value": "{palette.lilac}",
+          "$description": "Genre color for films with no mapped genre.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "action": {
+          "$type": "color",
+          "$value": "{color.orange.400}",
+          "$description": "Action: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "adventure": {
+          "$type": "color",
+          "$value": "{color.lime.400}",
+          "$description": "Adventure: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "animation": {
+          "$type": "color",
+          "$value": "{color.gold.400}",
+          "$description": "Animation: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "comedy": {
+          "$type": "color",
+          "$value": "{color.gold.400}",
+          "$description": "Comedy: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "crime": {
+          "$type": "color",
+          "$value": "{color.indigo.400}",
+          "$description": "Crime: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "documentary": {
+          "$type": "color",
+          "$value": "{color.green.400}",
+          "$description": "Documentary: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "drama": {
+          "$type": "color",
+          "$value": "{color.sky.400}",
+          "$description": "Drama: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "family": {
+          "$type": "color",
+          "$value": "{color.lime.400}",
+          "$description": "Family: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "fantasy": {
+          "$type": "color",
+          "$value": "{color.violet.400}",
+          "$description": "Fantasy: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "history": {
+          "$type": "color",
+          "$value": "{color.green.400}",
+          "$description": "History: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "horror": {
+          "$type": "color",
+          "$value": "{color.violet.400}",
+          "$description": "Horror: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "music": {
+          "$type": "color",
+          "$value": "{color.magenta.400}",
+          "$description": "Music: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "mystery": {
+          "$type": "color",
+          "$value": "{color.indigo.400}",
+          "$description": "Mystery: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "romance": {
+          "$type": "color",
+          "$value": "{color.magenta.400}",
+          "$description": "Romance: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "science-fiction": {
+          "$type": "color",
+          "$value": "{color.cyan.400}",
+          "$description": "Science Fiction: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "thriller": {
+          "$type": "color",
+          "$value": "{color.orange.400}",
+          "$description": "Thriller: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "tv-movie": {
+          "$type": "color",
+          "$value": "{color.sky.400}",
+          "$description": "TV Movie: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "war": {
+          "$type": "color",
+          "$value": "{color.orange.400}",
+          "$description": "War: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        },
+        "western": {
+          "$type": "color",
+          "$value": "{color.gold.400}",
+          "$description": "Western: the genre color on cards, stickers and the VHS box, always beside the genre name.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": [
+                "theme.color.background.default",
+                "theme.color.background.raised",
+                "theme.color.background.overlay"
+              ],
+              "min": 3
+            }
+          }
+        }
+      }
+    }
+  }
+}

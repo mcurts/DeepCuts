@@ -1,4 +1,4 @@
-// Tests for the score spread helpers (ADR-0044): each part's spread across candidates, the flat
+// Tests for the score spread helpers: each part's spread across candidates, the flat
 // flag, and the match range of a list of picks.
 import { describe, expect, it } from 'vitest'
 import { FLAT_SPREAD, matchRange, partSpreads } from './scoreSpread'

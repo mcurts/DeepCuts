@@ -1,4 +1,4 @@
-// One Top Ten film while the shelf is in reorder mode (ADR-0041): its VHS box with the rank tab,
+// One Top Ten film while the shelf is in reorder mode: its VHS box with the rank tab,
 // its title, and two buttons that move it one place earlier or later. The box can also be dragged
 // onto another film; while a film is dragged over it, the box shows the open-slot outline
 // (EmptySlot's dashed border, in the accent color) with the rank the film would take there.
@@ -130,15 +130,15 @@ export function DropSlot({ rank }: { rank: number }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 flex flex-col items-center justify-center gap-2 border-3 border-dashed border-accent bg-surface p-3 text-center"
+      className="absolute inset-0 flex flex-col items-center justify-center gap-2 border-3 border-dashed border-border-accent bg-background p-3 text-center"
     >
-      <span className="font-display text-7xl leading-none text-fg">#{rank}</span>
-      <span className="font-label text-sm text-fg-muted">Drop to move here</span>
+      <span className="font-display text-7xl leading-none text-content">#{rank}</span>
+      <span className="font-label text-sm text-content-muted">Drop to move here</span>
     </div>
   )
 }
 
-/** A 44px square arrow button (WCAG 2.5.8 and ADR-0009's 44px targets). */
+/** A 44px square arrow button (WCAG 2.5.8 asks for 24px; the app uses 44px targets). */
 function MoveButton({
   direction,
   label,
@@ -155,7 +155,7 @@ function MoveButton({
       // The shelf finds the button again after the move, to keep focus on it.
       data-move={direction}
       onClick={onPress}
-      className="flex size-11 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg text-button-secondary-fg hover:border-accent"
+      className="flex size-11 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-background text-button-secondary-content hover:border-border-accent"
     >
       <Icon name={direction === 'earlier' ? 'back' : 'forward'} />
     </button>

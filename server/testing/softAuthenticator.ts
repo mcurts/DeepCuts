@@ -1,4 +1,4 @@
-// A software passkey for unit tests (ADR-0031, Stage 6 A6). It holds a real P-256 key pair and
+// A software passkey for unit tests (Stage 6 A6). It holds a real P-256 key pair and
 // builds the same signed WebAuthn messages a phone or laptop would ("none" attestation, ES256), so
 // the tests run SimpleWebAuthn's real verification, not a mock of it. Test-only: never bundled.
 //

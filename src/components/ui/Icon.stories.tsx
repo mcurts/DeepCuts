@@ -30,10 +30,10 @@ export const Single: Story = {}
 /** The whole set, labelled. */
 export const All: Story = {
   render: () => (
-    <ul className="grid grid-cols-4 gap-4 text-sm text-fg-muted sm:grid-cols-6">
+    <ul className="grid grid-cols-4 gap-4 text-sm text-content-muted sm:grid-cols-6">
       {NAMES.map((name) => (
         <li key={name} className="flex flex-col items-center gap-1.5">
-          <Icon name={name} className="size-6 text-fg" />
+          <Icon name={name} className="size-6 text-content" />
           {name}
         </li>
       ))}

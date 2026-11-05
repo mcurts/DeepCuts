@@ -3,45 +3,45 @@
    components as Tailwind classes. */
 @import 'tailwindcss';
 /* Fonts are bundled with the app, not loaded from Google: the CSP allows no third-party font
-   hosts (ADR-0008). The default theme's fonts load here (its meta.json lists them); other themes'
-   load when chosen (useTheme, ADR-0056). */
+   hosts. The default theme's fonts load here (its meta.json lists them); other themes'
+   load when chosen (useTheme). */
 @import './styles/theme-fonts.css';
-@import './styles/tokens.css';
 
-/* Tokens (ADR-0027, ADR-0056): the shared tiers, every theme's layer (under its `data-theme`; the
-   default also under :root), and the Tailwind theme GENERATED from them (sd.config.mjs), so every
-   class name is a token name. The default palette and scales are replaced, so only token values
-   can be used. */
-@import './styles/themes.css';
-@import './styles/theme.css';
+/* Design tokens, built by the site-builder engine from tokens/ (npm run tokens): every theme's
+   values (the default on :root, each theme under its data-theme), in Tailwind's theme layer so
+   any utility beats them, and the Tailwind theme generated from them, so a class name is always
+   a token name (`text-content-muted` reads the content-muted color token). Tailwind's default
+   palette and scales are replaced, so only token values can be used. */
+@import '../tokens/dist/css/deep-cuts.css';
+@import '../tokens/dist/tailwind/theme.css';
 
 @layer base {
   /* Each theme sets its own color-scheme (light or dark) in its layer. */
   body {
-    @apply bg-surface font-body text-fg antialiased;
+    @apply bg-background font-body text-content antialiased;
   }
-  /* Display type takes its theme's weight and letter spacing (ADR-0056). In the base layer, so a
+  /* Display type takes its theme's weight and letter spacing. In the base layer, so a
      component's own `font-bold` or `tracking-wide` (utilities) still wins, while the class
      selector outranks the reset's `font-weight: inherit` on headings. */
   .font-display {
-    font-weight: var(--dc-font-display-weight);
-    letter-spacing: var(--dc-font-display-tracking);
+    font-weight: var(--theme-font-display-weight);
+    letter-spacing: var(--theme-font-display-letter-spacing);
   }
   /* Design v2: a 3px ring with a surface-colored gap, raised above neighbours so dense lists
      never hide it (WCAG 2.4.11/2.4.13). Inputs show it on their whole field via `focus-ring-within`. */
   :focus-visible {
     position: relative;
     z-index: 2;
-    outline: 3px solid var(--color-focus);
+    outline: 3px solid var(--color-focus-border);
     outline-offset: 3px;
-    box-shadow: 0 0 0 2px var(--color-surface);
+    box-shadow: 0 0 0 2px var(--color-background);
   }
   input:focus-visible {
     outline: none;
     box-shadow: none;
   }
   /* Controls ease into their hover, pressed and focus looks over the app's default transition
-     (150ms, the same as Tailwind's `transition` classes) instead of snapping (owner, 2026-10-26).
+     (150ms, the same as Tailwind's `transition` classes) instead of snapping.
      Only colors change, never size or position, so it stays quiet.
      - The focus ring fades in and settles out to its offset. An outline can only animate between
        two drawn states, so controls carry an invisible one at rest.
@@ -110,10 +110,10 @@
   &:has(input:focus-visible) {
     position: relative;
     z-index: 3;
-    border-color: var(--color-focus);
-    outline: 3px solid var(--color-focus);
+    border-color: var(--color-focus-border);
+    outline: 3px solid var(--color-focus-border);
     outline-offset: 3px;
-    box-shadow: 0 0 0 2px var(--color-surface);
+    box-shadow: 0 0 0 2px var(--color-background);
   }
   @media (forced-colors: active) {
     outline-style: none;
@@ -126,24 +126,24 @@
 }
 
 /* Headlines, buttons and labels set in display type take their theme's letter case: capitals in
-   Vintage and Midnight Rental; a theme can choose `none` to keep text as written (ADR-0056). Use it instead of
+   Vintage and Midnight Rental; a theme can choose `none` to keep text as written. Use it instead of
    `uppercase` wherever the case is part of the brand; film titles keep `font-display` alone. */
 @utility case-display {
-  text-transform: var(--dc-font-display-case);
+  text-transform: var(--theme-font-display-case);
 }
 
-/* Page accent (ADR-0020): a tag-filtered page swaps the contextual accent to that tag's color. */
+/* Page accent: a tag-filtered page swaps the contextual accent to that tag's color. */
 @utility page-accent-watchlist {
-  --dc-color-contextual: var(--dc-color-tag-watchlist);
+  --theme-signal-contextual: var(--theme-signal-tag-watchlist);
 }
 @utility page-accent-liked {
-  --dc-color-contextual: var(--dc-color-tag-liked);
+  --theme-signal-contextual: var(--theme-signal-tag-liked);
 }
 @utility page-accent-disliked {
-  --dc-color-contextual: var(--dc-color-tag-disliked);
+  --theme-signal-contextual: var(--theme-signal-tag-disliked);
 }
 
-/* The face of the VHS genre sticker (GenreSticker.tsx; design approved 2026-10-07). Layers, top
+/* The face of the VHS genre sticker (GenreSticker.tsx). Layers, top
    to bottom: shelf scuffs, a rubbed patch, a sun-bleached patch, paper grain (SVG noise as a data
    URI, which the CSP allows), and the film's genre color (`--tone`) bleached 35% toward the paper.
    Highlights use the paper color, so the whole sticker follows the tokens. */
@@ -152,26 +152,26 @@
     repeating-linear-gradient(
       115deg,
       transparent 0 7px,
-      color-mix(in srgb, var(--color-sticker-paper) 22%, transparent) 7px 8px,
+      color-mix(in srgb, var(--color-sticker-background) 22%, transparent) 7px 8px,
       transparent 8px 19px
     ),
     radial-gradient(
       circle at 74% 70%,
-      color-mix(in srgb, var(--color-sticker-paper) 30%, transparent),
+      color-mix(in srgb, var(--color-sticker-background) 30%, transparent),
       transparent 30%
     ),
     radial-gradient(
       circle at 30% 24%,
-      color-mix(in srgb, var(--color-sticker-paper) 38%, transparent),
+      color-mix(in srgb, var(--color-sticker-background) 38%, transparent),
       transparent 58%
     ),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.5 0 0 0 0 0.42 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")
       0 0 / 60px 60px,
-    color-mix(in srgb, var(--tone) 65%, var(--color-sticker-paper));
+    color-mix(in srgb, var(--tone) 65%, var(--color-sticker-background));
   background-blend-mode: screen, screen, normal, multiply, normal;
 }
 
-/* Triple Feature textures (ADR-0040). All three are decorative: put them on `aria-hidden` layers
+/* Triple Feature textures. All three are decorative: put them on `aria-hidden` layers
    with no pointer events. */
 
 /* Film grain over the whole window (AppLayout renders one fixed layer with it). SVG noise as a
@@ -181,7 +181,7 @@
 @utility film-grain {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")
     0 0 / 180px 180px;
-  opacity: var(--dc-texture-grain);
+  opacity: var(--theme-texture-grain);
   mix-blend-mode: overlay;
   @media (forced-colors: active) {
     display: none;
@@ -192,7 +192,8 @@
 @utility film-scratch {
   background-image: repeating-linear-gradient(
     90deg,
-    color-mix(in srgb, var(--color-fg) calc(var(--dc-texture-scratch) * 1%), transparent) 0 1px,
+    color-mix(in srgb, var(--color-content) calc(var(--theme-texture-scratch) * 1%), transparent) 0
+      1px,
     transparent 1px 140px
   );
 }
@@ -200,22 +201,32 @@
 /* A halftone dot screen, for poster placeholders and illustration wells. */
 @utility halftone {
   background-image: radial-gradient(
-    color-mix(in srgb, var(--color-shadow) calc(var(--dc-texture-halftone) * 1%), transparent) 1.2px,
+    color-mix(
+        in srgb,
+        var(--color-shadow-decorative) calc(var(--theme-texture-halftone) * 1%),
+        transparent
+      )
+      1.2px,
     transparent 1.4px
   );
   background-size: 7px 7px;
 }
 
-/* The hard text shadow under highlighted headline words (ADR-0040); its offset is the theme's, so
-   a theme can turn it off (ADR-0056). */
+/* The hard text shadow under highlighted headline words; its offset is the theme's, so
+   a theme can turn it off. */
 @utility text-shadow-hard {
-  text-shadow: var(--dc-text-shadow-offset) var(--dc-text-shadow-offset) 0 var(--color-shadow);
+  text-shadow: var(--theme-size-headline-shadow-offset) var(--theme-size-headline-shadow-offset) 0
+    var(--color-shadow-decorative);
 }
 
 /* The mustard dashed rule in section headers: grows to fill the row between title and meta. */
 @utility dashed-rule {
   height: 6px;
-  background: repeating-linear-gradient(90deg, var(--color-accent) 0 18px, transparent 18px 28px);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-accent-background) 0 18px,
+    transparent 18px 28px
+  );
 }
 
 /* Loader behind film images (`LoadingImage`): the placeholder color with a soft band of light
@@ -226,12 +237,12 @@
    background entirely, so nothing keeps animating underneath them; failed ones keep the static
    placeholder. Reduced motion gets the static placeholder, and no fade (the rule above). */
 @utility image-loader {
-  background-color: var(--color-poster-placeholder);
+  background-color: var(--color-poster-placeholder-background);
   &[data-loading] {
     background-image: linear-gradient(
       100deg,
       transparent 30%,
-      color-mix(in srgb, var(--color-fg) 8%, transparent) 50%,
+      color-mix(in srgb, var(--color-content) 8%, transparent) 50%,
       transparent 70%
     );
     background-size: 200% 100%;
@@ -289,9 +300,9 @@
   }
 }
 
-/* Switching theme (useTheme, ADR-0056) cross-fades the whole page with the View Transitions API, so
+/* Switching theme (useTheme) cross-fades the whole page with the View Transitions API, so
    fonts, corners and shadows change as smoothly as colors. It uses the `enter` motion role
-   (ADR-0053); browsers without the API, and reduced motion, switch at once. */
+  ; browsers without the API, and reduced motion, switch at once. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: --theme(--motion-enter-duration);

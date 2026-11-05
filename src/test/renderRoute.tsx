@@ -2,7 +2,7 @@
 // navigate and click like a person would. Options swap in feature flags or a custom session.
 //
 // Tests start signed in to the demo account, because almost every page needs an account
-// (ADR-0034). Pass `initialSession: SIGNED_OUT` for the landing page and the sign-in flows.
+//. Pass `initialSession: SIGNED_OUT` for the landing page and the sign-in flows.
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'

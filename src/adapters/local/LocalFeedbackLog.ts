@@ -1,4 +1,4 @@
-// The quick-action press log (ADR-0045), saved in this browser for every kind of account.
+// The quick-action press log, saved in this browser for every kind of account.
 //
 // Each Want / Like / Nope press on a Discovery pick is saved with how the scorer saw that pick
 // (its part scores and dislike penalty), so the weights lab can learn which parts predict what
@@ -19,7 +19,7 @@ export const FEEDBACK_LIMIT = 500
 // A part score or penalty: a number from 0 to 1.
 const unit = z.number().min(0).max(1)
 
-/** One saved press. Stored data is untrusted, so every field is checked (ADR-0013). */
+/** One saved press. Stored data is untrusted, so every field is checked. */
 const entrySchema = z.object({
   tmdbId: z.number().int().positive(),
   action: z.enum(['watchlist', 'liked', 'disliked']),
@@ -49,7 +49,7 @@ export interface FeedbackLog {
 export function createLocalFeedbackLog(key: string, storage?: Storage): FeedbackLog {
   const store = versionedStore<FeedbackEntry[]>({
     key,
-    // Presses of the retired Seen button (ADR-0050) are dropped; the rest of the log is kept.
+    // Presses of the retired Seen button are dropped; the rest of the log is kept.
     migrate: (raw) =>
       Array.isArray(raw)
         ? raw.filter((e: unknown) => (e as { action?: unknown } | null)?.action !== 'seen')

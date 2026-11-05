@@ -1,6 +1,6 @@
 // The VHS box poster: a film drawn as a 3D cardboard video sleeve, with the poster on the front,
 // a printed spine, the cassette in the open end, and the VHS genre sticker on the cover.
-// Design approved 2026-10-09 (tuned in the dev-only lab, /lab/vhs).
+// Tuned in the dev-only lab (/lab/vhs).
 //
 // The look is the co-located stylesheet VhsBox.css, and so is the motion for the keyboard and
 // touch. The mouse motion is a small per-frame animation here (see below), which
@@ -8,8 +8,7 @@
 // next to the box, so it's hidden from screen readers. Colors come from the vhs-box component
 // tokens and the film's genre tone (`--tone`, set by genreTone() on a parent).
 //
-// A box can carry one badge (ADR-0040), stuck on its cover so it turns with the box (owner,
-// 2026-10-13): a mustard rank tab (Top Ten), an ADMIT ONE ticket (the watchlist), a blood-red
+// A box can carry one badge, stuck on its cover so it turns with the box: a mustard rank tab (Top Ten), an ADMIT ONE ticket (the watchlist), a blood-red
 // match sticker (Discovery), or the stamp a Discovery quick action leaves (issue #76). Badges are decoration too: the caption under the box says the same.
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { imageUrl, releaseYear, type MovieSummary } from '@/api/tmdb'
@@ -23,7 +22,7 @@ import './VhsBox.css'
 /**
  * How quickly the mouse motion catches up, in ms: the time to cover 63% of the way to where the
  * pointer aims (95% takes three times as long, about 0.55s). Longer is smoother but lazier;
- * the owner found 150ms transitions jittery (2026-10-09).
+ * 150ms looks jittery.
  */
 const SMOOTHING = 180
 
@@ -173,7 +172,7 @@ export function VhsBox({
           {poster ? (
             <LoadingImage src={poster} alt="" loading="lazy" className="vhs-art" />
           ) : (
-            <span className="vhs-art bg-poster-placeholder" />
+            <span className="vhs-art bg-poster-placeholder-background" />
           )}
           <GenreSticker
             genreIds={movie.genre_ids}
@@ -205,32 +204,32 @@ function Badge({ badge }: { badge: VhsBadge }) {
       // pressed tag buttons' fills).
       return (
         <span
-          className="absolute inset-0 z-2 grid animate-pop-in place-content-center bg-surface/60 p-3"
+          className="absolute inset-0 z-2 grid animate-pop-in place-content-center bg-background/60 p-3"
           style={tagColor(badge.tag) as CSSProperties}
         >
-          <span className="-rotate-8 border-2 border-shadow bg-(--tag) px-2 py-1 text-center font-display text-xl leading-none text-fg-on-accent case-display shadow-stamp">
+          <span className="-rotate-8 border-2 border-shadow-decorative bg-(--tag) px-2 py-1 text-center font-display text-xl leading-none text-accent-content case-display shadow-stamp">
             {badge.label}
           </span>
         </span>
       )
     case 'rank':
-      // A mustard tab against the cover's right edge, near the bottom (owner, 2026-10-13): clear
+      // A mustard tab against the cover's right edge, near the bottom: clear
       // of the genre sticker at the top right.
       return (
-        <span className="vhs-pin-bottom absolute right-0 bottom-3.5 z-2 bg-accent px-2 py-1 font-display text-3xl leading-none text-fg-on-accent shadow-stamp">
+        <span className="vhs-pin-bottom absolute right-0 bottom-3.5 z-2 bg-accent-background px-2 py-1 font-display text-3xl leading-none text-accent-content shadow-stamp">
           #{badge.rank}
         </span>
       )
     case 'ticket':
       // A bone ticket stub, stuck on slightly crooked, with a perforated right edge.
       return (
-        <span className="vhs-pin-top absolute top-3 left-3 z-2 -rotate-4 border-r-2 border-dashed border-fg-on-accent/40 bg-fg px-2 py-1 font-display text-xs tracking-widest text-fg-on-accent case-display shadow-stamp">
+        <span className="vhs-pin-top absolute top-3 left-3 z-2 -rotate-4 border-r-2 border-dashed border-accent-content/40 bg-content px-2 py-1 font-display text-xs tracking-widest text-accent-content case-display shadow-stamp">
           Admit one
         </span>
       )
     case 'match': {
       // A starburst price sticker stuck on the cover's bottom-left corner, slightly crooked. Its
-      // color steps from blood red to neon green with the match (owner, 2026-10-13; the
+      // color steps from blood red to neon green with the match (the
       // color.match tokens, each with text that passes 4.5:1).
       const colors = MATCH_CLASSES[matchStep(badge.match)]
       return (
@@ -239,12 +238,16 @@ function Badge({ badge }: { badge: VhsBadge }) {
         >
           <svg viewBox="-4 -4 108 108" className="absolute inset-0 size-full overflow-visible">
             {/* The hard shadow: the same burst, offset down and right (elevation.stamp). */}
-            <polygon points={STARBURST} transform="translate(4 4)" className="fill-shadow" />
+            <polygon
+              points={STARBURST}
+              transform="translate(4 4)"
+              className="fill-shadow-decorative"
+            />
             <polygon
               points={STARBURST}
               strokeWidth="4"
               strokeLinejoin="round"
-              className={`${colors.fill} stroke-fg`}
+              className={`${colors.fill} stroke-content`}
             />
           </svg>
           <span className="relative text-xl sm:text-2xl">{badge.match}%</span>

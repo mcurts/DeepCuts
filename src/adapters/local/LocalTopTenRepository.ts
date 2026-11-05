@@ -1,4 +1,4 @@
-// A Top Ten saved in this browser (ADR-0036), for the demo and practice accounts.
+// A Top Ten saved in this browser, for the demo and practice accounts.
 //
 // Same pattern as LocalTagRepository.ts: each account gets its own key (`account-<id>-top-ten`),
 // so signing out and in as someone else never mixes lists. Passkey accounts keep their Top Ten on

@@ -1,4 +1,4 @@
-// Playwright configuration for the Storybook accessibility gate (ADR-0007, ADR-0010):
+// Playwright configuration for the Storybook accessibility gate:
 // builds Storybook, serves it, and runs axe on every story (storybook-tests/a11y.spec.ts).
 // Run with `npm run storybook:test`.
 import { defineConfig, devices } from '@playwright/test'

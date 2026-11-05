@@ -1,5 +1,5 @@
 // An in-memory fake of the accounts API (`/api/auth/*`, `/api/tags*`, `/api/top-ten`) for unit tests of the
-// Cloudflare adapters and the screens (ADR-0031, Stage 6 A4). It behaves like the real Functions
+// Cloudflare adapters and the screens (Stage 6 A4). It behaves like the real Functions
 // from the client's side (status codes, bodies, the tag rules) but keeps one "browser" session in
 // a variable instead of a cookie. The real server is tested on its own (server/accounts/).
 import { http, HttpResponse } from 'msw'
@@ -29,7 +29,7 @@ export function createFakeAccountsApi(now: () => string = () => new Date().toISO
     users: new Map<string, User>(),
     /** Each user's tags, kept with the same shared rules the real server applies. */
     tags: new Map<string, TagRepository>(),
-    /** Each user's saved watchlist order (ADR-0041), kept by the same shared tag store. */
+    /** Each user's saved watchlist order, kept by the same shared tag store. */
     watchlistOrder: new Map<string, OrderStore>(),
     /** Each user's Top Ten, kept with the same shared rules the real server applies. */
     topTen: new Map<string, TopTenRepository>(),

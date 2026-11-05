@@ -1,8 +1,8 @@
-// The app shell around Home, Search, My Lists and Account (ADR-0040): the header (logo, search and
+// The app shell around Home, Search, My Lists and Account: the header (logo, search and
 // the account menu), the page, and the legal footer (SiteFooter). There is no tab bar: the logo
 // goes Home and the account menu holds My Lists, at every width. (Detail and Sign in have their
 // own layouts.) Signed out, the header is just the logo and Sign in: search leads only to
-// signed-in pages (ADR-0034).
+// signed-in pages.
 import { useRef } from 'react'
 import { Link, Outlet } from 'react-router'
 import { FEATURES } from '@/config/features'
@@ -18,7 +18,7 @@ import { useRouteFocus } from '@/hooks/useRouteFocus'
 import { useSession } from '@/session/SessionContext'
 
 /**
- * Shell (ADR-0021, ADR-0033, ADR-0040): a sticky header, the page in a 1200px column, and the
+ * Shell: a sticky header, the page in a 1200px column, and the
  * TMDB credit as the footer.
  */
 export function AppLayout() {
@@ -39,10 +39,10 @@ export function AppLayout() {
           the search centred between logo and account. The DOM order (logo, search, account) is
           the desktop reading order; below `lg`, `order-last` moves the search to its own row, so
           keyboard focus goes logo → search → account there. */}
-      <header ref={header} className="sticky top-0 z-20 border-b-2 border-border bg-surface">
+      <header ref={header} className="sticky top-0 z-20 border-b-2 border-border bg-background">
         <div className="mx-auto flex max-w-300 flex-wrap items-center justify-between gap-x-3 gap-y-4 px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 md:px-8 lg:flex-nowrap lg:gap-x-8 lg:py-5">
           {/* From `md`, nudged down 8px, so the wordmark itself lines up with the search field
-              beside it (from `lg`) and the tagline hangs below (owner, 2026-10-15). A transform,
+              beside it (from `lg`) and the tagline hangs below. A transform,
               so the header height doesn't change. The name includes the tagline the link shows
               (WCAG 2.5.3, Label in Name), so a voice control user can say what they see. */}
           <Link
@@ -50,8 +50,7 @@ export function AppLayout() {
             aria-label={`Deep Cuts, ${TAGLINE}, go to Home`}
             className="inline-flex min-h-11 shrink-0 flex-col items-start justify-center gap-1 md:translate-y-2"
           >
-            {/* The tagline shows from `md` only: phones keep their header height (owner,
-                2026-10-15). */}
+            {/* The tagline shows from `md` only: phones keep their header height. */}
             <Logo
               decorative
               tagline
@@ -73,7 +72,7 @@ export function AppLayout() {
                 to="/tune"
                 aria-label="Tune my picks"
                 title="Tune my picks"
-                className="grid size-11 place-items-center border-2 border-border-control text-accent hover:border-accent"
+                className="grid size-11 place-items-center border-2 border-border-control text-content-accent hover:border-border-accent"
               >
                 <Icon name="heart" />
               </Link>

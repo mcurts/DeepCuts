@@ -1,10 +1,10 @@
-// The Top Ten API for signed-in accounts (ADR-0036).
+// The Top Ten API for signed-in accounts.
 //
 // - Every query is scoped to the session's user (`WHERE user_id = ?`); a user id is never taken
 //   from the client, so nobody can read or change someone else's Top Ten.
 // - The Top Ten rules (src/domain/topTen.ts) run here too, through the same `addToTopTen`,
 //   `removeFromTopTen` and `reorderTopTen` the app uses, so a modified client can't store an
-//   eleventh film, or slip a film in or out while reordering (ADR-0041).
+//   eleventh film, or slip a film in or out while reordering.
 // - A change rewrites the user's whole list (at most ten rows) in one D1 batch: delete, then insert
 //   with fresh positions. Batches are transactions, so a list is never half-written, and positions
 //   stay 1…n without gaps. The list travels as one JSON parameter that SQLite expands with
@@ -90,7 +90,7 @@ export async function changeTopTen(request: Request, env: AccountsEnv, now = Dat
 const newOrder = z.object({ ids: topTenSchema })
 
 /**
- * `PATCH /api/top-ten` `{ ids }` saves a new order for the user's films (ADR-0041) and returns it
+ * `PATCH /api/top-ten` `{ ids }` saves a new order for the user's films and returns it
  * as `{ films }`. `ids` must hold exactly the stored films: an order that adds, drops or repeats
  * one answers 409 `top_ten_changed` (the list changed elsewhere, so the client re-reads it), and
  * a malformed body answers 400.

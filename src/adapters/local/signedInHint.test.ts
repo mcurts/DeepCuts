@@ -1,4 +1,4 @@
-// Tests for the signed-in hint (ADR-0057) and the boot script that reads it: the app writes the
+// Tests for the signed-in hint and the boot script that reads it: the app writes the
 // key the script reads, and the script hides the pre-rendered landing page only when this visit
 // won't show it (another address, or signed in).
 import { readFileSync } from 'node:fs'

@@ -1,4 +1,4 @@
-// Shared contract suite (ADR-0013): every TagRepository implementation must pass it unchanged.
+// Shared contract suite: every TagRepository implementation must pass it unchanged.
 import { beforeEach, describe, expect, it } from 'vitest'
 import { ListChangedError } from '../domain/ranking'
 import type { TagRepository } from './TagRepository'
@@ -19,7 +19,7 @@ export function tagRepositoryContract(name: string, make: (now: () => string) =>
       expect(await repo.exportAll()).toEqual([])
     })
 
-    it('ADR-0050: applies tagRules on every write, so a film keeps one tag', async () => {
+    it('applies tagRules on every write, so a film keeps one tag', async () => {
       await repo.setTag(1, 'watchlist', true)
       expect([...(await repo.setTag(1, 'liked', true))]).toEqual(['liked'])
       expect(await repo.list('watchlist')).toEqual([])
@@ -70,7 +70,7 @@ export function tagRepositoryContract(name: string, make: (now: () => string) =>
       expect(await tags(2)).toEqual(['watchlist'])
     })
 
-    it('saves a watchlist order; newer films go on top of it (ADR-0041)', async () => {
+    it('saves a watchlist order; newer films go on top of it', async () => {
       for (const id of [1, 2, 3]) await repo.setTag(id, 'watchlist', true)
       expect(await repo.list('watchlist')).toEqual([3, 2, 1])
       expect(await repo.reorder('watchlist', [1, 3, 2])).toEqual([1, 3, 2])

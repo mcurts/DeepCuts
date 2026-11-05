@@ -1,5 +1,5 @@
 // Tests for the local session provider: the shared SessionProvider contract, a retired device
-// profile being ignored (ADR-0034), a stale demo account name being refreshed, registration never
+// profile being ignored, a stale demo account name being refreshed, registration never
 // storing the invite code, and versionedStore's migration hook.
 import { beforeEach, expect, it } from 'vitest'
 import { sessionProviderContract } from '../sessionProvider.contract'
@@ -11,7 +11,7 @@ beforeEach(() => localStorage.clear())
 
 sessionProviderContract('MockSessionProvider', () => createMockSessionProvider())
 
-it('a device profile saved by an older version is ignored, not read or deleted (ADR-0034)', async () => {
+it('a device profile saved by an older version is ignored, not read or deleted', async () => {
   localStorage.setItem('deepcuts:v1:profile', JSON.stringify({ displayName: 'Mike' }))
   localStorage.setItem('deepcuts:v1:tags', '[]')
   expect(await createMockSessionProvider().getSession()).toEqual({ kind: 'signedOut' })
@@ -31,7 +31,7 @@ it('a demo account saved under an old name comes back with the current name', as
   })
 })
 
-it('registration stores only the name, never the invite code (ADR-0031)', async () => {
+it('registration stores only the name, never the invite code', async () => {
   await createMockSessionProvider().register({ name: 'Ada', invite: 'Zm9vYmFyYmF6cXV4cXV1eA' })
   // Everything this provider wrote to the browser, as one string.
   const stored = Object.keys(localStorage)

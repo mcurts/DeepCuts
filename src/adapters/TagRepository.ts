@@ -1,4 +1,4 @@
-// The tag storage contract (ADR-0013): what the app can ask of wherever tags are kept.
+// The tag storage contract: what the app can ask of wherever tags are kept.
 //
 // The app only ever talks to this interface, never to localStorage or a database directly.
 // Today's adapters keep tags in memory (guests) or in this browser (saved profiles and the demo
@@ -17,7 +17,7 @@ export const tagRecordSchema = z.object({
   createdAt: z.iso.datetime(),
 })
 /**
- * Tags that older versions saved and this one no longer has: "Seen it", retired by ADR-0050.
+ * Tags that older versions saved and this one no longer has: "Seen it", which the app no longer offers.
  * Stored data and server answers may still hold them, so they're skipped before validation.
  */
 const RETIRED_TAGS: readonly unknown[] = ['seen']
@@ -35,10 +35,10 @@ export function dropRetiredTags(raw: unknown): unknown {
   )
 }
 
-/** A list of stored tag records, read the safe way: retired tags are skipped (ADR-0050). */
+/** A list of stored tag records, read the safe way: retired tags are skipped. */
 export const storedRecordsSchema = z.preprocess(dropRetiredTags, z.array(tagRecordSchema))
 
-/** The lists that can be put in the person's own order: only the watchlist (ADR-0041). */
+/** The lists that can be put in the person's own order: only the watchlist. */
 export type OrderedTag = 'watchlist'
 
 /**
@@ -61,12 +61,12 @@ export interface TagRepository {
   setTag(tmdbId: number, tag: SystemTag, on: boolean): Promise<TagSet>
   /**
    * Movie ids on a list, newest first. A disliked film is only on the Disliked list. The
-   * watchlist follows the person's saved order (ADR-0041): films added since they last reordered
+   * watchlist follows the person's saved order: films added since they last reordered
    * come first, newest first, then the order they chose.
    */
   list(tag: SystemTag): Promise<number[]>
   /**
-   * Saves a new order for the watchlist (ADR-0041) and returns it. Rejects with
+   * Saves a new order for the watchlist and returns it. Rejects with
    * `ListChangedError` when `order` isn't exactly the films on the watchlist, because the list
    * changed elsewhere (another tab or device) since it was read.
    */

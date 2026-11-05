@@ -1,0 +1,33 @@
+{
+  "$description": "Tier 3: the Top Ten sticker on Detail, drawn as a staff-pick shelf talker: a gold card with a clipped corner and a strip of tape. It turns bone once the film is in the Top Ten. Its ink is the printed-matter ink.",
+  "component": {
+    "top-ten-sticker": {
+      "face": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.print-spot.background}",
+          "$description": "The card before the film is added"
+        }
+      },
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.print.background}",
+        "$description": "The card once the film is in the Top Ten, and the tape on the gold card"
+      },
+      "content": {
+        "$type": "color",
+        "$value": "{theme.color.print.content}",
+        "$description": "The printed text",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": [
+              "component.top-ten-sticker.face.background",
+              "component.top-ten-sticker.background"
+            ],
+            "min": 4.5
+          }
+        }
+      }
+    }
+  }
+}

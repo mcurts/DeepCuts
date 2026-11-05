@@ -1,4 +1,4 @@
-// Tests for learning weights from quick-action presses (ADR-0045): the thresholds, which presses
+// Tests for learning weights from quick-action presses: the thresholds, which presses
 // count, that a predictive part earns the weight, the penalty, and determinism.
 import { describe, expect, it } from 'vitest'
 import {
@@ -37,7 +37,7 @@ function press(
 const many = (count: number, make: (i: number) => FeedbackEntry) =>
   Array.from({ length: count }, (_, i) => make(i))
 
-describe('learnWeights (ADR-0045)', () => {
+describe('learnWeights', () => {
   it('waits for MIN_PRESSES presses, MIN_EACH yeses and Nopes', () => {
     expect([MIN_PRESSES, MIN_EACH]).toEqual([30, 5])
     const tooFew = many(MIN_PRESSES - 1, (i) => press(i % 2 ? 'watchlist' : 'disliked'))
@@ -49,7 +49,7 @@ describe('learnWeights (ADR-0045)', () => {
     expect(learnWeights(lopsided, VERSION).learned).toBeUndefined()
   })
 
-  it("counts Like as a yes (ADR-0050), and older versions' presses not at all", () => {
+  it("counts Like as a yes, and older versions' presses not at all", () => {
     const entries = [
       ...many(10, () => press('watchlist')),
       ...many(9, () => press('liked')),

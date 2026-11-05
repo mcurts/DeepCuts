@@ -3,7 +3,7 @@
 // after a reload shows the error page instead of reloading forever.
 //
 // sessionStorage, not localStorage: the guard belongs to one tab, and should not stop another tab
-// from recovering. It lives here because every browser storage access does (ADR-0013).
+// from recovering. It lives here because every browser storage access does.
 import { STORAGE_PREFIX } from './versionedStore'
 
 const KEY = `${STORAGE_PREFIX}chunk-reload-at`

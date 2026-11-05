@@ -1,0 +1,46 @@
+{
+  "$description": "Type roles for Midnight Rental.",
+  "theme": {
+    "font": {
+      "body": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": [
+            "Space Grotesk",
+            "system-ui",
+            "-apple-system",
+            "Segoe UI",
+            "Roboto",
+            "Helvetica Neue",
+            "Arial",
+            "sans-serif"
+          ]
+        }
+      },
+      "display": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": ["Bungee", "Impact", "sans-serif"]
+        },
+        "weight": {
+          "$type": "string",
+          "$value": "400"
+        },
+        "letter-spacing": {
+          "$type": "string",
+          "$value": "0.02em"
+        },
+        "case": {
+          "$type": "string",
+          "$value": "uppercase"
+        }
+      },
+      "label": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": ["Space Mono", "Courier New", "monospace"]
+        }
+      }
+    }
+  }
+}

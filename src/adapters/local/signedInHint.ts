@@ -1,10 +1,10 @@
-// Remembers whether someone is signed in on this device (ADR-0057), so the boot script can hide
+// Remembers whether someone is signed in on this device, so the boot script can hide
 // the pre-rendered landing page before the first paint for a returning, signed-in visitor (who is
 // about to see Home instead).
 //
 // Only a hint: the real session still comes from the session provider before React renders. A
 // wrong hint costs nothing but speed: a stale "signed in" shows a blank page until the app is
-// ready (as before ADR-0057), a stale "signed out" shows the landing page until Home replaces it.
+// ready, a stale "signed out" shows the landing page until Home replaces it.
 //
 // Two readers share this key: the app (through saveSignedInHint) and public/shell-boot.js, a
 // plain script that runs before the app; signedInHint.test.ts checks that the two agree.

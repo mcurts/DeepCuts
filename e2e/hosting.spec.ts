@@ -1,4 +1,4 @@
-// End-to-end checks that only apply to the hosted runtime (ADR-0029, Stage 4): run by
+// End-to-end checks that only apply to the hosted runtime (Stage 4): run by
 // `npm run e2e:cf` against `wrangler pages dev`, never against `vite preview`.
 import { expect, test } from '@playwright/test'
 import { contentSecurityPolicy } from '../server/securityHeaders.ts'
@@ -48,7 +48,7 @@ test('deep links load the app (H7)', async ({ page }) => {
 
 test('the API answers only on the site address (host pin)', async ({ request }) => {
   // An old deploy's own address, as Cloudflare would route it. Localhost (every other test here)
-  // is allowed; so is the site, here the stand-in host `npm run preview:cf` sets (ADR-0047).
+  // is allowed; so is the site, here the stand-in host `npm run preview:cf` sets.
   const wrong = await request.get('/api/auth/session', {
     headers: { Host: 'a1b2c3d4.deep-cuts.pages.dev' },
   })

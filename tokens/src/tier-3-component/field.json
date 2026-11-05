@@ -1,0 +1,90 @@
+{
+  "$description": "Tier 3: text fields (the search field, with its flush action button) and their suggestion popover.",
+  "component": {
+    "field": {
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.background.raised}",
+        "$description": "Field fill."
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{theme.color.border.emphasis}",
+        "$description": "Field outline at rest.",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["theme.color.background.default"],
+            "min": 3
+          }
+        }
+      },
+      "border-focus": {
+        "$type": "color",
+        "$value": "{theme.color.focus.border}",
+        "$description": "Field outline while focused.",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["component.field.background"],
+            "min": 3
+          }
+        }
+      },
+      "border-invalid": {
+        "$type": "color",
+        "$value": "{theme.color.content.danger}",
+        "$description": "Field outline when the value is invalid: the error text color, so the field and its message match. Paired with the message, never color alone.",
+        "$extensions": {
+          "com.mikecurts.contrast": {
+            "on": ["component.field.background"],
+            "min": 3
+          }
+        }
+      },
+      "action": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.content.default}",
+          "$description": "The bone FIND button flush with the field"
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Label on the field's action button.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["component.field.action.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{theme.border.control.radius}",
+        "$description": "Field corners."
+      }
+    },
+    "popover": {
+      "background": {
+        "$type": "color",
+        "$value": "{theme.color.background.raised}",
+        "$description": "Popover and menu surface."
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{theme.color.border.emphasis}",
+        "$description": "Popover outline."
+      },
+      "shadow": {
+        "$type": "shadow",
+        "$value": "{theme.shadow.box}",
+        "$description": "Popover shadow."
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{theme.border.container.radius}",
+        "$description": "Popover corners."
+      }
+    }
+  }
+}

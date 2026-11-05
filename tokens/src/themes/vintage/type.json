@@ -1,0 +1,43 @@
+{
+  "$description": "Type roles for Vintage, the Triple Feature identity. Families are self-hosted and listed in meta.json; sizes and spacing come from the shared Tailwind scale.",
+  "theme": {
+    "font": {
+      "body": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": ["Courier Prime", "Courier New", "monospace"],
+          "$description": "All body copy, film titles in captions, metadata and inputs"
+        }
+      },
+      "display": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": ["Anton", "Impact", "Arial Narrow", "sans-serif"],
+          "$description": "Headlines, section titles, buttons, rank numbers and stamps"
+        },
+        "weight": {
+          "$type": "string",
+          "$value": "inherit",
+          "$description": "A CSS font-weight for display text. `inherit` keeps the surrounding text's (Anton has one weight)"
+        },
+        "letter-spacing": {
+          "$type": "string",
+          "$value": "inherit",
+          "$description": "A CSS letter-spacing for display text. `inherit` keeps the surrounding text's, so a parent's tracking class still reaches it"
+        },
+        "case": {
+          "$type": "string",
+          "$value": "uppercase",
+          "$description": "text-transform for headlines and buttons (`case-display`). Film titles keep their own case"
+        }
+      },
+      "label": {
+        "family": {
+          "$type": "fontFamily",
+          "$value": ["Special Elite", "Courier New", "monospace"],
+          "$description": "Typewriter labels: 'Feature Nº 1', reasons, the footer. Sentence case, never long text"
+        }
+      }
+    }
+  }
+}

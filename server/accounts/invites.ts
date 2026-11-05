@@ -1,11 +1,11 @@
-// Invite codes (ADR-0031): how people get an account. Used by `npm run invite`
+// Invite codes: how people get an account. Used by `npm run invite`
 // (scripts/invite.mjs) and by the tests, so both make codes the same way.
 //
 // A code is 16 random bytes as base64url (22 characters, 128 bits). Only its SHA-256 is stored;
 // the code itself exists only in the printed link, so a database copy holds no usable invite.
 import { randomToken, sha256Hex } from './crypto.ts'
 
-/** How long an invite lasts by default: 7 days (owner decision, 2026-10-07). */
+/** How long an invite lasts by default: 7 days. */
 export const INVITE_DAYS = 7
 const DAY_MS = 24 * 60 * 60 * 1000
 

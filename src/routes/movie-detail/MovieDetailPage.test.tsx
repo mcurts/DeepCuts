@@ -28,7 +28,7 @@ describe('movie detail', () => {
     expect(back).toHaveFocus()
   })
 
-  it('provider badges are not interactive (ADR-0018)', async () => {
+  it('provider badges are not interactive', async () => {
     renderRoute('/movie/1091')
     const section = await screen.findByRole('region', { name: /Where to watch/ })
     await within(section).findByRole('img', { name: 'Disney Plus' })
@@ -36,7 +36,7 @@ describe('movie detail', () => {
     expect(within(section).queryAllByRole('button')).toHaveLength(0)
   })
 
-  it('tag toggles follow the ADR-0050 rule: one at a time', async () => {
+  it('tag toggles follow the tag rule: one at a time', async () => {
     const user = userEvent.setup()
     renderRoute('/movie/1091')
     const group = await screen.findByRole('group', { name: 'Your tags' })
@@ -100,7 +100,7 @@ describe('movie detail', () => {
     expect(await screen.findByText(/will appear here/)).toBeInTheDocument()
   })
 
-  it('a disliked film stays in Search with a marker (ADR-0017 amendment)', async () => {
+  it('a disliked film stays in Search with a marker', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/movie/1091', { features: { searchPage: true } })
     const group = await screen.findByRole('group', { name: 'Your tags' })
@@ -137,13 +137,13 @@ describe('movie detail', () => {
     const { router } = renderRoute('/lists')
     await act(() => router.navigate('/movie/1091'))
     await screen.findByRole('heading', { level: 1, name: 'The Thing' })
-    // The bottom Back button was removed once Save and Cancel arrived (owner, 2026-10-07).
+    // The bottom Back button was removed once Save and Cancel arrived.
     expect(screen.queryByRole('button', { name: 'Back' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Back to previous screen' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lists'))
   })
 
-  describe('Top Ten (ADR-0036)', () => {
+  describe('Top Ten', () => {
     it('adds the film, shows its rank on the sticker, and keeps it after a reload', async () => {
       const user = userEvent.setup()
       const { unmount } = renderRoute('/movie/1091')

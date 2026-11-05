@@ -1,4 +1,4 @@
-// Reorder mode for a ranked shelf (ADR-0041): on or off, what the live region says, and Escape to
+// Reorder mode for a ranked shelf: on or off, what the live region says, and Escape to
 // leave. Shared by Home's Top Ten shelf and the watchlist on My Lists, with the button and live
 // region in ReorderToggle.tsx.
 import { useEffect, useRef, useState } from 'react'

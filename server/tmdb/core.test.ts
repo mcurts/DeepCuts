@@ -1,7 +1,7 @@
 // @vitest-environment node
 // Tests for the parts of the proxy core the contract suite doesn't cover: trimming credits, the
-// edge cache (ADR-0029, Stage 4 H5) and its time-to-live per endpoint, and what it reports to the
-// error log (ADR-0058).
+// edge cache (Stage 4 H5) and its time-to-live per endpoint, and what it reports to the
+// error log.
 import { describe, expect, it, vi } from 'vitest'
 import { edgeTtl, handleTmdb, trimCredits } from './core'
 
@@ -74,7 +74,7 @@ describe('handleTmdb', () => {
   })
 })
 
-describe('error reports (ADR-0058)', () => {
+describe('error reports', () => {
   // Runs one request with TMDB answering via `fetchImpl` and returns the answer and the notes.
   async function withTmdb(fetchImpl: () => Promise<Response>, token = 'secret-token') {
     const report = vi.fn()
@@ -113,8 +113,8 @@ describe('error reports (ADR-0058)', () => {
   })
 })
 
-describe('trimCredits (ADR-0028)', () => {
-  it('keeps directors, writers and the five top-billed actors from appended credits (ADR-0038)', () => {
+describe('trimCredits', () => {
+  it('keeps directors, writers and the five top-billed actors from appended credits', () => {
     const body = {
       id: 1091,
       title: 'The Thing',

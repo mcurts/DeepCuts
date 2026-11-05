@@ -85,7 +85,7 @@ describe('reasonOptions', () => {
   })
 
   it('never names a fact whose part weighs 0', () => {
-    // Cast and studio weigh 0 by default (ADR-0038).
+    // Cast and studio weigh 0 by default.
     const p = pick({
       sameCast: { actor: 'Kurt Russell', liked: 'The Thing' },
       sameStudio: { studio: 'Hammer', liked: 'Dracula' },

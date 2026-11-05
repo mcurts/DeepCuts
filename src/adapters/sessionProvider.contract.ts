@@ -1,10 +1,10 @@
-// Shared contract suite (ADR-0013): every SessionProvider implementation must pass it unchanged.
+// Shared contract suite: every SessionProvider implementation must pass it unchanged.
 import { describe, expect, it } from 'vitest'
 import type { SessionProvider } from './SessionProvider'
 
 export function sessionProviderContract(name: string, make: () => SessionProvider) {
   describe(`SessionProvider contract: ${name}`, () => {
-    it('starts signed out (ADR-0034)', async () => {
+    it('starts signed out', async () => {
       expect(await make().getSession()).toEqual({ kind: 'signedOut' })
     })
 
@@ -17,7 +17,7 @@ export function sessionProviderContract(name: string, make: () => SessionProvide
       }
     })
 
-    it('signs in with an offered method, survives a reload, and signs out (ADR-0025)', async () => {
+    it('signs in with an offered method, survives a reload, and signs out', async () => {
       const provider = make()
       const method = provider.signInMethods()[0]
       if (!method) throw new Error('no sign-in method offered')
@@ -28,7 +28,7 @@ export function sessionProviderContract(name: string, make: () => SessionProvide
       expect(await make().getSession()).toEqual({ kind: 'signedOut' })
     })
 
-    it('registers an account that survives a reload, and signs out (ADR-0031)', async () => {
+    it('registers an account that survives a reload, and signs out', async () => {
       const provider = make()
       const session = await provider.register({
         name: '  Ada Lovelace ',

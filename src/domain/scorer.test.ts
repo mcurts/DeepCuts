@@ -1,8 +1,8 @@
-// Tests for the recommendation scorer (ADR-0026, ADR-0028, ADR-0032), with small hand-made films:
+// Tests for the recommendation scorer, with small hand-made films:
 // each score part, exclusions, series candidates, ranking, spread rules, explore slots, weights
 // and determinism, plus v3's similar films, next-in-series and once-only series credit
-// (ADR-0037), Top Ten films weighing more than likes (ADR-0043), and v4's sharper parts, dislike
-// penalty and stretched match (ADR-0044). The scorer must stay at 100% coverage.
+//, Top Ten films weighing more than likes, and v4's sharper parts, dislike
+// penalty and stretched match. The scorer must stay at 100% coverage.
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_WEIGHTS,
@@ -78,13 +78,13 @@ function input(overrides: Partial<TasteInput> = {}): TasteInput {
   return { liked: [], wanted: [], disliked: [], excluded: new Set(), ...overrides }
 }
 
-describe('recommend (ADR-0026)', () => {
+describe('recommend', () => {
   it('weights sum to 1, so scores stay between 0 and 1', () => {
     const total = SCORE_PARTS.reduce((s, p) => s + DEFAULT_WEIGHTS[p], 0)
     expect(total).toBeCloseTo(1, 10)
   })
 
-  it('uses the v3 weights the owner tuned, plus cast and studio (ADR-0037, ADR-0038)', () => {
+  it('uses the v3 weights the owner tuned, plus cast and studio', () => {
     const shown = Object.fromEntries(
       SCORE_PARTS.map((p) => [p, Math.round(DEFAULT_WEIGHTS[p] * 100)]),
     )
@@ -99,7 +99,7 @@ describe('recommend (ADR-0026)', () => {
       director: 8,
       writer: 5,
       series: 7,
-      // Off until tuned, so the owner's mix applies exactly (ADR-0038 amendment).
+      // Off until tuned, so the owner's mix applies exactly.
       cast: 0,
       studio: 0,
     })
@@ -126,7 +126,7 @@ describe('recommend (ADR-0026)', () => {
     expect(picks.map((p) => p.film.title)).toEqual(['Shared', 'Single'])
     expect(picks[0]?.because).toEqual(['Alien', 'The Thing'])
     expect(picks[0]?.parts.support).toBe(1)
-    // Half the best support, on the square-root scale (ADR-0044).
+    // Half the best support, on the square-root scale.
     expect(picks[1]?.parts.support).toBeCloseTo(Math.SQRT1_2, 10)
   })
 
@@ -156,7 +156,7 @@ describe('recommend (ADR-0026)', () => {
     )
     expect(picks.map((p) => p.film.id)).toEqual([drama.id, comedy.id])
     // Disliked comedy is −1 (the largest weight) but only falls to the 0.25 floor, never 0
-    // (ADR-0032); Want to see drama scales to +0.5.
+    //; Want to see drama scales to +0.5.
     expect(picks[1]?.parts.genre).toBe(0.25)
     expect(picks[0]?.parts.genre).toBe(0.75)
   })
@@ -204,7 +204,7 @@ describe('recommend (ADR-0026)', () => {
     )
   })
 
-  it('scores decade and language by how much more your likes lean to them (ADR-0044)', () => {
+  it('scores decade and language by how much more your likes lean to them', () => {
     const liked = film({ year: 1984, language: 'en' })
     const same = film({ year: 1989, language: 'en' })
     const other = film({ year: 2015, language: 'ko' })
@@ -270,7 +270,7 @@ describe('recommend (ADR-0026)', () => {
     expect(normalizeWeights(DEFAULT_WEIGHTS).support).toBeCloseTo(DEFAULT_WEIGHTS.support)
   })
 
-  it('scores keyword overlap against liked, wanted and disliked keywords (ADR-0028)', () => {
+  it('scores keyword overlap against liked, wanted and disliked keywords', () => {
     const CABIN = 1
     const SNOW = 2
     const SPACE = 3
@@ -297,7 +297,7 @@ describe('recommend (ADR-0026)', () => {
     expect(pickOf(picks, unknown.id).parts.keywords).toBe(0)
   })
 
-  it('scores a shared director and says who and which liked film (ADR-0028)', () => {
+  it('scores a shared director and says who and which liked film', () => {
     const carpenter = { id: 11770, name: 'John Carpenter' }
     const liked = film({ title: 'The Thing', directors: [carpenter] })
     const same = film()
@@ -383,7 +383,7 @@ describe('recommend (ADR-0026)', () => {
   })
 })
 
-describe('scorer v2 (ADR-0032)', () => {
+describe('scorer v2', () => {
   const carpenter = { id: 11770, name: 'John Carpenter' }
   const hill = { id: 9, name: 'Debra Hill' }
 
@@ -471,7 +471,7 @@ describe('scorer v2 (ADR-0032)', () => {
     expect(inSeries).toEqual([true, false, false, true, true])
   })
 
-  it('takes at most SERIES_PICKS films from the series you liked (ADR-0037)', () => {
+  it('takes at most SERIES_PICKS films from the series you liked', () => {
     // Five liked films from five series, each bringing its next film, which outscore the rest.
     const liked = Array.from({ length: 5 }, (_, i) => {
       const seriesId = 100 + i
@@ -491,7 +491,7 @@ describe('scorer v2 (ADR-0032)', () => {
     expect(sequels).toEqual([true, true, true, false, false, false, false, true, true])
   })
 
-  it('credits a sequel once: director, writer and keywords count only outside its series (ADR-0037)', () => {
+  it('credits a sequel once: director, writer and keywords count only outside its series', () => {
     const S = 7
     const original = film({
       title: 'Halloween',
@@ -548,7 +548,7 @@ describe('scorer v2 (ADR-0032)', () => {
     })
   })
 
-  it('adds the films TMDB lists as similar, counting a film once per liked film (ADR-0037)', () => {
+  it('adds the films TMDB lists as similar, counting a film once per liked film', () => {
     const shared = film()
     const onlySimilar = film()
     const picks = recommend(
@@ -564,7 +564,7 @@ describe('scorer v2 (ADR-0032)', () => {
     expect(pickOf(picks, onlySimilar.id).parts.support).toBeCloseTo(Math.SQRT1_2, 10)
   })
 
-  it('skips similar films with too few votes or no genre in common (ADR-0037)', () => {
+  it('skips similar films with too few votes or no genre in common', () => {
     const kept = film({ genreIds: [DRAMA, HORROR], voteCount: SIMILAR_MIN_VOTES })
     const fewVotes = film({ voteCount: SIMILAR_MIN_VOTES - 1 })
     const otherGenre = film({ genreIds: [COMEDY] })
@@ -648,7 +648,7 @@ describe('scorer v2 (ADR-0032)', () => {
   })
 })
 
-describe('cast, studio and keyword searches (ADR-0038)', () => {
+describe('cast, studio and keyword searches', () => {
   const russell = { id: 6856, name: 'Kurt Russell' }
   const hammer = { id: 1314, name: 'Hammer Films' }
   const universal = { id: 33, name: 'Universal Pictures' }
@@ -758,7 +758,7 @@ describe('cast, studio and keyword searches (ADR-0038)', () => {
   })
 })
 
-describe('Top Ten films weigh more than likes (ADR-0043)', () => {
+describe('Top Ten films weigh more than likes', () => {
   it('counts a Top Ten film as 1.25 likes', () => {
     expect(TOP_TEN_WEIGHT).toBe(1.25)
   })
@@ -851,7 +851,7 @@ describe('Top Ten films weigh more than likes (ADR-0043)', () => {
   })
 })
 
-describe('scorer v4: sharper parts, dislike penalty, stretched match (ADR-0044)', () => {
+describe('scorer v4: sharper parts, dislike penalty, stretched match', () => {
   it('keeps the agreed constants', () => {
     expect(DISLIKE_PENALTY).toBe(0.15)
     expect(PENALTY_HITS).toBe(2)

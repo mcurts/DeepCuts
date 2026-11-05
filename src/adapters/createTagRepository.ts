@@ -15,7 +15,7 @@ export interface RecordStore {
 
 /**
  * The films on one list, newest first, from a store's records (oldest first). A disliked film is
- * only on the Disliked list (ADR-0017); for equal times, the record stored later wins. Shared by
+ * only on the Disliked list; for equal times, the record stored later wins. Shared by
  * every tag store and the server, so lists come out the same everywhere.
  */
 export function listOf(records: readonly TagRecord[], tag: SystemTag): number[] {
@@ -29,7 +29,7 @@ export function listOf(records: readonly TagRecord[], tag: SystemTag): number[] 
 }
 
 /**
- * Records with at most one tag per film (ADR-0050). Data saved before ADR-0050 could hold two
+ * Records with at most one tag per film. Data saved by older versions could hold two
  * (Like and Want to see); the one added most recently is kept (for equal times, the record stored
  * later), as if each had been picked again in order under today's rule. Already-valid records
  * come back unchanged and in their order.
@@ -45,7 +45,7 @@ export function oneTagPerFilm(records: readonly TagRecord[]): TagRecord[] {
   return records.filter((r, i) => newest.get(r.tmdbId) === i)
 }
 
-/** Where the watchlist's saved order lives (ADR-0041): film ids, first first. */
+/** Where the watchlist's saved order lives: film ids, first first. */
 export interface OrderStore {
   load(): readonly number[]
   save(ids: readonly number[]): void
@@ -96,7 +96,7 @@ export function createTagRepository(
   // A list's films, newest first.
   const newestFirst = (tag: SystemTag) => listOf(store.load(), tag)
 
-  // The watchlist in the saved order (ADR-0041).
+  // The watchlist in the saved order.
   const watchlist = () => applySavedOrder(newestFirst('watchlist'), order.load())
 
   // Drops films that have left the watchlist from its saved order, so a film added again later

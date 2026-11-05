@@ -1,0 +1,19 @@
+{
+  "$description": "Surface textures for Midnight Rental. 0 turns one off.",
+  "theme": {
+    "texture": {
+      "grain": {
+        "$type": "number",
+        "$value": 0.1
+      },
+      "scratch": {
+        "$type": "number",
+        "$value": 0
+      },
+      "halftone": {
+        "$type": "number",
+        "$value": 20
+      }
+    }
+  }
+}

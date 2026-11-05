@@ -1,4 +1,4 @@
-// Playwright configuration for the hosting E2E tests (`npm run e2e:cf`, ADR-0029 Stage 4 H9): the
+// Playwright configuration for the hosting E2E tests (`npm run e2e:cf`): the
 // security checks run against the real Cloudflare runtime, locally, through `npm run preview:cf`
 // (`wrangler pages dev` with the rate-limit Worker). Nothing is deployed.
 import { defineConfig, devices } from '@playwright/test'
@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: 'e2e',
   // The header/CSP/proxy checks, the hosting-only ones (HSTS, `_headers`, SPA routing), and real
-  // passkey accounts against the local D1 database (ADR-0031).
+  // passkey accounts against the local D1 database.
   testMatch: ['security.spec.ts', 'hosting.spec.ts', 'accounts.spec.ts'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

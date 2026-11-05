@@ -1,8 +1,8 @@
-// The theme (brand look) on the page (ADR-0056): which one is on, switching to another with a
+// The theme (brand look) on the page: which one is on, switching to another with a
 // cross-fade, and loading a theme's fonts.
 //
 // A theme is a set of CSS variables under `<html data-theme="<id>">` (src/styles/themes/, built
-// from tokens/themes/). public/theme-boot.js sets the attribute before the first paint from a
+// from tokens/src/themes/). public/theme-boot.js sets the attribute before the first paint from a
 // `?theme=` link or the saved choice; from then on this module owns it.
 import { saveThemePreference } from './adapters/local/LocalThemePreference'
 import { DEFAULT_THEME_ID, THEMES, type ThemeInfo } from './styles/themes'
@@ -17,7 +17,7 @@ const defaultTheme = () => findTheme(DEFAULT_THEME_ID) as ThemeInfo
 
 /**
  * The theme on the page now. No `data-theme` (or an unknown one) means the default, and so does no
- * page at all: the landing page is pre-rendered at build time (ADR-0057), where there is no
+ * page at all: the landing page is pre-rendered at build time, where there is no
  * `document`, and the app re-renders with the visitor's theme when it starts.
  */
 export function currentTheme(): ThemeInfo {

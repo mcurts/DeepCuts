@@ -1,5 +1,5 @@
 // Small HTTP helpers shared by every server-side handler (the TMDB proxy, the auth and tags APIs),
-// written on the Fetch API so they run the same in Vite, Vitest and Cloudflare (ADR-0029).
+// written on the Fetch API so they run the same in Vite, Vitest and Cloudflare.
 import type { z } from 'zod'
 
 /**
@@ -20,7 +20,7 @@ export function json(status: number, body: unknown, extraHeaders: Record<string,
 
 /**
  * An error answer with a short code (`invalid_invite`, `verification_failed`…). Never a stack
- * trace or a library's own message, which could reveal internals (ADR-0008).
+ * trace or a library's own message, which could reveal internals.
  */
 export const fail = (status: number, error: string) => json(status, { error })
 
@@ -54,7 +54,7 @@ export const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
 /**
  * Whether a request comes from this site's own pages: its `Origin` header must equal the
  * request's own origin. Browsers always send `Origin` on cross-site and on POST/PATCH/DELETE
- * requests, so a forged form or script on another site fails this check (ADR-0031).
+ * requests, so a forged form or script on another site fails this check.
  */
 export function isSameOrigin(request: Request): boolean {
   return request.headers.get('Origin') === new URL(request.url).origin

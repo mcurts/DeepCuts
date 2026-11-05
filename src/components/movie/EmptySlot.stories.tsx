@@ -1,4 +1,4 @@
-// Stories for EmptySlot, an empty place on a shelf (ADR-0040 §9), in a box-sized column.
+// Stories for EmptySlot, an empty place on a shelf, in a box-sized column.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
 import { EmptySlot } from './EmptySlot'

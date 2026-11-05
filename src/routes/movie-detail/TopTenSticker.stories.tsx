@@ -1,4 +1,4 @@
-// Stories for the Top Ten shelf-talker stickers on Detail (ADR-0036): TopTenSticker, the "Add to
+// Stories for the Top Ten shelf-talker stickers on Detail: TopTenSticker, the "Add to
 // Top 10" button, and TopTenPick, the sticker once the film is in the list.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { TopTenPick, TopTenSticker } from './TopTenSticker'

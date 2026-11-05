@@ -1,7 +1,7 @@
 // The Halloween logo, shown every October (Logo.tsx, SEASONAL_LOGOS). The owner's artwork
 // (docs repo: design/halloween/deep-cuts-halloween-original.svg) drawn as data: the standard wordmark
 // ringed by jack-o'-lanterns under a crescent moon (the
-// artwork's bats are left out, owner 2026-10-13). At rest the wordmark keeps its usual
+// artwork's bats are left out). At rest the wordmark keeps its usual
 // colors and the faces are dark; on hover, or while the link around it has keyboard focus, the
 // blocks turn purple and orange and the faces light up and flicker (HalloweenLogo.css).
 //
@@ -32,7 +32,7 @@ type Pumpkin = {
   stem: string
   /**
    * The flicker's duration and delay, as utility classes, so pumpkins flicker out of step. Classes,
-   * not a `style` attribute: the CSP blocks inline styles in the pre-rendered HTML (ADR-0057).
+   * not a `style` attribute: the CSP blocks inline styles in the pre-rendered HTML.
    */
   flicker: string
   /** Eyes, (sometimes) a nose, and the mouth, as polygon points. */

@@ -1,0 +1,27 @@
+{
+  "name": "@site-builder/engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The site-builder token engine: DTCG 2025.10 source and resolver in, gated CSS, TS, JSON, DTCG, Tailwind and email out. Vendored byte-identical into every site.",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "bin": {
+    "sb": "./bin/sb.ts"
+  },
+  "scripts": {
+    "test": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "style-dictionary": "5.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@vitest/coverage-v8": "4.1.12",
+    "typescript": "7.0.2",
+    "vitest": "4.1.12"
+  }
+}

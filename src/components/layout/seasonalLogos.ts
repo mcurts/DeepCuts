@@ -21,7 +21,7 @@ type SeasonalLogo = {
 
 /** Every seasonal logo, checked in order; the first in season wins. */
 export const SEASONAL_LOGOS: readonly SeasonalLogo[] = [
-  // All of October (owner, 2026-10-13).
+  // All of October.
   {
     id: 'halloween',
     window: { start: { month: 10, day: 1 }, end: { month: 10, day: 31 } },

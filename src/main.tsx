@@ -25,7 +25,7 @@ reloadOnStaleChunk()
 // A holiday's tab icon, when one is in season (e.g. Halloween all October).
 applySeasonalFavicon()
 
-// The chosen theme's fonts, and remembering a theme picked by a `?theme=` link (ADR-0056).
+// The chosen theme's fonts, and remembering a theme picked by a `?theme=` link.
 initTheme()
 
 const root = document.getElementById('root')
@@ -40,7 +40,7 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter(routes)
 // Resolves once the router has loaded the first page's code (pages are lazy, router.tsx). Until
 // then RouterProvider would render an empty frame, which at `/` would replace the pre-rendered
-// landing page with a blank one for a moment (ADR-0057). The router settles even when a load
+// landing page with a blank one for a moment. The router settles even when a load
 // fails (it then shows the error page), so this never rejects.
 const routerReady = new Promise<void>((resolve) => {
   if (router.state.initialized) return resolve()
@@ -54,7 +54,7 @@ const routerReady = new Promise<void>((resolve) => {
 // timer set from it runs after.
 const nextPaint = () =>
   new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
-// Resolves once the pre-rendered page has painted in its own fonts (ADR-0057). On a fast
+// Resolves once the pre-rendered page has painted in its own fonts. On a fast
 // connection the code can arrive before the headline's font: the app would then replace the
 // headline before it ever showed, and its copy would count as the Largest Contentful Paint, tying
 // that to the JavaScript. A paint first (so layout has asked for the fonts), then the fonts, then
@@ -65,11 +65,11 @@ const shellPainted = (async () => {
   await document.fonts.ready
   await nextPaint()
 })()
-// Which accounts the app uses (ADR-0031): with the build flag VITE_ACCOUNTS=cloudflare (not a
+// Which accounts the app uses: with the build flag VITE_ACCOUNTS=cloudflare (not a
 // secret; set by `npm run preview:cf` and for the hosted build), real passkey accounts on the
 // server; otherwise the local mock, so `npm run dev` needs no setup.
 // Imported statically, so its code downloads with the entry instead of in a second round trip
-// before the first paint (ADR-0055). The flag is a build-time constant, so a mock build drops the
+// before the first paint. The flag is a build-time constant, so a mock build drops the
 // Cloudflare provider and still never ships the passkey library.
 const sessionProvider =
   import.meta.env.VITE_ACCOUNTS === 'cloudflare'

@@ -57,7 +57,7 @@ describe('VhsBox', () => {
   it('shows a placeholder and no year band text when TMDB has no poster or date', () => {
     const { box } = renderInLink({ ...film, poster_path: null, release_date: '' })
     expect(box.querySelector('img')).toBeNull()
-    expect(box.querySelector('.bg-poster-placeholder')).toBeInTheDocument()
+    expect(box.querySelector('.bg-poster-placeholder-background')).toBeInTheDocument()
     expect(box.querySelector('.vhs-spine-band')).toBeEmptyDOMElement()
   })
 

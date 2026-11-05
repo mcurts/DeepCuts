@@ -1,6 +1,5 @@
-/* The Top Ten sticker (TopTenSticker.tsx, ADR-0036), drawn as a "staff pick" shelf talker: the
-   card a rental clerk taped to the shelf under their favourite tape (owner's pick of three
-   mockups, 2026-10-13).
+/* The Top Ten sticker (TopTenSticker.tsx), drawn as a "staff pick" shelf talker: the
+   card a rental clerk taped to the shelf under their favourite tape.
 
    A flat card in the favourite gold with one clipped corner, a strip of translucent tape across
    the top, "YOUR PICK?" in the label face over "★ ADD TO TOP 10" in the poster face, stuck on a
@@ -31,10 +30,10 @@
     display: inline-grid;
     place-items: stretch;
     rotate: var(--tilt);
-    /* A hard 3px shadow, like the stamps (elevation.stamp, ADR-0040); a drop shadow so it
+    /* A hard 3px shadow, like the stamps (elevation.stamp); a drop shadow so it
        follows the clipped outline. */
-    filter: drop-shadow(3px 3px 0 var(--color-shadow));
-    color: var(--color-top-ten-sticker-ink);
+    filter: drop-shadow(3px 3px 0 var(--color-shadow-decorative));
+    color: var(--color-top-ten-sticker-content);
     /* The app's default transition, like every control's hover (index.css). */
     transition-property: rotate, translate, scale;
     transition-duration: --theme(--default-transition-duration);
@@ -62,12 +61,12 @@
   }
 
   .top-ten-sticker__card {
-    background: var(--color-top-ten-sticker-face);
+    background: var(--color-top-ten-sticker-face-background);
     clip-path: polygon(0 0, 100% 0, 100% 100%, var(--corner) 100%, 0 calc(100% - var(--corner)));
   }
 
   .top-ten-sticker--pick .top-ten-sticker__card {
-    background: var(--color-top-ten-sticker-paper);
+    background: var(--color-top-ten-sticker-background);
   }
 
   /* A strip of clear tape, crooked, over the card's top edge. `position: absolute` takes it out
@@ -79,12 +78,12 @@
     @apply h-4.5 w-14;
     translate: -50% 0;
     rotate: -4deg;
-    background: color-mix(in srgb, var(--color-top-ten-sticker-paper) 55%, transparent);
+    background: color-mix(in srgb, var(--color-top-ten-sticker-background) 55%, transparent);
   }
 
   /* On the bone card, plain tape would vanish; a faint ink tint keeps it visible. */
   .top-ten-sticker--pick .top-ten-sticker__tape {
-    background: color-mix(in srgb, var(--color-top-ten-sticker-ink) 15%, transparent);
+    background: color-mix(in srgb, var(--color-top-ten-sticker-content) 15%, transparent);
   }
 
   /* "YOUR PICK?" over "★ ADD TO TOP 10". Its padding sets the card's size; `relative` keeps it

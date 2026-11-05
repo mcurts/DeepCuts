@@ -1,0 +1,282 @@
+[
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-action", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-adventure", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-animation", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-comedy", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-crime", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-default", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-documentary", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-drama", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-family", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-fantasy", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-history", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-horror", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-music", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-mystery", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-romance", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-science-fiction", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-thriller", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-tv-movie", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-war", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "sticker-content",
+    {
+      "mix": ["theme-signal-genre-western", 0.65, "sticker-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-action", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-adventure", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-animation", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-comedy", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-crime", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-default", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-documentary", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-drama", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-family", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-fantasy", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-history", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-horror", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-music", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-mystery", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-romance", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-science-fiction", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-thriller", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-tv-movie", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-war", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ],
+  [
+    "vhs-box-content",
+    {
+      "mix": ["theme-signal-genre-western", 0.75, "vhs-box-card-background"]
+    },
+    4.5
+  ]
+]

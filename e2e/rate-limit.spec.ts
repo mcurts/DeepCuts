@@ -1,10 +1,10 @@
-// What the built app does when the API's per-client rate limit (ADR-0029) refuses some requests.
+// What the built app does when the API's per-client rate limit refuses some requests.
 // Unit tests copy the app's retry rules into their own data cache; this runs the production build,
 // so it checks the rules main.tsx actually sets (src/api/retry.ts).
 //
 // The case it guards: a reload that skips the browser's cache goes over the limit (feedBudget.test.ts).
-// Each refused film used to be asked for again every time Home re-rendered, 781 times in 45 s on
-// the live site, which kept the client over the limit and the shelves jumping.
+// Without the guard, each refused film is asked for again every time Home re-renders (781 times
+// in 45 s on the live site), which keeps the client over the limit and the shelves jumping.
 import { movieFixture } from '../src/test/msw/fixtures'
 import { expect, test } from './fixtures'
 

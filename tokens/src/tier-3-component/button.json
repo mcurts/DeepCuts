@@ -1,0 +1,87 @@
+{
+  "$description": "Tier 3: buttons. Primary is a mustard utility button; CTA is the one blood-red call to action on a page; secondary is a bone outline.",
+  "component": {
+    "button": {
+      "primary": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.accent.background}",
+          "$description": "Primary button fill."
+        },
+        "background-hover": {
+          "$type": "color",
+          "$value": "{theme.color.accent.background-hover}",
+          "$description": "Primary button fill on hover and press."
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.accent.content}",
+          "$description": "Primary button label.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["component.button.primary.background"],
+              "min": 4.5
+            }
+          }
+        }
+      },
+      "cta": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.highlight.background}",
+          "$description": "The one call to action on a page: its fill."
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.highlight.content}",
+          "$description": "Call-to-action label.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["component.button.cta.background"],
+              "min": 4.5
+            }
+          }
+        },
+        "shadow": {
+          "$type": "shadow",
+          "$value": "{theme.shadow.cta}",
+          "$description": "Call-to-action hard shadow."
+        }
+      },
+      "secondary": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.background.default}",
+          "$description": "Secondary button fill."
+        },
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.content.default}",
+          "$description": "Secondary button label.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["component.button.secondary.background"],
+              "min": 4.5
+            }
+          }
+        },
+        "border": {
+          "$type": "color",
+          "$value": "{theme.color.border.emphasis}",
+          "$description": "Secondary button outline.",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["theme.color.background.raised"],
+              "min": 3
+            }
+          }
+        }
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{theme.border.control.radius}",
+        "$description": "Button corners."
+      }
+    }
+  }
+}

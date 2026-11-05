@@ -1,4 +1,4 @@
-// Writes dist/_headers, Cloudflare Pages' header rules for static files (ADR-0029, Stage 4 H6),
+// Writes dist/_headers, Cloudflare Pages' header rules for static files (Stage 4 H6),
 // from server/securityHeaders.ts, the single source of the app's security headers. Runs as part of
 // `npm run build`; the file is never hand-written.
 import { writeFileSync } from 'node:fs'

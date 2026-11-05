@@ -9,8 +9,8 @@ export function RouteError() {
       {/* React 19 moves <title> into the document head. */}
       <title>Something went wrong · Deep Cuts</title>
       <h1 className="font-display text-4xl tracking-wide case-display">Something went wrong</h1>
-      <p className="mt-2 text-fg-muted">
-        <Link to={HOME.path} className="text-accent underline">
+      <p className="mt-2 text-content-muted">
+        <Link to={HOME.path} className="text-content-accent underline">
           Back to {HOME.label}
         </Link>
       </p>

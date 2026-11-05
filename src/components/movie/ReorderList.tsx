@@ -1,4 +1,4 @@
-// A ranked list in reorder mode (ADR-0041): Home's Top Ten and the watchlist on My Lists. Each
+// A ranked list in reorder mode: Home's Top Ten and the watchlist on My Lists. Each
 // film is a ReorderTile with "move earlier" and "move later" buttons, and can be dragged onto
 // another film.
 //

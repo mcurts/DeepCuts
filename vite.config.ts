@@ -12,19 +12,19 @@ import { baseHeaders, contentSecurityPolicy } from './server/securityHeaders.ts'
 import { sonnerStyles } from './server/sonnerStyles.ts'
 import { tmdbProxy } from './server/tmdb/proxy.ts'
 
-// Security headers (ADR-0008), defined once in server/securityHeaders.ts. CSP is applied to
+// Security headers, defined once in server/securityHeaders.ts. CSP is applied to
 // `vite preview` (the production build); the dev server needs inline scripts for React Fast
 // Refresh, so it gets the other headers only. HSTS is for the hosted app only (localhost is HTTP).
 // Re-exported so the E2E security test checks the exact same values.
 export { baseHeaders, contentSecurityPolicy }
 
 // The release version, shown in the footer. `npm run deploy` works it out from git and passes it in
-// (ADR-0049); every other build (dev, tests, Storybook, CI) is a `dev` build.
+//; every other build (dev, tests, Storybook, CI) is a `dev` build.
 const version = process.env.DEEP_CUTS_VERSION ?? 'dev'
 
 export default defineConfig(({ mode }) => ({
   define: { __APP_VERSION__: JSON.stringify(version) },
-  // TMDB_READ_TOKEN is read without the VITE_ prefix, so it never reaches the bundle (ADR-0013).
+  // TMDB_READ_TOKEN is read without the VITE_ prefix, so it never reaches the bundle.
   plugins: [
     react(),
     tailwindcss(),
@@ -33,10 +33,10 @@ export default defineConfig(({ mode }) => ({
     sonnerStyles(),
     // Starts the web fonts downloading with the page, so headings don't reflow when they arrive.
     preloadFonts(),
-    // Lets the stylesheet and fonts, all the pre-rendered landing page needs, arrive first (ADR-0057).
+    // Lets the stylesheet and fonts, all the pre-rendered landing page needs, arrive first.
     lowPriorityScripts(),
     // dist/version.json: the error log reads it to stamp each line with this deploy's version
-    // (ADR-0058, server/errorLog.ts). The footer shows the same version.
+    // (server/errorLog.ts). The footer shows the same version.
     {
       name: 'version-file',
       apply: 'build',
@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => ({
             },
             {
               name: 'react-aria',
-              // Except drag and drop: only Home's Top Ten reorder mode uses it (ADR-0041), so it
+              // Except drag and drop: only Home's Top Ten reorder mode uses it, so it
               // stays in that lazy chunk instead of adding ~20 kB to every first visit.
               test: /node_modules[\\/](react-aria|react-aria-components|react-stately|@react-aria|@react-stately|@react-types|@internationalized|@swc)[\\/](?!.*(?:[\\/]dnd[\\/]|[\\/]use(?:Drag|Drop)\.js$))/,
             },
@@ -108,7 +108,7 @@ export default defineConfig(({ mode }) => ({
       include: ['src/**/*.{ts,tsx}', 'server/**/*.ts', 'functions/**/*.ts', 'scripts/**/*.ts'],
       exclude: [
         'src/main.tsx',
-        // The build-time render of the landing page (ADR-0057), checked by the build and e2e.
+        // The build-time render of the landing page, checked by the build and e2e.
         'src/prerender.tsx',
         'src/**/*.test.{ts,tsx}',
         'src/**/*.contract.ts',
@@ -123,9 +123,9 @@ export default defineConfig(({ mode }) => ({
       ],
       thresholds: {
         lines: 80,
-        // Tag rules carry the product's invariants (ADR-0010, ADR-0017).
+        // Tag rules carry the product's invariants.
         'src/domain/tagRules.ts': { lines: 100, branches: 100, functions: 100, statements: 100 },
-        // The recommendation scorer (ADR-0010, ADR-0026).
+        // The recommendation scorer.
         'src/domain/scorer.ts': { lines: 100, branches: 100, functions: 100, statements: 100 },
       },
     },

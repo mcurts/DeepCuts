@@ -1,4 +1,4 @@
-// The signed-in account (ADR-0031, Stage 6 A2/A2b): who am I, sign out, rename, delete.
+// The signed-in account (Stage 6 A2/A2b): who am I, sign out, rename, delete.
 // Every handler finds the user from the session cookie only; no user id is ever taken from the
 // client.
 import { z } from 'zod'

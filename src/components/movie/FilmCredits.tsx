@@ -20,8 +20,8 @@ export function CreditLines({ credits }: { credits: Credits | undefined }) {
     // Two reserved text rows let credits arrive without moving this card or anything below it.
     <span data-credit-lines="" className="mt-1 block min-h-10">
       {lines.map((l) => (
-        <span key={l.label} className="block text-sm text-fg-muted">
-          {l.label}: <span className="text-fg">{l.names.join(', ')}</span>
+        <span key={l.label} className="block text-sm text-content-muted">
+          {l.label}: <span className="text-content">{l.names.join(', ')}</span>
         </span>
       ))}
     </span>

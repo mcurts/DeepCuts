@@ -24,7 +24,7 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
   const { pathname } = useLocation()
   const [params, setParams] = useSearchParams()
   const onSearchPage = pathname === '/search'
-  // An over-long ?q= is ignored rather than truncated, matching the Search page (ADR-0014).
+  // An over-long ?q= is ignored rather than truncated, matching the Search page.
   const [text, setText] = useState(() => {
     const q = onSearchPage ? (params.get('q') ?? '') : ''
     return q.length <= 100 ? q : ''
@@ -36,7 +36,7 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
   const disliked = new Set(useQuery(useTagQueries().list('disliked')).data)
   const suggestions = query.length >= 2 ? (data?.results.slice(0, MAX_SUGGESTIONS) ?? []) : []
 
-  // On the Search page the URL follows the field, so results and links stay shareable (ADR-0014).
+  // On the Search page the URL follows the field, so results and links stay shareable.
   useEffect(() => {
     if (onSearchPage && query !== (params.get('q') ?? '')) {
       setParams(query ? { q: query } : {}, { replace: true })
@@ -78,8 +78,8 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
       >
         {/* The Group is the popover's trigger, so the suggestion list matches the whole field's
             width (--trigger-width), not just the text input's. */}
-        <Group className="focus-ring-within flex min-h-12 items-stretch rounded-field border-2 border-field-border bg-field-bg pl-3 focus-within:border-field-border-focus">
-          <Icon name="search" className="size-5 shrink-0 self-center text-accent" />
+        <Group className="focus-ring-within flex min-h-12 items-stretch rounded-field border-2 border-field-border bg-field-background pl-3 focus-within:border-field-border-focus">
+          <Icon name="search" className="size-5 shrink-0 self-center text-content-accent" />
           <Input
             // Enter with a highlighted suggestion selects it (React Aria); otherwise it acts as Find.
             onKeyDown={(e) => {
@@ -87,25 +87,25 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
                 submit()
             }}
             placeholder="Find a movie to tag..."
-            className="min-w-0 flex-1 bg-transparent px-3 text-base text-fg outline-none placeholder:text-fg-placeholder"
+            className="min-w-0 flex-1 bg-transparent px-3 text-base text-content outline-none placeholder:text-content-placeholder"
           />
           {/* Disabled until there's something to open. */}
           <button
             type="submit"
             disabled={suggestions.length === 0}
-            className="w-18 bg-field-action-bg font-display text-base tracking-widest text-field-action-fg case-display hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-surface-overlay disabled:text-fg-muted"
+            className="w-18 bg-field-action-background font-display text-base tracking-widest text-field-action-content case-display hover:bg-accent-background-hover disabled:cursor-not-allowed disabled:bg-background-overlay disabled:text-content-muted"
           >
             Find
           </button>
         </Group>
         <Popover
           offset={6}
-          className="max-h-96 w-(--trigger-width) overflow-y-auto rounded-popover border-2 border-popover-border bg-popover-bg p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
+          className="max-h-96 w-(--trigger-width) overflow-y-auto rounded-popover border-2 border-popover-border bg-popover-background p-1 shadow-popover data-entering:animate-pop-in data-exiting:animate-pop-out"
         >
           <ListBox
             aria-label="Movie suggestions"
             renderEmptyState={() => (
-              <p className="p-3.5 text-sm text-fg-muted">
+              <p className="p-3.5 text-sm text-content-muted">
                 {query.length >= 2 ? 'No matching films' : 'Type at least two letters'}
               </p>
             )}
@@ -119,16 +119,19 @@ export function MovieSearch({ onPick }: { onPick?: (movie: MovieSummary) => void
                   id={movie.id}
                   textValue={movie.title}
                   style={genreTone(movie.genre_ids)}
-                  className="border-b-border-2 flex min-h-16 cursor-pointer items-center gap-2.5 border-b border-l-3 border-l-(--tone) p-1.5 outline-none last:border-b-0 data-focused:bg-surface-overlay"
+                  className="border-b-border-2 flex min-h-16 cursor-pointer items-center gap-2.5 border-b border-l-3 border-l-(--tone) p-1.5 outline-none last:border-b-0 data-focused:bg-background-overlay"
                 >
                   {poster ? (
                     <LoadingImage src={poster} alt="" className="h-12 w-9 shrink-0 object-cover" />
                   ) : (
-                    <span aria-hidden="true" className="h-12 w-9 shrink-0 bg-poster-placeholder" />
+                    <span
+                      aria-hidden="true"
+                      className="h-12 w-9 shrink-0 bg-poster-placeholder-background"
+                    />
                   )}
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <strong className="text-sm font-bold wrap-anywhere">{movie.title}</strong>
-                    <small className="text-sm text-fg-muted">
+                    <small className="text-sm text-content-muted">
                       {meta.filter(Boolean).join(' · ')}
                       {disliked.has(movie.id) && (
                         <span className="ml-2 text-tag-disliked">Less like this</span>

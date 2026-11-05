@@ -1,7 +1,7 @@
 // When and how soon a failed data request is tried again (React Query's defaults, main.tsx).
 //
 // Most failures (a network blip, a slow TMDB answer) are retried once, straight away. A 429 means
-// this client is over the per-client rate limit (ADR-0029): an immediate retry would only count
+// this client is over the per-client rate limit: an immediate retry would only count
 // against the limit again, so it is retried once, after the wait the server asks for
 // (`Retry-After`). Until then the film keeps its loading placeholder, so the page holds still.
 //

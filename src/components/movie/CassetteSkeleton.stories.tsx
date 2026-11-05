@@ -1,4 +1,4 @@
-// Stories for CassetteSkeleton, a film tile's placeholder while it loads (ADR-0040 §9): one at a
+// Stories for CassetteSkeleton, a film tile's placeholder while it loads: one at a
 // phone tile's width, a shelf of them as Home shows while its films load, and the single row
 // shown while a whole list loads.
 import type { Meta, StoryObj } from '@storybook/react-vite'

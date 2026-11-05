@@ -1,5 +1,5 @@
 // GET /api/tags lists the user's tags; PUT sets one; DELETE removes one (or all).
-// The logic lives in server/accounts/ (ADR-0031); this file only routes methods to it. The rate
+// The logic lives in server/accounts/; this file only routes methods to it. The rate
 // limit and the Origin check run first, in functions/api/_middleware.ts.
 import { changeTag, listTags } from '../../../server/accounts/tags.ts'
 import { route } from '../../../server/http.ts'

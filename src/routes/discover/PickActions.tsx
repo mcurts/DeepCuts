@@ -1,5 +1,4 @@
-// The quick-action strip under a Discovery pick (issue #76; owner picked layout A with stamps,
-// 2026-10-15): three buttons in one row, Want / Like / Nope (ADR-0050), that tag the film at once without
+// The quick-action strip under a Discovery pick (issue #76): three buttons in one row, Want / Like / Nope, that tag the film at once without
 // opening Detail. Once one is used, the strip becomes an Undo button (the box shows the stamp,
 // CassetteCard). It sits after the tile's link, never inside it, so there's no interactive
 // element nested in another, and the keyboard goes tile link → its actions → the next tile.
@@ -56,7 +55,7 @@ export function PickActions({
           data-undo=""
           onClick={() => !busy && onUndo()}
           aria-disabled={busy || undefined}
-          className="min-h-11 w-full animate-pop-in border-2 border-dashed border-accent text-sm font-bold text-accent hover:bg-accent hover:text-fg-on-accent aria-disabled:cursor-wait"
+          className="min-h-11 w-full animate-pop-in border-2 border-dashed border-border-accent text-sm font-bold text-content-accent hover:bg-accent-background hover:text-accent-content aria-disabled:cursor-wait"
         >
           Undo{' '}
           <span className="sr-only">
@@ -80,7 +79,7 @@ export function PickActions({
               // border's width, so the strip still reads as one row with single 2px dividers. The
               // hovered or focused button is lifted above its neighbours, so its whole outline shows
               // in the tag's colour (with shared dividers, its left edge was the previous button's).
-              className="relative flex min-h-11 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-bg px-0.5 text-xs font-bold text-tag-toggle-fg not-first:-ml-0.5 hover:z-10 hover:border-(--tag) focus-visible:z-10 aria-disabled:cursor-wait aria-disabled:opacity-60"
+              className="relative flex min-h-11 min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-0.5 rounded-tag-toggle border-2 border-tag-toggle-border bg-tag-toggle-background px-0.5 text-xs font-bold text-tag-toggle-content not-first:-ml-0.5 hover:z-10 hover:border-(--tag) focus-visible:z-10 aria-disabled:cursor-wait aria-disabled:opacity-60"
             >
               <Icon name={action.icon} className="size-5 shrink-0 text-(--tag)" />
               <span aria-hidden="true">{action.short}</span>

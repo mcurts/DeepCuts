@@ -1,4 +1,4 @@
-// The app's security headers, defined once (ADR-0008, ADR-0029 Stage 4 H6). Every place that
+// The app's security headers, defined once. Every place that
 // serves the app reads them from here, so they can't drift apart:
 // - `vite dev` / `vite preview` (vite.config.ts),
 // - Cloudflare Pages static files, through `dist/_headers` (written by scripts/generate-headers.mjs
@@ -12,7 +12,7 @@ export const baseHeaders: Record<string, string> = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'microphone=(), camera=(), geolocation=(), payment=()',
   'X-Frame-Options': 'DENY',
-  // Keep the invite-only site out of search engines (owner, 2026-10-07). This header
+  // Keep the invite-only site out of search engines. This header
   // covers every response, including the API and the *.pages.dev address; public/robots.txt asks
   // crawlers not to fetch anything, and index.html carries the same rule as a <meta> tag.
   'X-Robots-Tag': 'noindex, nofollow',

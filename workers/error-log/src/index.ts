@@ -1,4 +1,4 @@
-// The error-log Worker (ADR-0058). Pages Functions have no Workers Logs, so the `/api` middleware
+// The error-log Worker. Pages Functions have no Workers Logs, so the `/api` middleware
 // sends each error line here over a service binding, and this Worker prints it, which Workers Logs
 // keeps. The line was built and checked in server/errorLog.ts; it's checked again here, so even a
 // line that somehow skipped that can't put anything else in the log.

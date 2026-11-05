@@ -1,0 +1,72 @@
+{
+  "$description": "Tier 3: the VHS box posters on Discover's grid (design approved 2026-10-09): each film drawn as a 3D cardboard video sleeve. The art, the genre band on the spine and the cassette's label sticker take the film's genre tone at runtime (`--tone`).",
+  "component": {
+    "vhs-box": {
+      "card": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.print.background}",
+          "$description": "Raw card on the folded top and bottom edges, the rubbed shelf wear, the barcode label"
+        }
+      },
+      "content": {
+        "$type": "color",
+        "$value": "{theme.color.print.content}",
+        "$description": "Printing on the card: the year band, the label sticker, the barcode",
+        "$extensions": {
+          "com.mikecurts.contrast": [
+            {
+              "on": ["component.vhs-box.card.background"],
+              "min": 4.5
+            },
+            {
+              "on": [
+                "theme.signal.genre.action",
+                "theme.signal.genre.adventure",
+                "theme.signal.genre.animation",
+                "theme.signal.genre.comedy",
+                "theme.signal.genre.crime",
+                "theme.signal.genre.default",
+                "theme.signal.genre.documentary",
+                "theme.signal.genre.drama",
+                "theme.signal.genre.family",
+                "theme.signal.genre.fantasy",
+                "theme.signal.genre.history",
+                "theme.signal.genre.horror",
+                "theme.signal.genre.music",
+                "theme.signal.genre.mystery",
+                "theme.signal.genre.romance",
+                "theme.signal.genre.science-fiction",
+                "theme.signal.genre.thriller",
+                "theme.signal.genre.tv-movie",
+                "theme.signal.genre.war",
+                "theme.signal.genre.western"
+              ],
+              "min": 3
+            }
+          ]
+        }
+      },
+      "shell": {
+        "background": {
+          "$type": "color",
+          "$value": "{theme.color.background.default}",
+          "$description": "The dark printed spine and the black cassette in the open end"
+        }
+      },
+      "light": {
+        "content": {
+          "$type": "color",
+          "$value": "{theme.color.content.default}",
+          "$description": "Title text on the spine, and the light that tints the cassette",
+          "$extensions": {
+            "com.mikecurts.contrast": {
+              "on": ["component.vhs-box.shell.background"],
+              "min": 4.5
+            }
+          }
+        }
+      }
+    }
+  }
+}

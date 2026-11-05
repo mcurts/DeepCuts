@@ -1,4 +1,4 @@
-// Stories for SiteFooter, the legal footer with the release version (ADR-0048, ADR-0049). It stacks below
+// Stories for SiteFooter, the legal footer with the release version. It stacks below
 // `sm`; the E2E reflow checks cover the phone widths.
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, within } from 'storybook/test'

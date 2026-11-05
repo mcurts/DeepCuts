@@ -1,4 +1,4 @@
-// The registration page (/register, ADR-0031): sign-up is by invitation, and the account's key
+// The registration page (/register): sign-up is by invitation, and the account's key
 // is a passkey (fingerprint, face or device PIN), so the form only asks for a name and the invite
 // code. The layout is plain until the owner designs it.
 //
@@ -7,7 +7,7 @@
 //
 // With real accounts (VITE_ACCOUNTS=cloudflare), the device creates a passkey and the server checks
 // the invite (single use, not expired). With the local mock, a *practice* account is made on this
-// device, only the name is kept, and the page says so (ADR-0025). Like sign-in, the page then
+// device, only the name is kept, and the page says so. Like sign-in, the page then
 // returns to where sign-in started.
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Button, FieldError, Form, Input, Label, Text, TextField } from 'react-aria-components'
@@ -32,11 +32,11 @@ const INVITE_REFUSED = 'This invite can’t be used. It may have expired or been
 // Shared field styles. The whole field box shows the focus ring (focus-ring-within), and turns
 // the danger color while it has an error.
 const fieldBox =
-  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-bg rounded-field focus-within:border-field-border-focus group-data-invalid:border-fg-danger'
+  'focus-ring-within flex min-h-12 items-center border-2 border-field-border bg-field-background rounded-field focus-within:border-field-border-focus group-data-invalid:border-field-border-invalid'
 const inputClass =
-  'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-fg outline-none placeholder:text-fg-placeholder'
+  'min-w-0 flex-1 self-stretch bg-transparent px-3 text-base text-content outline-none placeholder:text-content-placeholder'
 
-/** The registration page (ADR-0031): a name and an invite code, then a passkey. */
+/** The registration page: a name and an invite code, then a passkey. */
 export function RegisterPage() {
   useRouteFocus()
   const { session, register, practiceRegistration } = useSession()
@@ -110,16 +110,17 @@ export function RegisterPage() {
         <h1 className="font-display text-4xl leading-none tracking-wide case-display">
           Create an account
         </h1>
-        <p className="mt-2 text-sm text-fg-muted">
+        <p className="mt-2 text-sm text-content-muted">
           Keep your lists in your account instead of a single browser.
         </p>
       </div>
 
-      {/* ADR-0025's rule: a mock must never pass for a real account. */}
+      {/* A mock must never pass for a real account. */}
       {practiceRegistration && (
-        <p className="border-2 border-dashed border-border-control p-3 text-sm text-fg-muted">
-          <strong className="text-fg">Practice registration.</strong> No passkey or real account is
-          created yet. Your name is kept on this device; the invite code is checked, then discarded.
+        <p className="border-2 border-dashed border-border-control p-3 text-sm text-content-muted">
+          <strong className="text-content">Practice registration.</strong> No passkey or real
+          account is created yet. Your name is kept on this device; the invite code is checked, then
+          discarded.
         </p>
       )}
 
@@ -143,10 +144,10 @@ export function RegisterPage() {
           <div className={fieldBox}>
             <Input className={inputClass} />
           </div>
-          <Text slot="description" className="text-sm text-fg-muted">
+          <Text slot="description" className="text-sm text-content-muted">
             Shown in the header and on your account.
           </Text>
-          <FieldError className="text-sm text-fg-danger" />
+          <FieldError className="text-sm text-content-danger" />
         </TextField>
 
         <TextField
@@ -162,35 +163,35 @@ export function RegisterPage() {
             {/* No auto-capitalising or spell-check on phones: they'd change the code. */}
             <Input className={inputClass} autoCapitalize="none" spellCheck={false} />
           </div>
-          <Text slot="description" className="text-sm text-fg-muted">
+          <Text slot="description" className="text-sm text-content-muted">
             Deep Cuts is invite-only for now. Your invite link fills this in.
           </Text>
-          <FieldError className="text-sm text-fg-danger" />
+          <FieldError className="text-sm text-content-danger" />
         </TextField>
 
         <Button
           type="submit"
           isPending={pending}
-          className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-bg font-display text-base tracking-widest text-button-primary-fg case-display hover:bg-button-primary-bg-hover data-pending:opacity-70"
+          className="flex min-h-12 w-full items-center justify-center rounded-button bg-button-primary-background font-display text-base tracking-widest text-button-primary-content case-display hover:bg-button-primary-background-hover data-pending:opacity-70"
         >
           Create passkey
         </Button>
-        <p className="text-sm text-fg-muted">
+        <p className="text-sm text-content-muted">
           Your device asks for your fingerprint, face or PIN. That passkey is how you’ll sign in: no
           password.
         </p>
       </Form>
-      <p role="status" className="text-sm text-fg-muted empty:hidden">
+      <p role="status" className="text-sm text-content-muted empty:hidden">
         {pending ? 'Creating your account…' : ''}
       </p>
 
-      <p className="text-sm text-fg-muted">
+      <p className="text-sm text-content-muted">
         Already have an account?{' '}
-        <Link to="/sign-in" state={{ from }} className="text-accent underline">
+        <Link to="/sign-in" state={{ from }} className="text-content-accent underline">
           Sign in
         </Link>
         . No invite?{' '}
-        <Link to="/sign-in" state={{ from }} className="text-accent underline">
+        <Link to="/sign-in" state={{ from }} className="text-content-accent underline">
           Try the demo
         </Link>
         .

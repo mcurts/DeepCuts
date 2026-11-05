@@ -1,7 +1,7 @@
 // Playwright configuration for the end-to-end tests in e2e/ (`npm run e2e`).
 import { defineConfig, devices } from '@playwright/test'
 
-// Three viewports per ADR-0021: Reflow (320), mobile (390), desktop (1280).
+// Three viewports: Reflow (320), mobile (390), desktop (1280).
 export default defineConfig({
   testDir: 'e2e',
   // Hosting-only checks (HSTS, `_headers`, Functions) and real passkey accounts run against
@@ -28,7 +28,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
   ],
-  // Tests run against the production build, where the CSP is applied (ADR-0008).
+  // Tests run against the production build, where the CSP is applied.
   // Same as CI everywhere: a fresh build every run, and no TMDB token, so a missing mock can
   // never fall through to live TMDB from a developer machine.
   webServer: {

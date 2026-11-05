@@ -1,4 +1,4 @@
-// Tests for the sign-in flow (ADR-0025, ADR-0034): a signed-in page sends a signed-out visitor
+// Tests for the sign-in flow: a signed-in page sends a signed-out visitor
 // to sign in and back again (same-app paths only), failures change nothing, and the signed-in
 // Account page signs out to the landing page.
 import { screen, waitFor, within } from '@testing-library/react'
@@ -11,8 +11,8 @@ import { findToast, renderRoute } from '@/test/renderRoute'
 
 const header = () => screen.getByRole('banner')
 
-describe('sign in (ADR-0025)', () => {
-  it('sends a signed-out visitor from a signed-in page to sign in, then back to it (ADR-0034)', async () => {
+describe('sign in', () => {
+  it('sends a signed-out visitor from a signed-in page to sign in, then back to it', async () => {
     const user = userEvent.setup()
     const { router } = renderRoute('/lists?tag=watchlist', { initialSession: SIGNED_OUT })
     expect(
@@ -94,7 +94,7 @@ describe('signed-in account page', () => {
 
     await user.click(screen.getByRole('button', { name: 'Sign out' }))
     await user.click(screen.getByRole('button', { name: 'Yes, sign out' }))
-    // Signing out lands on the landing page, not on a sign-in prompt for /account (ADR-0034).
+    // Signing out lands on the landing page, not on a sign-in prompt for /account.
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     expect(within(header()).getByRole('link', { name: 'Sign in' })).toBeInTheDocument()
     expect(

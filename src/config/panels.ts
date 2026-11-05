@@ -1,5 +1,5 @@
 // The app's three ideas, in the order the landing page's program and Home's shelves present them
-// (ADR-0035, ADR-0040): Top Ten, Watchlist and Discovery. One definition, so the two
+//: Top Ten, Watchlist and Discovery. One definition, so the two
 // pages can't drift apart in name or order.
 
 /** Which of the three ideas. */

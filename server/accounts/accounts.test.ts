@@ -1,5 +1,5 @@
 // @vitest-environment node
-// Tests for the accounts API (ADR-0031, Stage 6 A2/A2b/A3/A6): passkey registration and sign-in,
+// Tests for the accounts API (Stage 6 A2/A2b/A3/A6): passkey registration and sign-in,
 // invites, sessions, rename/delete, and per-user tags. They run against real SQLite with the real
 // migrations (server/testing/fakeD1.ts) and a software passkey that really signs
 // (server/testing/softAuthenticator.ts), through the same `/api` guard Pages uses.
@@ -168,7 +168,7 @@ describe('registration (A2)', () => {
     expect(db.rows('passkeys')).toHaveLength(1)
   })
 
-  it('reports a failed sign-up batch to the error log (ADR-0058)', async () => {
+  it('reports a failed sign-up batch to the error log', async () => {
     const client = createClient(env)
     const soft = await createSoftAuthenticator()
     const options = await client.call('POST', '/api/auth/register/options', {
@@ -518,7 +518,7 @@ describe('tags (A3)', () => {
     expect((await client.call('POST', '/api/tags/import', bad)).status).toBe(400)
   })
 
-  it('ADR-0050: refuses the retired "Seen it" tag and skips rows of it not yet migrated', async () => {
+  it('refuses the retired "Seen it" tag and skips rows of it not yet migrated', async () => {
     const client = await signedIn()
     expect((await client.call('PUT', '/api/tags', { tmdbId: 1, tag: 'seen' })).status).toBe(400)
     const retired = { records: [{ tmdbId: 1, tag: 'seen', createdAt: '2026-01-01T00:00:00.000Z' }] }
@@ -536,7 +536,7 @@ describe('tags (A3)', () => {
   })
 })
 
-describe('watchlist order (ADR-0041)', () => {
+describe('watchlist order', () => {
   async function signedIn() {
     const client = createClient(env)
     await register(client, await createSoftAuthenticator(), await invite())
@@ -592,7 +592,7 @@ describe('watchlist order (ADR-0041)', () => {
     const client = await signedIn()
     for (const id of [1, 2, 3, 4]) await add(client, id)
     await reorder(client, [1, 2, 3, 4])
-    await add(client, 2, 'liked') // Like clears Want to see (tag rules, ADR-0050).
+    await add(client, 2, 'liked') // Like clears Want to see (tag rules).
     await client.call('DELETE', '/api/tags', { tmdbId: 3, tag: 'watchlist' })
     await add(client, 4, 'disliked')
     expect(db.rows('watchlist_order').map((r) => r.tmdb_id)).toEqual([1])
@@ -618,7 +618,7 @@ describe('watchlist order (ADR-0041)', () => {
   })
 })
 
-describe('Top Ten (ADR-0036)', () => {
+describe('Top Ten', () => {
   async function signedIn() {
     const client = createClient(env)
     await register(client, await createSoftAuthenticator(), await invite())
@@ -680,7 +680,7 @@ describe('Top Ten (ADR-0036)', () => {
     expect(await films(client)).toEqual([])
   })
 
-  it('saves a new order with PATCH, rewriting positions 1…n (ADR-0041)', async () => {
+  it('saves a new order with PATCH, rewriting positions 1…n', async () => {
     const client = await signedIn()
     for (const id of [1, 2, 3]) await client.call('PUT', '/api/top-ten', { tmdbId: id })
     const res = await client.call('PATCH', '/api/top-ten', { ids: [3, 1, 2] })

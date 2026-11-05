@@ -1,4 +1,4 @@
-// One feature on the landing page's bill, "Tonight's program" (ADR-0035, ADR-0040 §6a): a
+// One feature on the landing page's bill, "Tonight's program": a
 // "Feature Nº n" label, the feature's heading, its illustration and a line of copy. Home shows
 // the same three ideas as shelves (ShelfSection), in the same order.
 import type { ReactNode } from 'react'
@@ -24,7 +24,7 @@ export function FeaturePanel({
   return (
     <section
       aria-labelledby={headingId}
-      className="flex h-full min-w-0 flex-col rounded-card border-2 border-card-border bg-card-bg p-7"
+      className="flex h-full min-w-0 flex-col rounded-card border-2 border-card-border bg-card-background p-7"
     >
       <Eyebrow className="mb-1">Feature Nº {feature}</Eyebrow>
       <h3

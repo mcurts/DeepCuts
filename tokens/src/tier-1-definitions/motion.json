@@ -1,0 +1,50 @@
+{
+  "duration": {
+    "150": {
+      "$type": "duration",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      }
+    },
+    "400": {
+      "$type": "duration",
+      "$value": {
+        "value": 400,
+        "unit": "ms"
+      }
+    },
+    "450": {
+      "$type": "duration",
+      "$value": {
+        "value": 450,
+        "unit": "ms"
+      }
+    },
+    "500": {
+      "$type": "duration",
+      "$value": {
+        "value": 500,
+        "unit": "ms"
+      }
+    }
+  },
+  "easing": {
+    "in": {
+      "$type": "cubicBezier",
+      "$value": [0.4, 0, 1, 1]
+    },
+    "out": {
+      "$type": "cubicBezier",
+      "$value": [0, 0, 0.2, 1]
+    },
+    "in-out": {
+      "$type": "cubicBezier",
+      "$value": [0.4, 0, 0.2, 1]
+    },
+    "ease": {
+      "$type": "cubicBezier",
+      "$value": [0.25, 0.1, 0.25, 1]
+    }
+  }
+}

@@ -1,9 +1,9 @@
-// The session contract (ADR-0013, ADR-0025, ADR-0034): who is using the app.
+// The session contract: who is using the app.
 //
-// There are two kinds of session (ADR-0034):
+// There are two kinds of session:
 // - signedOut: the landing page and the account pages only; nothing is read or saved;
-// - account: signed in. A real account signs in with a passkey (ADR-0031, Cloudflare D1). The
-//   shared "demo" account (ADR-0025) and the "practice" account the local mock makes from the
+// - account: signed in. A real account signs in with a passkey (Cloudflare D1). The
+//   shared "demo" account and the "practice" account the local mock makes from the
 //   registration form are stand-ins that live only on this device.
 import { z } from 'zod'
 
@@ -11,8 +11,8 @@ import { z } from 'zod'
 export const accountSchema = z.object({
   id: z.string().regex(/^[\w-]{1,64}$/),
   name: z.string().trim().min(1).max(80),
-  // passkey: a real account on the server (ADR-0031). demo: the shared practice account
-  // (ADR-0025). practice: made by the local mock's registration form. Neither demo nor practice is
+  // passkey: a real account on the server. demo: the shared practice account
+  //. practice: made by the local mock's registration form. Neither demo nor practice is
   // a real account; both live only on this device.
   method: z.enum(['passkey', 'demo', 'practice']),
 })
@@ -22,7 +22,7 @@ export type Account = z.infer<typeof accountSchema>
 export type SignInMethodId = Extract<Account['method'], 'passkey' | 'demo'>
 
 /**
- * What the registration form asks for (ADR-0031). The messages are shown under each field.
+ * What the registration form asks for. The messages are shown under each field.
  * - name: the same limit an account name has.
  * - invite: the single-use code from an invite link: 128 random bits as base64url (22 characters).
  * The passkey itself is made by the device, not typed, so it isn't part of this schema.
@@ -45,7 +45,7 @@ export interface SignInMethod {
   description: string
 }
 
-/** The current session: signed out, or signed in to an account (ADR-0034). */
+/** The current session: signed out, or signed in to an account. */
 export type Session = { kind: 'signedOut' } | { kind: 'account'; account: Account }
 
 /** The one signed-out session; providers return this rather than building their own. */
@@ -64,7 +64,7 @@ export interface SessionProvider {
   /** Rejects for a method this provider doesn't offer, or when sign-in doesn't complete. */
   signIn(method: SignInMethodId): Promise<Session>
   /**
-   * Creates an account from the registration form and signs it in (ADR-0031). Throws a ZodError
+   * Creates an account from the registration form and signs it in. Throws a ZodError
    * for invalid details. The local mock keeps only the name; the invite code is discarded.
    */
   register(details: Registration): Promise<Session>
@@ -72,10 +72,10 @@ export interface SessionProvider {
   signOut(): Promise<Session>
   /**
    * True when `register` only makes a practice account on this device (the local mock), so the
-   * registration page says so (ADR-0025: a mock must never pass for a real account).
+   * registration page says so.
    */
   readonly practiceRegistration: boolean
-  /** Renames the signed-in passkey account (ADR-0031 A2b). Absent where accounts can't be renamed. */
+  /** Renames the signed-in passkey account. Absent where accounts can't be renamed. */
   rename?(name: string): Promise<Session>
   /** Deletes the signed-in passkey account and its lists, for good. Absent where unsupported. */
   deleteAccount?(): Promise<Session>

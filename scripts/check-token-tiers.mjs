@@ -1,16 +1,12 @@
-// Token tiers (ADR-0023, ADR-0027, ADR-0056, after Brad Frost's three-tier model).
-// 1. In the token files, each tier may only reference the tiers below it:
-//    primitive → primitive · palette, brand → nothing · semantic/themes → primitive, palette,
-//    semantic, themes · component → semantic, themes. Every theme defines the same roles.
-// 2. In the code, components use Tailwind utilities generated from tiers 2–3. Raw `--dc-*`
-//    variables may appear only in src/index.css (the page accent, display type, textures) and brand variables only in
-//    the logo files (Logo.tsx and the holiday logos' stylesheets). Corners use radius roles
-//    (`rounded-button`, `rounded-container`; ADR-0056) and shadows use role or component tokens (`shadow-popover`, `shadow-box`), not the raw scale
-//    (`rounded-lg`, `shadow-sm`). Motion uses the motion roles (ADR-0053): no raw durations or
-//    easings (`duration-300`, `ease-out`, `transition: color 0.2s`) outside src/index.css, except
-//    endless loops (`infinite`), which keep their own pace.
+// How code reads design tokens. The token build (tokens/engine/) already checks the tokens
+// themselves (tiers, names, every theme defining the same roles, contrast); this checks the code:
+// - token variables (--theme-*) are read through Tailwind utilities, except in the few files
+//   listed in ALLOWED, where Tailwind has no utility for them;
+// - corners and shadows use role utilities (rounded-button, shadow-box), not Tailwind's raw scale;
+// - motion uses motion roles, not raw durations or easings (except endless loops).
+// See docs/design-tokens.md.
 import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { join } from 'node:path'
 
 const walk = (dir, ext) =>
   readdirSync(dir).flatMap((f) => {
@@ -24,87 +20,13 @@ const fail = (msg) => {
   problems++
 }
 
-// ---- 1. References between tiers -------------------------------------------------------------
-// Each theme (a folder in tokens/themes/, ADR-0056) is checked with the shared tiers, the way the
-// build sees it. A theme's palette.json is its own tier 1: raw values that reference nothing.
-const MAY_REFERENCE = {
-  primitive: ['primitive'],
-  palette: [],
-  brand: [],
-  semantic: ['primitive', 'semantic', 'themes'],
-  themes: ['primitive', 'palette', 'semantic', 'themes'],
-  component: ['semantic', 'themes'],
-}
-const tierOf = (file) =>
-  file.endsWith('/palette.json') ? 'palette' : relative('tokens', file).split('/')[0]
-/** Every token in these files: path → { tier, file, value }. */
-const read = (files) => {
-  const tokens = new Map()
-  for (const file of files) {
-    const visit = (node, path) => {
-      if (node && typeof node === 'object' && '$value' in node) {
-        tokens.set(path.join('.'), { tier: tierOf(file), file, value: node.$value })
-        return
-      }
-      for (const [k, v] of Object.entries(node ?? {}))
-        if (!k.startsWith('$')) visit(v, [...path, k])
-    }
-    visit(JSON.parse(readFileSync(file, 'utf8')), [])
-  }
-  return tokens
-}
-const refsIn = (value) => [...JSON.stringify(value).matchAll(/\{([^{}"]+)\}/g)].map((m) => m[1])
-
-const THEMES = 'tokens/themes'
-const shared = walk('tokens', /\.json$/).filter((f) => !f.startsWith(THEMES))
-const themes = readdirSync(THEMES).map((id) => {
-  const files = walk(join(THEMES, id), /\.json$/).filter((f) => !f.endsWith('/meta.json'))
-  const meta = JSON.parse(readFileSync(join(THEMES, id, 'meta.json'), 'utf8'))
-  return { id, files, meta }
-})
-let count = 0
-for (const theme of themes) {
-  const tokens = read([...shared, ...theme.files])
-  count = Math.max(count, tokens.size)
-  for (const [path, { tier, file, value }] of tokens) {
-    if (!(tier in MAY_REFERENCE)) fail(`${file}: unknown tier folder "${tier}"`)
-    for (const ref of refsIn(value)) {
-      const target = tokens.get(ref)
-      if (!target) fail(`${file}: ${path} references missing token {${ref}}`)
-      else if (!MAY_REFERENCE[tier]?.includes(target.tier))
-        fail(`${file}: ${path} (${tier}) may not reference {${ref}} (${target.tier})`)
-    }
-  }
-}
-
-// ---- 1b. Every theme has the same roles (ADR-0056) -------------------------------------------
-// Copying a theme folder is only safe if components can count on every role being there. So each
-// theme must define exactly the default theme's role names (its palette is free-form).
-const roleNames = (theme) =>
-  new Set(read(theme.files.filter((f) => !f.endsWith('/palette.json'))).keys())
-const defaults = themes.filter((t) => t.meta.default)
-if (defaults.length !== 1)
-  fail(`${THEMES}: exactly one theme must have "default": true in meta.json`)
-else {
-  const expected = roleNames(defaults[0])
-  for (const theme of themes) {
-    const actual = roleNames(theme)
-    for (const name of expected)
-      if (!actual.has(name)) fail(`${THEMES}/${theme.id}: missing role ${name}`)
-    for (const name of actual)
-      if (!expected.has(name))
-        fail(
-          `${THEMES}/${theme.id}: ${name} is not a role of ${defaults[0].id}; add it there first`,
-        )
-  }
-}
-
-// ---- 2. Code ---------------------------------------------------------------------------------
+// Token variables read directly, not through a Tailwind utility, only where Tailwind has no
+// utility for them: the page accent and the display type, textures and headline shadow
+// (index.css), and the logo colors (the two logo files).
 const ALLOWED = {
-  // The page accent, and the theme values Tailwind has no utility for (display type, textures).
-  'src/index.css': /--dc-(?:color|font-display|texture|text-shadow)-/,
-  'src/components/layout/Logo.tsx': /--dc-brand-/,
-  'src/components/layout/HalloweenLogo.css': /--dc-brand-/,
+  'src/index.css': /--theme-(?:signal|font-display|texture|size-headline)-/,
+  'src/components/layout/Logo.tsx': /--theme-logo-/,
+  'src/components/layout/HalloweenLogo.css': /--theme-logo-/,
 }
 const IGNORE = /^src\/styles\//
 const RAW_SCALE =
@@ -119,7 +41,7 @@ for (const file of walk('src', /\.(tsx?|css)$/)) {
   readFileSync(file, 'utf8')
     .split('\n')
     .forEach((line, i) => {
-      for (const [, name] of line.matchAll(/(--dc-[\w-]+)/g)) {
+      for (const [, name] of line.matchAll(/(--theme-[\w-]+)/g)) {
         if (!ALLOWED[file]?.test(name))
           fail(`${file}:${i + 1} ${name}: use a Tailwind utility instead`)
       }
@@ -142,5 +64,5 @@ for (const file of walk('src', /\.(tsx?|css)$/)) {
     })
 }
 
-if (!problems) console.log(`✓ token tiers respected (${count} tokens, ${themes.length} themes)`)
+if (!problems) console.log('✓ code reads tokens through Tailwind utilities and token roles')
 process.exit(problems ? 1 : 0)

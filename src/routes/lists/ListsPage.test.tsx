@@ -1,6 +1,6 @@
 // Tests for My Lists: tagged films appear under their list, `?tag=` filters, and an unknown
 // `?tag=` (or the retired Seen list's) falls back to Want to see, and the films are VHS boxes with their credits. The watchlist
-// can be put in your own order (ADR-0041).
+// can be put in your own order.
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react'
@@ -58,7 +58,7 @@ describe('my lists', () => {
     expect(tile).toHaveTextContent('Director: John Carpenter')
   })
 
-  describe('reordering the watchlist (ADR-0041)', () => {
+  describe('reordering the watchlist', () => {
     /** Puts Alien, The Thing, then a third film (790) on the demo watchlist, oldest first. */
     async function seed() {
       const tags = createLocalTagRepository(undefined, undefined, 'account-demo-tags')

@@ -1,8 +1,8 @@
-// Runs before every `/api/*` Function (ADR-0029, ADR-0031), so no route can forget the host pin,
+// Runs before every `/api/*` Function, so no route can forget the host pin,
 // the rate limit or the Origin check (server/apiGuard.ts). The root functions/_middleware.ts then adds the
 // security headers to whatever is answered.
 //
-// It is also the only place that writes the error log (ADR-0058, server/errorLog.ts): it catches
+// It is also the only place that writes the error log (server/errorLog.ts): it catches
 // anything a route throws, and after the answer it logs one line if the request failed on the
 // server's side (a 5xx, or a note a handler left through `data`).
 import { guardApi } from '../../server/apiGuard.ts'
@@ -21,10 +21,10 @@ export type ApiEnv = {
   RATE_LIMITER?: RateLimiterBinding
   /**
    * The only host the API answers on (server/apiGuard.ts). A Pages secret, not a `wrangler.toml`
-   * var, so the public repo never names the live site (ADR-0047).
+   * var, so the public repo never names the live site.
    */
   CANONICAL_HOST?: string
-  /** The error-log Worker (workers/error-log/, ADR-0058). Missing locally; logging then only prints. */
+  /** The error-log Worker (workers/error-log/). Missing locally; logging then only prints. */
   ERROR_LOG?: ErrorLogBinding
   /** This deploy's static files, given to every Pages Function; read for `/version.json`. */
   ASSETS?: AssetsBinding
@@ -42,7 +42,7 @@ export const onRequest: PagesFunction<ApiEnv> = async (context) => {
 
   let response: Response
   try {
-    // Fail closed (ADR-0047): with no site address the pin would let every old deploy reach the
+    // Fail closed: with no site address the pin would let every old deploy reach the
     // production database, so a missing secret stops the API instead of quietly opening it.
     response = !env.CANONICAL_HOST
       ? fail(500, 'host_not_configured')

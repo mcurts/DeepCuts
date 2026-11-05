@@ -1,9 +1,11 @@
-// Fails if any fg/bg token pair is below its WCAG contrast minimum, in any theme. ADR-0006,
-// ADR-0009, ADR-0056: every theme (tokens/themes/<id>/, built to build/tokens/<id>/) must pass every
-// pair, so a new brand can't merge until it is accessible.
-import { readdirSync, readFileSync } from 'node:fs'
+// Contrast for the colors the page mixes at runtime with color-mix(): a genre's tone bleached
+// toward the sticker or VHS-box paper, with ink on top. The token build checks every other pair
+// (each content color declares its grounds in the token source); it can't see these, because the
+// mixed color exists only in CSS. Every theme must pass every pair, so a new theme can't merge
+// until it's accessible (WCAG 1.4.3).
+import { readFileSync } from 'node:fs'
 
-const pairs = JSON.parse(readFileSync('scripts/contrast-pairs.json', 'utf8'))
+const pairs = JSON.parse(readFileSync('scripts/mixed-contrast-pairs.json', 'utf8'))
 
 const channel = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
 const luminance = (hex) => {
@@ -40,8 +42,9 @@ const resolve = (tokens, side) => {
 }
 
 let failed = 0
-for (const theme of readdirSync('tokens/themes')) {
-  const tokens = JSON.parse(readFileSync(`build/tokens/${theme}/tokens.json`, 'utf8'))
+// Every theme's resolved values, written by the token build (npm run tokens).
+const themes = JSON.parse(readFileSync('tokens/dist/json/contexts/theme.json', 'utf8'))
+for (const [theme, tokens] of Object.entries(themes)) {
   let themeFailed = 0
   for (const [fgSide, bgSide, min] of pairs) {
     const [fg, fgHex] = resolve(tokens, fgSide)

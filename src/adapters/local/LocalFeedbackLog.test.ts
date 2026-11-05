@@ -1,4 +1,4 @@
-// Tests for the quick-action press log (ADR-0045): saving, Undo, the size cap, untrusted data and
+// Tests for the quick-action press log: saving, Undo, the size cap, untrusted data and
 // a storage that refuses writes.
 import { describe, expect, it } from 'vitest'
 import type { FeedbackEntry } from '../../domain/learnWeights'
@@ -30,7 +30,7 @@ const press = (tmdbId: number, action: FeedbackEntry['action'] = 'watchlist'): F
   at: '2026-10-15T12:00:00.000Z',
 })
 
-describe('LocalFeedbackLog (ADR-0045)', () => {
+describe('LocalFeedbackLog', () => {
   it('saves presses in order and takes back the latest one on a film', () => {
     const log = createLocalFeedbackLog('feedback-test', memoryStorage())
     log.add(press(1, 'watchlist'))
@@ -60,7 +60,7 @@ describe('LocalFeedbackLog (ADR-0045)', () => {
     expect(createLocalFeedbackLog('feedback-test', storage).list()).toEqual([])
   })
 
-  it('ADR-0050: drops presses of the retired Seen button and keeps the rest', () => {
+  it('drops presses of the retired Seen button and keeps the rest', () => {
     const storage = memoryStorage()
     storage.setItem(
       `${STORAGE_PREFIX}feedback-test`,

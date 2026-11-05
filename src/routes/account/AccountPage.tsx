@@ -1,10 +1,10 @@
-// The Account page (/account), signed in only (ADR-0034): the account, its tagged-film count, and
+// The Account page (/account), signed in only: the account, its tagged-film count, and
 // sign out (with a confirm step). A passkey account can also change its name and delete itself
-// (AccountSettings.tsx, ADR-0031).
+// (AccountSettings.tsx).
 //
 // Phones reach it from the header chip. From `md` the header's account menu covers the lists and
 // sign out, so there this page is just "Account settings" (who you are, change name, delete), and
-// the menu links it for passkey accounts only (owner decision 2026-10-12).
+// the menu links it for passkey accounts only.
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
@@ -19,8 +19,8 @@ import { AccountSettings } from './AccountSettings'
 import { useTagQueries } from '@/session/tagQueries'
 
 /**
- * The signed-in account (ADR-0025, ADR-0034). Copy never implies cross-device sync for the
- * on-device demo and practice accounts (ADR-0013).
+ * The signed-in account. Copy never implies cross-device sync for the
+ * on-device demo and practice accounts.
  */
 export function AccountPage() {
   const { session } = useSession()
@@ -58,7 +58,7 @@ function SignedIn({ account }: { account: Account }) {
           <h1 className="font-display text-3xl leading-tight tracking-wide case-display">
             {account.name}
           </h1>
-          <p className="text-sm text-fg-muted">{SIGNED_IN_WITH[account.method]}</p>
+          <p className="text-sm text-content-muted">{SIGNED_IN_WITH[account.method]}</p>
         </div>
       </div>
 
@@ -66,25 +66,25 @@ function SignedIn({ account }: { account: Account }) {
         {/* Phones only: from `md` the account menu shows the count and links My Lists. */}
         <section
           aria-labelledby="lists-heading"
-          className="grid content-start gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4 md:hidden"
+          className="grid content-start gap-2.5 rounded-card border-2 border-card-border bg-card-background p-4 md:hidden"
         >
           <h2 id="lists-heading" className="font-display text-2xl tracking-wide case-display">
             Your lists
           </h2>
-          <p className="text-sm text-fg-muted">
+          <p className="text-sm text-content-muted">
             {films} {films === 1 ? 'film' : 'films'} tagged across Want to see, More like this and
             Less like this.
           </p>
-          {/* Demo and practice accounts live on this device only (ADR-0025, ADR-0031). */}
+          {/* Demo and practice accounts live on this device only. */}
           {(account.method === 'demo' || account.method === 'practice') && (
-            <p className="text-sm text-fg-muted">
+            <p className="text-sm text-content-muted">
               Practice account: lists are kept on this device. A real account will sync them between
               devices.
             </p>
           )}
           <Link
             to="/lists"
-            className="flex min-h-11 w-fit items-center gap-1.5 text-sm font-bold text-accent"
+            className="flex min-h-11 w-fit items-center gap-1.5 text-sm font-bold text-content-accent"
           >
             Open My Lists <Icon name="arrow" className="size-4" />
           </Link>
@@ -93,12 +93,12 @@ function SignedIn({ account }: { account: Account }) {
         {/* Phones only: from `md` Sign out is in the account menu. */}
         <section
           aria-labelledby="signout-heading"
-          className="grid content-start gap-2.5 rounded-card border-2 border-card-border bg-card-bg p-4 md:hidden"
+          className="grid content-start gap-2.5 rounded-card border-2 border-card-border bg-card-background p-4 md:hidden"
         >
           <h2 id="signout-heading" className="font-display text-2xl tracking-wide case-display">
             Sign out
           </h2>
-          <p className="text-sm text-fg-muted">
+          <p className="text-sm text-content-muted">
             Your lists stay in your account. You’ll return to the welcome page.
           </p>
           {confirming ? (
@@ -106,7 +106,7 @@ function SignedIn({ account }: { account: Account }) {
               <Button
                 ref={confirmRef}
                 onPress={confirmSignOut}
-                className="flex h-11 items-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg px-3.5 font-display text-base tracking-widest text-button-secondary-fg case-display"
+                className="flex h-11 items-center rounded-button border-2 border-button-secondary-border bg-button-secondary-background px-3.5 font-display text-base tracking-widest text-button-secondary-content case-display"
               >
                 Yes, sign out
               </Button>
@@ -116,7 +116,7 @@ function SignedIn({ account }: { account: Account }) {
                   // Return focus to "Sign out" once it's back on screen (next frame).
                   requestAnimationFrame(() => askRef.current?.focus())
                 }}
-                className="flex h-11 items-center px-2 text-sm font-bold text-accent"
+                className="flex h-11 items-center px-2 text-sm font-bold text-content-accent"
               >
                 Cancel
               </Button>
@@ -125,14 +125,14 @@ function SignedIn({ account }: { account: Account }) {
             <Button
               ref={askRef}
               onPress={() => setConfirming(true)}
-              className="flex h-11 w-36 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-bg font-display text-base tracking-widest text-button-secondary-fg case-display"
+              className="flex h-11 w-36 items-center justify-center rounded-button border-2 border-button-secondary-border bg-button-secondary-background font-display text-base tracking-widest text-button-secondary-content case-display"
             >
               Sign out
             </Button>
           )}
         </section>
 
-        {/* Passkey accounts can be renamed and deleted (ADR-0031 A2b). */}
+        {/* Passkey accounts can be renamed and deleted. */}
         {account.method === 'passkey' && <AccountSettings name={account.name} />}
       </div>
     </>

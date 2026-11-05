@@ -1,4 +1,4 @@
-// Remembers which theme (brand look) this device chose (ADR-0056). Per device, not per account:
+// Remembers which theme (brand look) this device chose. Per device, not per account:
 // it's a display preference, and signed-out visitors can pick one too.
 //
 // Two readers share this key: the app (useTheme, through these functions) and the tiny boot

@@ -28,7 +28,7 @@ describe('LocalTagRepository storage', () => {
     },
   )
 
-  it('ADR-0050: drops saved "Seen it" records and keeps one tag per film, losing nothing else', async () => {
+  it('drops saved "Seen it" records and keeps one tag per film, losing nothing else', async () => {
     const at = (s: number) => `2026-10-0${s}T12:00:00.000Z`
     localStorage.setItem(
       `deepcuts:v1:${KEY}`,

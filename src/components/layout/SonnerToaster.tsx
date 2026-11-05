@@ -3,7 +3,7 @@
 import type { CSSProperties } from 'react'
 import { Toaster } from 'sonner'
 // Sonner's own stylesheet, bundled with the app's CSS. Sonner also tries to add these styles as an
-// inline <style> tag, which the CSP blocks (style-src 'self', ADR-0008); this copy is what applies.
+// inline <style> tag, which the CSP blocks (style-src 'self'); this copy is what applies.
 import 'sonner/dist/styles.css'
 import { HEADER_HEIGHT_VAR } from '@/hooks/useHeaderHeight'
 
@@ -12,13 +12,13 @@ import { HEADER_HEIGHT_VAR } from '@/hooks/useHeaderHeight'
 // Sonner applies this as a CSS variable through React's style prop, which the CSP allows.
 const BELOW_HEADER = { top: `calc(var(${HEADER_HEIGHT_VAR}, 0px) + 12px)` }
 
-// The theme's look (ADR-0040, ADR-0056), from the tokens: its container corners, an emphasis
+// The theme's look, from the tokens: its container corners, an emphasis
 // outline, the popover shadow and the label face. Sonner's own sizing, stacking and animation are kept; these classes
 // only replace its colors, corners and type.
 const TOAST_CLASSES = {
   toast:
-    'rounded-container! border-2! border-border-emphasis! bg-surface-raised! font-label! text-base! text-fg! shadow-popover!',
-  closeButton: 'rounded-control! border-border-emphasis! bg-surface-raised! text-fg!',
+    'rounded-container! border-2! border-border-emphasis! bg-background-raised! font-label! text-base! text-content! shadow-popover!',
+  closeButton: 'rounded-control! border-border-emphasis! bg-background-raised! text-content!',
 }
 // Sonner pins the close button to the toast's top-left corner, half outside it. Move it to the
 // top-right corner, where a close button is expected, through the variables Sonner reads.
@@ -29,7 +29,7 @@ const CLOSE_TOP_RIGHT = {
 } as CSSProperties
 
 /**
- * The toast area: centered just below the header, at every screen size (owner, 2026-10-13); on
+ * The toast area: centered just below the header, at every screen size; on
  * phones Sonner makes toasts full width with a 16px margin. Several at once are listed, not
  * stacked. Sonner's own z-index (999999999)
  * already sits above every layer in the app (highest: the film grain, z-60).
@@ -42,7 +42,7 @@ export function SonnerToaster() {
       mobileOffset={BELOW_HEADER}
       theme="dark"
       // Several toasts show as a list, newest on top, instead of a collapsed stack that only
-      // shows the newest until hovered (owner, 2026-10-13). Up to five at once; older ones wait
+      // shows the newest until hovered. Up to five at once; older ones wait
       // and appear as these close.
       expand
       visibleToasts={5}

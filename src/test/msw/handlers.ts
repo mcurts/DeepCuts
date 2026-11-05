@@ -27,7 +27,7 @@ export const handlers = [
       ? HttpResponse.json(candidate)
       : HttpResponse.json({ error: 'not_found' }, { status: 404 })
   }),
-  // The Friday the 13th series (ADR-0032), or not found.
+  // The Friday the 13th series, or not found.
   http.get('/api/tmdb/collection/:id', ({ params }) =>
     params.id === String(collectionFixture.id)
       ? HttpResponse.json(collectionFixture)

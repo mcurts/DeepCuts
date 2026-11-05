@@ -1,4 +1,4 @@
-// `/` (ADR-0035): the landing page when signed out, Home when signed in. Both show the same three
+// `/`: the landing page when signed out, Home when signed in. Both show the same three
 // panels (Top Ten, Watchlist, Discovery); the landing explains them, Home fills them.
 import { useState } from 'react'
 import { Navigate } from 'react-router'

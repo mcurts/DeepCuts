@@ -1,4 +1,4 @@
-// Tests for the signed-out landing page (ADR-0034, ADR-0035, ADR-0040): the hero and its two calls
+// Tests for the signed-out landing page: the hero and its two calls
 // to action, "Tonight's program" with Home's three features in order, and a shell with only the
 // logo and Sign in.
 import { screen, waitFor, within } from '@testing-library/react'

@@ -1,6 +1,6 @@
-// The Storybook accessibility gate (ADR-0007, ADR-0010): every story in the built Storybook must
+// The Storybook accessibility gate: every story in the built Storybook must
 // have zero axe violations (WCAG 2.2 A/AA), checked on the story itself, not Storybook's UI, in
-// every theme (ADR-0056): a theme that passes the token contrast pairs but breaks a component's
+// every theme: a theme that passes the token contrast pairs but breaks a component's
 // real colors fails here.
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
@@ -11,11 +11,12 @@ const index = JSON.parse(readFileSync('storybook-static/index.json', 'utf8')) as
   entries: Record<string, { id: string; title: string; name: string; type: string }>
 }
 const stories = Object.values(index.entries).filter((e) => e.type === 'story')
-// Every theme: a folder in tokens/themes/ with its name in meta.json.
-const THEMES = readdirSync('tokens/themes').map((id) => ({
+// Every theme: a folder in tokens/src/themes/ with its name in meta.json.
+const THEMES = readdirSync('tokens/src/themes').map((id) => ({
   id,
-  label: (JSON.parse(readFileSync(`tokens/themes/${id}/meta.json`, 'utf8')) as { label: string })
-    .label,
+  label: (
+    JSON.parse(readFileSync(`tokens/src/themes/${id}/meta.json`, 'utf8')) as { label: string }
+  ).label,
 }))
 
 test('Storybook has stories', () => {
@@ -36,7 +37,7 @@ for (const story of stories)
         `/iframe.html?id=${story.id}&viewMode=story&globals=a11y.manual:!true;theme:${theme.id}`,
       )
       await expect(page.locator('#storybook-root > *').first()).toBeVisible()
-      // Let fades finish first (a stamp or Undo fading in, ADR-0040 motion): mid-fade, text is
+      // Let fades finish first (a stamp or Undo fading in): mid-fade, text is
       // partly transparent and axe reports it as low contrast. Endless and scroll-driven animations
       // never finish, so only time-based ones are awaited (as in e2e/fixtures.ts).
       await page.evaluate(() =>

@@ -1,9 +1,9 @@
 // End-to-end security checks against the production build: the Content-Security-Policy and other
 // security headers are sent, the page loads without CSP violations, and the TMDB proxy refuses
-// anything outside its allowlist (ADR-0008).
+// anything outside its allowlist.
 import { expect, test } from '@playwright/test'
 
-// ADR-0008: strict CSP and security headers on the production build.
+// strict CSP and security headers on the production build.
 test('serves a strict Content-Security-Policy and security headers', async ({ request }) => {
   const res = await request.get('/')
   const h = res.headers()
@@ -14,7 +14,7 @@ test('serves a strict Content-Security-Policy and security headers', async ({ re
   expect(csp).toContain("object-src 'none'")
   expect(csp).not.toContain('unsafe-inline')
   expect(csp).not.toContain('unsafe-eval')
-  expect(csp).not.toMatch(/frame-src/) // ADR-0018: no embeds
+  expect(csp).not.toMatch(/frame-src/) // no embeds
   expect(h['x-content-type-options']).toBe('nosniff')
   expect(h['x-frame-options']).toBe('DENY')
   expect(h['referrer-policy']).toBe('strict-origin-when-cross-origin')

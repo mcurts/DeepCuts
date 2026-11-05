@@ -1,6 +1,6 @@
 // @vitest-environment node
-// Tests for the SemVer rules each deploy is versioned with (scripts/releasePlan.ts, ADR-0048,
-// ADR-0049): which commits bump what, the release notes, and the plan for a deploy.
+// Tests for the SemVer rules each deploy is versioned with (scripts/releasePlan.ts):
+// which commits bump what, the release notes, and the plan for a deploy.
 import { describe, expect, it } from 'vitest'
 import {
   applyBump,

@@ -2,7 +2,8 @@ dist
 build
 coverage
 package-lock.json
-src/styles/tokens.css
+tokens/engine
+tokens/dist
 .claude
 test-results
 playwright-report
