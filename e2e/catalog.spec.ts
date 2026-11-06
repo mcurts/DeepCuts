@@ -659,8 +659,6 @@ test('the dev-only labs are not part of the production site', async ({ page }) =
   await expect(page).toHaveURL(/\/$/)
   for (const path of ['/lab/weights', '/lab/vhs']) {
     await page.goto(path)
-    await expect(
-      page.getByRole('heading', { level: 1, name: 'Something went wrong' }),
-    ).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
   }
 })

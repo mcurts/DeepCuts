@@ -1,5 +1,5 @@
 // Tests for the app shell: the logo goes Home and carries the tagline, there is no tab bar, the
-// account menu leads to My Lists and signs out, and unknown URLs show the error page.
+// account menu leads to My Lists and signs out, and unknown URLs show the not-found page.
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
@@ -29,8 +29,10 @@ describe('navigation', () => {
   it('shows the error page for unknown routes', async () => {
     renderRoute('/nope')
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Something went wrong' }),
+      await screen.findByRole('heading', { level: 1, name: 'Page not found' }),
     ).toBeInTheDocument()
+    expect(document.querySelectorAll('main')).toHaveLength(1)
+    expect(document.querySelectorAll('#main')).toHaveLength(1)
   })
 
   it('renders the placeholder pages', async () => {

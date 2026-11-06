@@ -1,6 +1,14 @@
 # Security Policy
 
-Deep Cuts is a local-first portfolio app (ADR-0013). Its security controls (CSP and security headers, a server-side TMDB proxy with an allowlist, rate limiting, Zod validation of all external data, passkey-only accounts, and secret scanning) are enforced in code and CI; see `server/securityHeaders.ts`, `server/tmdb/` and `eslint.config.js`.
+Deep Cuts is a publicly hosted portfolio app with invite-only, passkey accounts. Account data is
+stored in Cloudflare D1; the demo account keeps its sample data in the browser. The app sends TMDB
+requests through a same-origin server proxy so the TMDB credential is never exposed to browsers.
+
+Security controls include a restrictive Content Security Policy and other response headers, an
+allowlist and per-client rate limiting on the TMDB proxy, same-origin checks on state-changing
+requests, Zod validation at trust boundaries, passkey-only authentication, and secret scanning in
+CI. The application and its infrastructure are designed to stay within free service tiers rather
+than incur usage-based charges.
 
 ## Reporting a vulnerability
 

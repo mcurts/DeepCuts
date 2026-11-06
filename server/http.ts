@@ -24,6 +24,40 @@ export function json(status: number, body: unknown, extraHeaders: Record<string,
  */
 export const fail = (status: number, error: string) => json(status, { error })
 
+/** Reads a request body up to a byte limit without buffering an oversized body in memory. */
+async function readTextUpTo(
+  request: Request,
+  maxBytes: number,
+): Promise<{ text: string; tooLarge: boolean }> {
+  const reader = request.body?.getReader()
+  if (!reader) return { text: '', tooLarge: false }
+
+  const decoder = new TextDecoder()
+  let bytesRead = 0
+  let text = ''
+  try {
+    while (true) {
+      const chunk = await reader.read()
+      if (chunk.done) break
+      bytesRead += chunk.value.byteLength
+      if (bytesRead > maxBytes) {
+        // Stop pulling from the network as soon as the cap is crossed; the caller never needs the
+        // rest of a body it will reject.
+        await reader.cancel()
+        return { text: '', tooLarge: true }
+      }
+      // Streaming decode preserves a multi-byte character split across two transport chunks.
+      text += decoder.decode(chunk.value, { stream: true })
+    }
+    return { text: text + decoder.decode(), tooLarge: false }
+  } catch {
+    // A broken body is handled like malformed JSON, without exposing the transport error.
+    return { text: '', tooLarge: false }
+  } finally {
+    reader.releaseLock()
+  }
+}
+
 /**
  * Reads a JSON body and validates it with `schema`. Returns the data, or a 400 response to send
  * back as-is. Bodies over 64 kB are refused before parsing (a passkey response is ~1–2 kB; a full
@@ -36,11 +70,11 @@ export async function readJson<T>(
 ): Promise<{ data: T } | { error: Response }> {
   const declared = Number(request.headers.get('Content-Length') ?? 0)
   if (declared > maxBytes) return { error: fail(413, 'too_large') }
-  const text = await request.text().catch(() => '')
-  if (text.length > maxBytes) return { error: fail(413, 'too_large') }
+  const body = await readTextUpTo(request, maxBytes)
+  if (body.tooLarge) return { error: fail(413, 'too_large') }
   let raw: unknown
   try {
-    raw = JSON.parse(text)
+    raw = JSON.parse(body.text)
   } catch {
     return { error: fail(400, 'bad_request') }
   }

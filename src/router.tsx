@@ -6,7 +6,7 @@
 import { Navigate, type RouteObject } from 'react-router'
 import { FEATURES, homeOf, type Features } from './config/features'
 import { AppLayout } from './routes/AppLayout'
-import { RouteError } from './routes/PlaceholderPages'
+import { NotFound, RouteError } from './routes/PlaceholderPages'
 import { RequireAccount } from './routes/RequireAccount'
 
 // Each loader imports one page module and hands React Router its component.
@@ -79,7 +79,7 @@ export function createRoutes(features: Features = FEATURES): RouteObject[] {
           ],
         },
         // Any unknown URL shows the "not found" page inside the shell.
-        { path: '*', element: <RouteError /> },
+        { path: '*', element: <NotFound /> },
       ],
     },
     // Sign-in has its own minimal layout: back, logo and the methods.
