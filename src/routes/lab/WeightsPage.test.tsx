@@ -155,9 +155,7 @@ describe('weights lab', () => {
     const { router } = renderRoute('/discover/weights', { features: { labs: false } })
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     renderRoute('/lab/weights', { features: { labs: false } })
-    expect(
-      await screen.findByRole('heading', { level: 1, name: 'Page not found' }),
-    ).toBeVisible()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
   })
 
   it('sends the old address to the lab on the dev server', async () => {
