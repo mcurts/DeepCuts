@@ -16,7 +16,6 @@ const EXEMPTIONS = new Map([
   ['src/components/ui/Form.tsx', 'behavior-only form boundary with no independent visual state'],
   ['src/routes/AppLayout.tsx', 'whole-route shell covered by screen and end-to-end tests'],
   ['src/routes/IndexRoute.tsx', 'session-dependent route switch with no UI of its own'],
-  ['src/routes/PlaceholderPages.tsx', 'route-bound error fallback covered by navigation tests'],
   ['src/routes/RequireAccount.tsx', 'route guard with no UI of its own'],
   ['src/routes/account/AccountPage.tsx', 'whole page covered by account screen tests'],
   [

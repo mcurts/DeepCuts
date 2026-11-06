@@ -156,7 +156,7 @@ describe('weights lab', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     renderRoute('/lab/weights', { features: { labs: false } })
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Something went wrong' }),
+      await screen.findByRole('heading', { level: 1, name: 'Page not found' }),
     ).toBeVisible()
   })
 
