@@ -7,8 +7,8 @@
 // Search keeps one-tap tagging that saves at once.
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Button } from 'react-aria-components'
 import { TagToggle } from '@/components/movie/TagToggle'
+import { Button } from '@/components/ui/Button'
 import { TAGS } from '@/components/movie/tagDisplay'
 import { notify } from '@/notify'
 import { applyTag, SYSTEM_TAGS, type SystemTag, type TagSet } from '@/domain/tagRules'

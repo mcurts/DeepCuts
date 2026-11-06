@@ -2,8 +2,8 @@
 // Create an account. A Back button, the logo and one narrow column; no search,
 // so nothing competes with the form.
 import { useRef, type ReactNode } from 'react'
-import { Button } from 'react-aria-components'
 import { Link, useLocation, useNavigate } from 'react-router'
+import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { HOME } from '@/config/features'
 import { Logo } from '@/components/layout/Logo'

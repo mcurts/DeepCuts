@@ -6,7 +6,8 @@
 // rather than a hover tooltip because touch has no hover, and the app is mobile-first.
 // The whole tile is a link, so this button sits just after it, above the quick actions: a button
 // inside a link isn't allowed. React Aria's DialogTrigger gives it focus handling and Escape.
-import { Button, Dialog, DialogTrigger, Popover } from 'react-aria-components'
+import { Dialog, DialogTrigger, Popover } from 'react-aria-components'
+import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 
 /**

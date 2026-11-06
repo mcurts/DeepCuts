@@ -10,11 +10,13 @@
 // device, only the name is kept, and the page says so. Like sign-in, the page then
 // returns to where sign-in started.
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Button, FieldError, Form, Input, Label, Text, TextField } from 'react-aria-components'
+import { FieldError, Input, Label, Text, TextField } from 'react-aria-components'
 import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { AccountsApiError } from '@/adapters/cloudflare/AccountsApiError'
 import { registrationSchema } from '@/adapters/SessionProvider'
+import { Button } from '@/components/ui/Button'
+import { Form } from '@/components/ui/Form'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useReturnPath } from './useReturnPath'
 import { useRouteFocus } from '@/hooks/useRouteFocus'
@@ -126,13 +128,7 @@ export function RegisterPage() {
 
       {/* validationBehavior="aria": the browser's own popups stay off; Zod's messages show under
           each field instead, and editing a field clears its message (clearError). */}
-      <Form
-        ref={formRef}
-        onSubmit={submit}
-        validationErrors={errors}
-        validationBehavior="aria"
-        className="grid gap-4"
-      >
+      <Form ref={formRef} onSubmit={submit} validationErrors={errors} className="grid gap-4">
         <TextField
           name="name"
           isRequired

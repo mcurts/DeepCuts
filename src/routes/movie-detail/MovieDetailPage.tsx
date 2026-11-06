@@ -4,10 +4,10 @@
 // layout, with the film's backdrop behind the page.
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { Button } from 'react-aria-components'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 import { movieQueries } from '@/api/queries'
+import { Button } from '@/components/ui/Button'
 import { certification, formatRuntime, imageUrl, providersFor, releaseYear } from '@/api/tmdb'
 import { Icon } from '@/components/ui/Icon'
 import { LoadingImage } from '@/components/ui/LoadingImage'

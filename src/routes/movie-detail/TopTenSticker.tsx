@@ -7,7 +7,7 @@
 // Neither knows anything about Top Ten data. DetailTopTen decides which to show and what a press
 // does, so either design can be replaced without touching any Top Ten logic.
 import type { Ref } from 'react'
-import { Button } from 'react-aria-components'
+import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import './TopTenSticker.css'
 
