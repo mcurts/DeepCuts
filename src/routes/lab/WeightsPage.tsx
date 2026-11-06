@@ -5,17 +5,11 @@
 // suggests weights fitted to your Want / Like / Nope presses on Home's Discovery picks.
 import { useMemo, useState } from 'react'
 import { withToast } from '@/notify'
-import {
-  Button,
-  Label,
-  Slider,
-  SliderOutput,
-  SliderThumb,
-  SliderTrack,
-} from 'react-aria-components'
+import { Label, Slider, SliderOutput, SliderThumb, SliderTrack } from 'react-aria-components'
 import { Link, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { releaseYear } from '@/api/tmdb'
+import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { HOME } from '@/config/features'
 import { PageHeading } from '@/components/ui/PageHeading'

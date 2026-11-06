@@ -2,9 +2,9 @@
 // (today only the demo account), links to registration, then returns to the page
 // sign-in started from.
 import { useState } from 'react'
-import { Button } from 'react-aria-components'
 import { Link, Navigate, useNavigate } from 'react-router'
 import type { SignInMethodId } from '@/adapters/SessionProvider'
+import { Button } from '@/components/ui/Button'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Icon } from '@/components/ui/Icon'
 import { useReturnPath } from './useReturnPath'

@@ -1,7 +1,7 @@
 // Onboarding step 1: a favorite film, chosen with the search field above.
 import { useQuery } from '@tanstack/react-query'
-import { Button } from 'react-aria-components'
 import { movieQueries } from '@/api/queries'
+import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Prompt } from './Prompt'
 import { primary } from './styles'

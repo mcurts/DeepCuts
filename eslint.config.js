@@ -64,6 +64,50 @@ export default defineConfig([
       ],
     },
   },
+  // Routes use the app-owned controls in components/ui. Shared components may build directly on
+  // React Aria because they are themselves the reusable boundary.
+  {
+    files: ['src/routes/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['../*'], message: 'Import from outside this folder with @/ (src/).' },
+          ],
+          paths: [
+            {
+              name: 'react-aria-components',
+              message:
+                'Feature routes use app-owned controls from @/components/ui; specialized primitive exceptions are listed in eslint.config.js.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // These page-private components compose specialized React Aria widgets whose behavior belongs
+  // to that one feature. Wrapping them would only rename the vendor API; recurring Button and Form
+  // policy still comes from components/ui. Labs are development-only but follow the same rule.
+  {
+    files: [
+      'src/routes/account/AccountSettings.tsx',
+      'src/routes/auth/RegisterPage.tsx',
+      'src/routes/discover/PickReason.tsx',
+      'src/routes/lab/WeightsPage.tsx',
+      'src/routes/search/SearchPage.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['../*'], message: 'Import from outside this folder with @/ (src/).' },
+          ],
+        },
+      ],
+    },
+  },
   // …except code that also runs outside Vite: the server and Pages Functions import src/domain and
   // src/adapters, and Playwright imports src/test/msw. None of those tools know `@/`, so these
   // folders keep plain relative imports.

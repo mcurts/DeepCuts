@@ -1,9 +1,9 @@
 // Onboarding step 2: tag a few popular films, one card at a time.
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useEffectEvent } from 'react'
-import { Button } from 'react-aria-components'
 import { Link, useNavigate } from 'react-router'
 import { movieQueries } from '@/api/queries'
+import { Button } from '@/components/ui/Button'
 import { imageUrl, releaseYear } from '@/api/tmdb'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Icon } from '@/components/ui/Icon'

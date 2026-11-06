@@ -7,10 +7,10 @@
 // the menu links it for passkey accounts only.
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { Button } from 'react-aria-components'
 import { Link } from 'react-router'
 import { SIGNED_IN_WITH, type Account } from '@/adapters/SessionProvider'
 import { Avatar } from '@/components/layout/AccountChip'
+import { Button } from '@/components/ui/Button'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Icon } from '@/components/ui/Icon'
 import { SIGN_OUT_MESSAGES, withToast } from '@/notify'

@@ -5,7 +5,7 @@
 // that runs the session check again. Mobile-first; built from EmptyState and the
 // existing button tokens.
 import { useState } from 'react'
-import { Button } from 'react-aria-components'
+import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Logo } from './Logo'

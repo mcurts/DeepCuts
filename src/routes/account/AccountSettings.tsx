@@ -6,9 +6,11 @@
 // says plainly that it can't be undone. The passkey itself lives in the person's password manager,
 // which the site can't reach, so the copy tells them where to remove it.
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Button, FieldError, Form, Input, Label, TextField } from 'react-aria-components'
+import { FieldError, Input, Label, TextField } from 'react-aria-components'
 import { z } from 'zod'
 import { registrationSchema } from '@/adapters/SessionProvider'
+import { Button } from '@/components/ui/Button'
+import { Form } from '@/components/ui/Form'
 import { withToast } from '@/notify'
 import { useSession } from '@/session/SessionContext'
 
@@ -61,12 +63,7 @@ function ChangeName({ name, rename }: { name: string; rename: (name: string) => 
       <h2 id="name-heading" className="font-display text-2xl tracking-wide case-display">
         Change name
       </h2>
-      <Form
-        onSubmit={submit}
-        validationErrors={errors}
-        validationBehavior="aria"
-        className="grid gap-3"
-      >
+      <Form onSubmit={submit} validationErrors={errors} className="grid gap-3">
         <TextField
           name="name"
           defaultValue={name}
