@@ -3,8 +3,9 @@
 //
 // A reload in the same minute costs nothing: the proxy lets the browser keep its answers for longer
 // than the limiter's period (server/http.ts). A reload that skips the browser's cache (a hard
-// reload, DevTools' "Disable cache", Lighthouse's storage reset) pays again and goes over; the app
-// then waits out the limit instead of re-asking (src/api/retry.ts, e2e/rate-limit.spec.ts).
+// reload, DevTools' "Disable cache", Lighthouse's storage reset) pays again, and two cold loads
+// still fit. Past the limit the app waits it out instead of re-asking (src/api/retry.ts,
+// e2e/rate-limit.spec.ts).
 //
 // The numbers come from the real sources (the caps in useRecommendations.ts and the limit in the
 // rate-limit Worker's wrangler.toml), so raising a cap or lowering the limit fails this test
@@ -32,11 +33,12 @@ const OTHER_CALLS = 4
 // where-to-watch call, so this covers a few dozen clicks.
 const HEADROOM = 30
 
-// The API_LIMITER's `limit` from the Worker's config, e.g. `simple = { limit = 120, period = 60 }`.
+// The TMDB_LIMITER's `limit` from the Worker's config, e.g. `simple = { limit = 300, period = 60 }`.
+// Every call the feed makes is film data, so it counts against this bucket.
 function apiLimit(toml: string): number {
-  const block = toml.split('[[ratelimits]]').find((b) => b.includes('"API_LIMITER"'))
+  const block = toml.split('[[ratelimits]]').find((b) => b.includes('"TMDB_LIMITER"'))
   const match = block?.match(/limit\s*=\s*(\d+)\s*,\s*period\s*=\s*60\b/)
-  if (!match?.[1]) throw new Error('API_LIMITER with a 60 s period not found in wrangler.toml')
+  if (!match?.[1]) throw new Error('TMDB_LIMITER with a 60 s period not found in wrangler.toml')
   return Number(match[1])
 }
 
@@ -48,7 +50,7 @@ const worstCase =
 
 describe('first Home load vs the rate limit', () => {
   it('reads the API limit from the Worker config', () => {
-    expect(apiLimit(rateLimitConfig)).toBe(120)
+    expect(apiLimit(rateLimitConfig)).toBe(300)
   })
 
   it('fits a heavy profile, with headroom', () => {
@@ -64,8 +66,7 @@ describe('first Home load vs the rate limit', () => {
     expect(maxAge).toBeGreaterThanOrEqual(60)
   })
 
-  it('goes over the limit on a reload that skips the cache: the case the retry rules cover', () => {
-    // Documents the known gap (tracked as its own issue): two cold loads in one minute.
-    expect(worstCase * 2).toBeGreaterThan(apiLimit(rateLimitConfig))
+  it('fits two cold loads in one minute, such as a hard reload', () => {
+    expect(worstCase * 2).toBeLessThanOrEqual(apiLimit(rateLimitConfig))
   })
 })

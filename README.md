@@ -56,12 +56,12 @@ The app is hosted on **Cloudflare Pages** (ADR-0029). This public repo doesn't n
 
 **Try the hosted runtime locally:** `npm run build && npm run preview:cf` serves the app at http://localhost:8788 with the real Pages Function (the TMDB proxy), the rate-limit Worker, the generated `_headers` and SPA routing. For the TMDB token, copy `.dev.vars.example` to `.dev.vars` (git-ignored); if it's missing, Wrangler falls back to `.env.local`.
 
-| Free-plan limit (ADR-0029, as of 2026-10-07) | Value                          | When exceeded                                                                    |
-| -------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------- |
-| Static asset requests                        | Unlimited                      | —                                                                                |
-| Function + Worker requests (shared)          | 100,000 / day, reset 00:00 UTC | The API is skipped (fail open); search shows "can't reach movie data"; no charge |
-| CPU time per request                         | 10 ms                          | Request errors                                                                   |
-| Per-client API rate limit (ours)             | 120 requests / 60 s            | 429 `rate_limited` (approximate: counted per location, so bursts get through)    |
+| Free-plan limit (ADR-0029, as of 2026-10-07) | Value                                        | When exceeded                                                                    |
+| -------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------- |
+| Static asset requests                        | Unlimited                                    | —                                                                                |
+| Function + Worker requests (shared)          | 100,000 / day, reset 00:00 UTC               | The API is skipped (fail open); search shows "can't reach movie data"; no charge |
+| CPU time per request                         | 10 ms                                        | Request errors                                                                   |
+| Per-client API rate limit (ours)             | 300 / 60 s film data, 120 / 60 s other calls | 429 `rate_limited` (approximate: counted per location, so bursts get through)    |
 
 > ⚠️ **Never upgrade the Cloudflare account to Workers Paid and never add a payment method.** On the Free plan, going over a limit fails; on Paid, it bills (ADR-0024).
 
