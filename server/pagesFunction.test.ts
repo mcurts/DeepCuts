@@ -69,7 +69,7 @@ describe('/api middleware: rate limit (Stage 4 H4)', () => {
     expect(await res.json()).toEqual({ error: 'rate_limited' })
     expect(res.headers.get('retry-after')).toBe('60')
     expect(res.headers.get('cache-control')).toBe('no-store')
-    expect(check).toHaveBeenCalledWith('203.0.113.7', 'api')
+    expect(check).toHaveBeenCalledWith('203.0.113.7', 'tmdb')
     expect(next).not.toHaveBeenCalled()
   })
 

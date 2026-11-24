@@ -8,14 +8,16 @@ import { WorkerEntrypoint } from 'cloudflare:workers'
 
 /** What this Worker is bound to (workers/rate-limit/wrangler.toml). */
 export type RateLimitEnv = {
-  /** 120 requests per 60 s per key: movie data, tags, the session check. */
+  /** 120 requests per 60 s per key: tags, the session check and other account calls. */
   API_LIMITER: RateLimit
+  /** 300 requests per 60 s per key: film data from TMDB (read-only, and a Discover load is heavy). */
+  TMDB_LIMITER: RateLimit
   /** 10 requests per 60 s per key: sign-in, registration and account changes. */
   AUTH_LIMITER: RateLimit
 }
 
 /** Which limit to count against (see `RateLimitEnv`). */
-export type Bucket = 'api' | 'auth'
+export type Bucket = 'api' | 'auth' | 'tmdb'
 
 /** The answer to one check. */
 export type RateLimitResult = { allowed: boolean }
@@ -27,7 +29,14 @@ export type RateLimitResult = { allowed: boolean }
 export default class RateLimiter extends WorkerEntrypoint<RateLimitEnv> {
   /** Counts one request for `key` in `bucket` and says whether it's within the limit. */
   async check(key: string, bucket: Bucket = 'api'): Promise<RateLimitResult> {
-    const limiter = bucket === 'auth' ? this.env.AUTH_LIMITER : this.env.API_LIMITER
+    // A Function from before the `tmdb` bucket existed only sends 'api' or 'auth', so deploying
+    // this Worker first is safe.
+    const limiter =
+      bucket === 'auth'
+        ? this.env.AUTH_LIMITER
+        : bucket === 'tmdb'
+          ? this.env.TMDB_LIMITER
+          : this.env.API_LIMITER
     const { success } = await limiter.limit({ key })
     return { allowed: success }
   }
